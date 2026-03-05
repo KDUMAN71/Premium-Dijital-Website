@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { CaseStudy } from "@/components/sections/case-studies/case-study-data";
 
-export default function CaseStudiesSection({ items }: { items: any[] }) {
+export default function CaseStudiesSection({ items }: { items: CaseStudy[] }) {
   return (
     <section
       id="vakalar"

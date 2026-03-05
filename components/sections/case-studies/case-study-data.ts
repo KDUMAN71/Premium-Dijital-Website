@@ -1,4 +1,38 @@
-import type { CaseStudy } from "./CaseStudiesSection";
+import build from "next/dist/build";
+
+export interface CaseStudy {
+  slug: string;
+  sector: string;
+  timeframeDays: number;
+  serviceTags: string[];
+  title: string;
+  tag: string;
+  summary: string;
+  metrics: { label: string; value: string }[];
+  highlights: string[];
+  story: {
+    problem: string;
+    approach: string;
+    execution: string;
+    results: string;
+    implementationSubtitle: string;
+  };
+  strategicNote: string;
+  context: {
+    situation: string;
+    goal: string;
+    approach: string[];
+  };
+  home: {
+    title: string;
+    summary: string;
+    bullets?: string[];
+    primaryMetric?: {
+      label: string;
+      value: string;
+    };
+  };
+}
 
 export const allCaseStudies: CaseStudy[] = [
   {

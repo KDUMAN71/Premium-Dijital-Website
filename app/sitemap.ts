@@ -6,7 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Dinamik Vaka Çalışmaları URL'leri
   const caseStudyUrls = homeCaseStudies.map((study) => ({
-    url: `${baseUrl}/vaka-calismalari/${study.id}`,
+    url: `${baseUrl}/vaka-calismalari/${study.slug}`,
     lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.8,

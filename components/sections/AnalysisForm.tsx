@@ -31,7 +31,7 @@ export default function AnalysisForm() {
     resolver: zodResolver(AnalysisSchema),
     shouldUnregister: true,
     defaultValues: {
-      goal: "",
+      goal: undefined,
       botField: "",
       otherGoal: "",
     },

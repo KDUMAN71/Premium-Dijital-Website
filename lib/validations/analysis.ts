@@ -6,7 +6,7 @@ export const AnalysisSchema = z
     email: z.string().email("Geçerli bir e-posta adresi giriniz."),
     website: z.string().url("Lütfen geçerli bir URL (https://...) giriniz."),
     goal: z.enum(["SATIŞ", "LEAD", "BRAND", "SEO", "OTHER"], {
-      required_error: "Lütfen hedef seçiniz.",
+      error: "Lütfen geçerli bir hedef seçiniz.",
     }),
     otherGoal: z.string().optional(),
     botField: z.string().optional(),

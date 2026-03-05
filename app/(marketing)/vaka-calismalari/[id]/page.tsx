@@ -56,7 +56,7 @@ export default async function CaseStudyPage({
         <header className="mb-16 border-b border-white/10 pb-12">
           <div className="flex flex-wrap items-center gap-3">
             <Pill>{cs.sector}</Pill>
-            {cs.serviceTags.map((tag) => (
+            {cs.serviceTags.map((tag: string) => (
               <Pill key={tag}>{tag}</Pill>
             ))}
           </div>
@@ -152,7 +152,7 @@ export default async function CaseStudyPage({
                 subtitle={cs.story?.implementationSubtitle}
               />
               <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {cs.context?.approach.map((step, idx) => (
+                {cs.context?.approach.map((step: string, idx: number) => (
                   <li
                     key={idx}
                     className="flex items-start gap-4 rounded-2xl border border-white/5 bg-white/[0.02] p-6"
@@ -174,16 +174,18 @@ export default async function CaseStudyPage({
                   Anahtar Metrikler
                 </h3>
                 <div className="space-y-8">
-                  {cs.metrics.map((metric, idx) => (
-                    <div key={idx} className="group">
-                      <p className="text-[10px] uppercase tracking-widest text-brand-blue font-bold mb-1">
-                        {metric.label}
-                      </p>
-                      <p className="text-4xl font-black italic text-white tracking-tighter">
-                        {metric.value}
-                      </p>
-                    </div>
-                  ))}
+                  {cs.metrics.map(
+                    (metric: { label: string; value: string }, idx: number) => (
+                      <div key={idx} className="group">
+                        <p className="text-[10px] uppercase tracking-widest text-brand-blue font-bold mb-1">
+                          {metric.label}
+                        </p>
+                        <p className="text-4xl font-black italic text-white tracking-tighter">
+                          {metric.value}
+                        </p>
+                      </div>
+                    ),
+                  )}
                 </div>
                 <div className="mt-12 pt-8 border-t border-white/10">
                   <div className="flex items-center gap-2 text-white/40">
