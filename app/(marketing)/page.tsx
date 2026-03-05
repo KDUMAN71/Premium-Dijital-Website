@@ -248,7 +248,7 @@ export default function Page() {
     VAKA (CASE STUDIES) - id=vaka
    ========================================================= */}
 
-        <CaseStudiesSection id="vaka" items={homeCaseStudies} />
+        <CaseStudiesSection items={homeCaseStudies} />
         {/* =========================================================
             CONTACT CTA (Benim eklediğim)
            ========================================================= */}
