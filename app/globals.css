@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@theme {
+  /* Marka Renklerimiz */
+  --color-brand-blue: #0000c8;
+  --color-brand-purple: #be29ec;
+  --color-brand-dark: #050505;
+
+  --bg-glow: radial-gradient(
+    circle,
+    rgba(190, 41, 236, 0.2) 0%,
+    rgba(0, 0, 200, 0) 70%
+  );
+}
+
+:root {
+  --background: var(--color-brand-dark);
+  --foreground: #ffffff;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* SHIMMER ANIMASYONU - Tailwind v4 uyumlu */
+@utility shimmer-effect {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent
+    );
+    transform: translateX(-100%);
+    animation: shimmer-anim 3s infinite;
+  }
+}
+
+@keyframes shimmer-anim {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  30% {
+    transform: translateX(100%) skewX(-15deg);
+  }
+  100% {
+    transform: translateX(100%) skewX(-15deg);
+  }
+}
+
+@utility hero-vignette {
+  mask-image: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 1) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 1) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-150%);
+  }
+  50% {
+    transform: translateX(150%);
+  }
+  100% {
+    transform: translateX(150%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2.5s infinite;
+}
+
+.line-clamp-4 {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
