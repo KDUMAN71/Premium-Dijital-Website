@@ -18,63 +18,68 @@ export default function CaseStudiesSection({ items }: { items: CaseStudy[] }) {
       </div>
 
       {/* 2 KARTLI PREMIUM DÜZEN */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {items.map((c) => (
+      <div className="grid grid-cols-1 gap-5 md:gap-8 lg:grid-cols-2 lg:gap-12">
+        {items.slice(0, 4).map((c, index) => (
           <article
             key={c.slug}
-            className="group relative bg-[#0a0a0a] border border-white/5 rounded-[3rem] p-12 flex flex-col md:flex-row gap-12 transition-all duration-500 hover:border-brand-blue/30 overflow-hidden min-h-[480px]"
+            className={`group relative flex min-h-0 flex-col gap-6 overflow-hidden rounded-[2rem] border border-white/5 bg-[#0a0a0a] p-5 transition-all duration-500 hover:border-brand-blue/30 sm:rounded-[2.5rem] sm:p-7 md:flex-row md:gap-8 md:p-8 lg:gap-10 lg:rounded-[3rem] lg:p-10 ${
+              index >= 2 ? "hidden md:flex" : "flex"
+            }`}
           >
             {/* Sol: Veri & Metrik Paneli */}
-            <div className="flex flex-col justify-between w-full md:w-[180px] shrink-0 border-b md:border-b-0 md:border-r border-white/10 pb-10 md:pb-0 md:pr-12">
+            <div className="flex w-full shrink-0 flex-col justify-between border-b border-white/10 pb-6 md:w-[160px] md:border-b-0 md:border-r md:pb-0 md:pr-8 lg:w-[180px] lg:pr-10">
               <div>
-                <span className="text-[11px] font-black text-white/25 uppercase tracking-[0.4em] block mb-6 leading-none">
+                <span className="mb-4 block text-[9px] leading-none font-black uppercase tracking-[0.28em] text-white/25 sm:text-[10px] md:mb-5 md:text-[11px] md:tracking-[0.35em] lg:mb-6 lg:tracking-[0.4em]">
                   {c.sector}
                 </span>
-                <div className="bg-brand-blue/10 border border-brand-blue/20 rounded-3xl p-8 text-center shadow-[0_0_30px_rgba(0,100,255,0.03)]">
-                  <p className="text-[10px] font-bold text-brand-blue uppercase tracking-[0.3em] mb-3">
+
+                <div className="rounded-[1.6rem] border border-brand-blue/20 bg-brand-blue/10 p-5 text-center shadow-[0_0_30px_rgba(0,100,255,0.03)] sm:rounded-[1.8rem] sm:p-6 md:rounded-3xl md:p-7 lg:p-8">
+                  <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.18em] text-brand-blue sm:text-[10px] sm:tracking-[0.24em] md:mb-3 md:tracking-[0.3em]">
                     {c.home?.primaryMetric?.label}
                   </p>
-                  <p className="text-5xl font-black italic text-white leading-none tracking-tighter">
+                  <p className="text-4xl font-black italic leading-none tracking-tighter text-white sm:text-[2.6rem] md:text-5xl">
                     {c.home?.primaryMetric?.value}
                   </p>
                 </div>
               </div>
-              <div className="mt-8 text-[10px] font-mono text-white/10 uppercase italic leading-tight">
+
+              <div className="mt-5 text-[9px] uppercase italic leading-tight text-white/10 sm:mt-6 sm:text-[10px]">
                 PROJE: {c.timeframeDays} GÜN <br /> // {c.tag}
               </div>
             </div>
 
             {/* Sağ: İçerik & Strateji Paneli */}
-            <div className="flex flex-col flex-grow justify-between">
+            <div className="flex min-w-0 flex-grow flex-col justify-between">
               <div>
-                <h3 className="text-3xl font-black italic uppercase tracking-tighter text-white/95 mb-6 line-clamp-2 leading-[0.95]">
+                <h3 className="mb-4 line-clamp-2 text-2xl font-black uppercase italic leading-[0.95] tracking-tighter text-white/95 sm:text-[1.9rem] md:mb-5 md:text-[2rem] lg:mb-6 lg:text-3xl">
                   {c.home?.title}
                 </h3>
-                <p className="text-base text-gray-400 italic mb-10 line-clamp-3 leading-relaxed">
+
+                <p className="mb-6 line-clamp-3 text-sm italic leading-relaxed text-gray-400 sm:text-[15px] md:mb-8 md:text-base lg:mb-10">
                   {c.home?.summary}
                 </p>
-                <ul className="space-y-4">
+
+                <ul className="space-y-3 md:space-y-4">
                   {c.home?.bullets?.map((b: string, i: number) => (
                     <li
                       key={i}
-                      className="flex items-center gap-4 text-[12px] font-bold text-white/40 uppercase tracking-widest"
+                      className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.14em] text-white/40 sm:text-[11px] sm:tracking-[0.18em] md:gap-4 md:text-[12px] md:tracking-widest"
                     >
-                      <span className="w-1.5 h-1.5 bg-brand-blue rounded-full shadow-[0_0_10px_#0066ff]" />
+                      <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-brand-blue shadow-[0_0_10px_#0066ff]" />
                       <span className="line-clamp-1">{b}</span>
                     </li>
                   ))}
                 </ul>
               </div>
 
-              {/* dizinine göre [id] linklemesi */}
-              <div className="mt-12 pt-8 border-t border-white/5 flex items-center justify-between">
+              <div className="mt-8 flex items-center justify-between border-t border-white/5 pt-5 md:mt-10 md:pt-6 lg:mt-12 lg:pt-8">
                 <Link
                   href={`/vaka-calismalari/${c.slug}`}
-                  className="text-[11px] font-black text-brand-blue uppercase tracking-[0.4em] hover:text-white transition-colors"
+                  className="text-[10px] font-black uppercase tracking-[0.22em] text-brand-blue transition-colors hover:text-white sm:text-[11px] sm:tracking-[0.3em] md:tracking-[0.4em]"
                 >
                   Stratejik Analiz →
                 </Link>
-                <div className="w-2.5 h-2.5 rounded-full bg-brand-blue animate-pulse shadow-[0_0_15px_#0066ff]" />
+                <div className="h-2.5 w-2.5 rounded-full bg-brand-blue shadow-[0_0_15px_#0066ff] animate-pulse" />
               </div>
             </div>
           </article>

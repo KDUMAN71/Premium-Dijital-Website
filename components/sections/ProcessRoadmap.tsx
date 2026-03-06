@@ -40,66 +40,72 @@ export default function ProcessRoadmap() {
   return (
     <section
       id="surec"
-      className="py-32 px-6 bg-brand-dark overflow-hidden border-t border-white/5"
+      className="overflow-hidden border-t border-white/5 bg-brand-dark px-4 py-16 sm:px-5 sm:py-20 md:px-6 md:py-28"
     >
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-5xl md:text-7xl font-bold tracking-tighter uppercase italic mb-20">
-          Süreç <span className="text-brand-blue font-light">Mimarisi</span>
+      <div className="mx-auto max-w-6xl">
+        <h2 className="mb-10 text-3xl font-bold tracking-tighter uppercase italic sm:mb-12 sm:text-4xl md:mb-20 md:text-7xl">
+          Süreç <span className="font-light text-brand-blue">Mimarisi</span>
         </h2>
 
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
+        <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-16">
           {/* Sol: Adım Seçici */}
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {steps.map((step, index) => (
-              <div
+              <button
                 key={step.id}
+                type="button"
                 onMouseEnter={() => setActiveStep(index)}
-                className={`group cursor-pointer p-8 rounded-3xl border transition-all duration-500 ${
+                onClick={() => setActiveStep(index)}
+                className={`group w-full rounded-2xl border p-5 text-left transition-all duration-500 sm:rounded-3xl sm:p-6 md:p-8 ${
                   activeStep === index
-                    ? "bg-white/[0.04] border-brand-blue/40 shadow-[0_0_30px_rgba(0,100,255,0.1)]"
-                    : "bg-transparent border-white/5 opacity-40 hover:opacity-100"
+                    ? "border-brand-blue/40 bg-white/[0.04] shadow-[0_0_30px_rgba(0,100,255,0.1)]"
+                    : "border-white/5 bg-transparent opacity-70 hover:opacity-100"
                 }`}
               >
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-4 sm:gap-5 md:gap-6">
                   <span
-                    className={`text-2xl font-black italic transition-colors ${activeStep === index ? "text-brand-blue" : "text-white/20"}`}
+                    className={`text-xl font-black italic transition-colors sm:text-2xl ${
+                      activeStep === index ? "text-brand-blue" : "text-white/20"
+                    }`}
                   >
                     {step.id}
                   </span>
-                  <h3 className="text-2xl font-bold uppercase italic tracking-tight">
+
+                  <h3 className="text-xl font-bold uppercase italic tracking-tight sm:text-2xl">
                     {step.title}
                   </h3>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
 
-          {/* Sağ: Detay Paneli (Resend Tarzı Wireframe) */}
-          <div className="relative min-h-[400px] p-10 rounded-[3rem] border border-white/10 bg-[#080808] overflow-hidden">
+          {/* Sağ: Detay Paneli */}
+          <div className="relative min-h-[320px] overflow-hidden rounded-[2rem] border border-white/10 bg-[#080808] p-6 sm:min-h-[360px] sm:rounded-[2.5rem] sm:p-8 md:min-h-[400px] md:rounded-[3rem] md:p-10">
             {/* Dinamik Arkaplan Glow */}
-            <div className="absolute -top-20 -right-20 w-64 h-64 bg-brand-blue/10 blur-[100px] rounded-full" />
+            <div className="absolute -top-20 -right-20 h-48 w-48 rounded-full bg-brand-blue/10 blur-[90px] sm:h-56 sm:w-56 md:h-64 md:w-64 md:blur-[100px]" />
 
             <motion.div
               key={activeStep}
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: 16 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
               className="relative z-10"
             >
-              <h4 className="text-brand-blue font-black text-xs uppercase tracking-[0.4em] mb-6 italic">
+              <h4 className="mb-4 text-[10px] font-black uppercase tracking-[0.24em] text-brand-blue italic sm:mb-5 sm:text-[11px] sm:tracking-[0.3em] md:mb-6 md:text-xs md:tracking-[0.4em]">
                 Aşama Detayları // {steps[activeStep].title}
               </h4>
-              <p className="text-2xl text-white/80 font-medium leading-relaxed italic mb-10">
+
+              <p className="mb-6 text-lg font-medium italic leading-relaxed text-white/80 sm:mb-8 sm:text-xl md:mb-10 md:text-2xl">
                 "{steps[activeStep].desc}"
               </p>
 
-              <div className="grid gap-3">
+              <div className="grid gap-2.5 sm:gap-3">
                 {steps[activeStep].details.map((detail, i) => (
                   <div
                     key={i}
-                    className="flex items-center gap-4 py-4 px-6 rounded-2xl bg-white/5 border border-white/5 text-sm font-bold uppercase tracking-widest text-white/60"
+                    className="flex items-center gap-3 rounded-2xl border border-white/5 bg-white/5 px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-white/60 sm:gap-4 sm:px-5 sm:py-4 sm:text-sm sm:tracking-[0.22em] md:px-6 md:tracking-widest"
                   >
-                    <span className="w-1.5 h-1.5 bg-brand-blue rounded-full shadow-[0_0_10px_rgba(0,100,255,1)]" />
+                    <span className="h-1.5 w-1.5 rounded-full bg-brand-blue shadow-[0_0_10px_rgba(0,100,255,1)]" />
                     {detail}
                   </div>
                 ))}

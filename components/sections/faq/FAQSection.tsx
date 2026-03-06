@@ -3,7 +3,6 @@ import Link from "next/link";
 export type FAQItem = { q: string; a: string };
 
 function toPlainText(htmlOrText: string) {
-  // Biz HTML kullanmıyoruz ama ileride kullanırsan minimum temizlik.
   return htmlOrText.replace(/<[^>]*>/g, "").trim();
 }
 
@@ -38,50 +37,47 @@ export default function FAQSection({
     })),
   };
 
+  const [titleBefore, titleAfter] = title.includes("{accent}")
+    ? title.split("{accent}")
+    : [title, ""];
+
   return (
     <section
       id={id}
-      className="relative z-10 py-32 px-6 border-t border-white/5 max-w-4xl mx-auto"
+      className="relative z-10 mx-auto max-w-4xl border-t border-white/5 px-4 py-14 sm:px-5 sm:py-18 md:px-6 md:py-24"
     >
-      {/* JSON-LD */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <h2 className="text-3xl md:text-5xl font-bold mb-16 text-center uppercase tracking-tighter">
-        {title.split("{accent}")[0]}
-        <span className={accentClass}>
-          {title.includes("{accent}") ? title.split("{accent}")[1] : ""}
-        </span>
+      <h2 className="mb-10 text-center text-3xl font-bold uppercase tracking-tighter sm:mb-12 sm:text-4xl md:mb-16 md:text-5xl">
+        {titleBefore}
+        <span className={accentClass}>{titleAfter}</span>
       </h2>
 
-      <div className="space-y-6">
+      <div className="space-y-4 sm:space-y-5 md:space-y-6">
         {items.map((faq, i) => (
           <details
             key={i}
-            className="group border border-white/10 rounded-2xl bg-white/5 p-2 hover:bg-white/[0.08] transition-all"
+            className="group rounded-2xl border border-white/10 bg-white/5 p-1.5 transition-all hover:bg-white/[0.08] sm:p-2"
           >
-            <summary className="p-6 cursor-pointer font-bold text-xl flex justify-between items-center list-none">
-              {faq.q}
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 text-base font-bold leading-snug sm:p-5 sm:text-lg md:p-6 md:text-xl">
+              <span>{faq.q}</span>
               <span
-                className={`${accentClass} group-open:rotate-180 transition-all`}
+                className={`${accentClass} shrink-0 text-lg transition-all group-open:rotate-180 sm:text-xl`}
               >
                 ↓
               </span>
             </summary>
 
-            <div className="p-6 pt-0 text-gray-300 border-t border-white/5 mt-2 leading-relaxed">
-              {faq.a}
+            <div className="mt-1 border-t border-white/5 px-4 pt-4 pb-4 leading-relaxed text-gray-300 sm:px-5 sm:pt-5 sm:pb-5 md:px-6 md:pt-5">
+              <div className="text-sm sm:text-[15px] md:text-base">{faq.a}</div>
 
-              <div className="mt-6">
+              <div className="mt-5 sm:mt-6">
                 <Link
                   href={ctaHref}
-                  className="shimmer-effect inline-flex items-center justify-center cursor-pointer select-none
-                             bg-brand-blue/30 text-white border border-brand-blue/50
-                             px-8 py-3 rounded-full text-xs font-bold uppercase relative overflow-hidden
-                             hover:bg-brand-blue/40 hover:border-brand-blue/70 hover:shadow-[0_0_30px_rgba(0,0,200,0.25)]
-                             transition"
+                  className="shimmer-effect inline-flex items-center justify-center overflow-hidden rounded-full border border-brand-blue/50 bg-brand-blue/30 px-6 py-3 text-[11px] font-bold uppercase text-white transition hover:border-brand-blue/70 hover:bg-brand-blue/40 hover:shadow-[0_0_30px_rgba(0,0,200,0.25)] sm:px-8 sm:text-xs"
                 >
                   {ctaLabel}
                 </Link>

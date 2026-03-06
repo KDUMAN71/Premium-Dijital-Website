@@ -13,7 +13,6 @@ export default function AnalysisForm() {
   const [serverError, setServerError] = useState<string | null>(null);
   const [startTime, setStartTime] = useState("");
 
-  // ✅ Bu ref, her durumda DOM’da kalacak (scroll garantili)
   const topRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -44,10 +43,8 @@ export default function AnalysisForm() {
     if (!showOther) setValue("otherGoal", "");
   }, [showOther, setValue]);
 
-  // ✅ Success olunca kesin scroll
   useEffect(() => {
     if (isSuccess) {
-      // rAF: success UI DOM'a otursun diye 1 frame beklet
       requestAnimationFrame(() => {
         topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       });
@@ -70,26 +67,29 @@ export default function AnalysisForm() {
       }
 
       if (result?.error) setServerError(result.error);
-      else
+      else {
         setServerError("Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.");
+      }
     });
   };
 
   return (
-    <section id="analiz" className="py-32 px-6 max-w-5xl mx-auto">
-      {/* ✅ scroll hedefi: header offset için */}
+    <section
+      id="analiz"
+      className="mx-auto max-w-5xl px-4 py-16 sm:px-5 sm:py-20 md:px-6 md:py-28"
+    >
       <div ref={topRef} className="scroll-mt-28" />
 
-      <div className="text-center mb-16">
-        <h2 className="text-5xl md:text-7xl font-bold tracking-tighter uppercase mb-6 italic">
-          Ücretsiz <span className="text-brand-blue font-bold">Analiz</span>
+      <div className="mb-10 text-center sm:mb-12 md:mb-16">
+        <h2 className="mb-4 text-3xl font-bold tracking-tighter uppercase italic sm:mb-5 sm:text-4xl md:mb-6 md:text-7xl">
+          Ücretsiz <span className="font-bold text-brand-blue">Analiz</span>
         </h2>
-        <p className="text-gray-500 font-medium tracking-wide italic">
+
+        <p className="text-sm font-medium italic tracking-wide text-gray-500 sm:text-base">
           Büyüme motorunuzu inşa etmek için ilk adımı atın.
         </p>
       </div>
 
-      {/* ✅ Form ve Success aynı “slot” içinde swap olacak */}
       <AnimatePresence mode="wait">
         {isSuccess ? (
           <motion.div
@@ -97,24 +97,25 @@ export default function AnalysisForm() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="p-16 text-center bg-[#0a0a0a] border border-brand-blue/30 rounded-[3rem] shadow-2xl"
+            className="rounded-[2rem] border border-brand-blue/30 bg-[#0a0a0a] p-8 text-center shadow-2xl sm:rounded-[2.5rem] sm:p-10 md:rounded-[3rem] md:p-16"
           >
-            <div className="text-6xl mb-8">💎</div>
-            <h3 className="text-3xl font-bold mb-4 uppercase tracking-tighter text-brand-blue">
+            <div className="mb-6 text-5xl sm:mb-7 sm:text-6xl md:mb-8">💎</div>
+
+            <h3 className="mb-3 text-2xl font-bold uppercase tracking-tighter text-brand-blue sm:mb-4 sm:text-3xl">
               Analiz Talebiniz Alındı
             </h3>
-            <p className="text-gray-400 text-lg">
+
+            <p className="text-sm text-gray-400 sm:text-base md:text-lg">
               Dijital stratejiniz uzman ekibimiz tarafından incelenmeye
               başlandı.
             </p>
 
-            {/* opsiyonel: tekrar gönder */}
             <button
               type="button"
               onClick={() => {
                 setIsSuccess(false);
                 setServerError(null);
-                setStartTime(Date.now().toString()); // timing check için yeniden
+                setStartTime(Date.now().toString());
                 requestAnimationFrame(() => {
                   topRef.current?.scrollIntoView({
                     behavior: "smooth",
@@ -122,7 +123,7 @@ export default function AnalysisForm() {
                   });
                 });
               }}
-              className="mt-10 inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-8 py-4 text-xs font-bold uppercase tracking-[0.3em] text-white/80 hover:text-white hover:bg-white/10 transition"
+              className="mt-8 inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 py-4 text-[10px] font-bold uppercase tracking-[0.22em] text-white/80 transition hover:bg-white/10 hover:text-white sm:mt-10 sm:px-8 sm:text-xs sm:tracking-[0.3em]"
             >
               Yeni Talep Oluştur
             </button>
@@ -134,7 +135,7 @@ export default function AnalysisForm() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-[#0c0c0c] p-8 md:p-14 rounded-[3.5rem] border border-white/5 relative overflow-hidden shadow-2xl"
+            className="relative grid grid-cols-1 gap-5 overflow-hidden rounded-[2rem] border border-white/5 bg-[#0c0c0c] p-5 shadow-2xl sm:gap-6 sm:rounded-[2.5rem] sm:p-7 md:grid-cols-2 md:gap-8 md:rounded-[3.5rem] md:p-14"
           >
             {/* Honeypot */}
             <input
@@ -147,26 +148,26 @@ export default function AnalysisForm() {
             />
 
             {/* Full Name */}
-            <div className="space-y-3">
-              <label className="text-[10px] uppercase tracking-[0.4em] text-white/30 font-black ml-2">
+            <div className="space-y-2.5 sm:space-y-3">
+              <label className="ml-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-white/30 sm:ml-2 sm:tracking-[0.32em] md:tracking-[0.4em]">
                 Yetkili Ad Soyad
               </label>
               <input
                 {...register("fullName")}
                 autoComplete="name"
                 placeholder="Örn: Ahmet Yılmaz"
-                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 outline-none focus:border-brand-blue transition-all font-medium text-white placeholder:text-white/10"
+                className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 font-medium text-white outline-none transition-all placeholder:text-white/10 focus:border-brand-blue sm:px-6 sm:py-5"
               />
               {errors.fullName && (
-                <p className="text-red-500 text-[10px] ml-2 uppercase font-bold">
+                <p className="ml-1.5 text-[10px] font-bold uppercase text-red-500 sm:ml-2">
                   {errors.fullName.message}
                 </p>
               )}
             </div>
 
             {/* Email */}
-            <div className="space-y-3">
-              <label className="text-[10px] uppercase tracking-[0.4em] text-white/30 font-black ml-2">
+            <div className="space-y-2.5 sm:space-y-3">
+              <label className="ml-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-white/30 sm:ml-2 sm:tracking-[0.32em] md:tracking-[0.4em]">
                 Kurumsal E-Posta
               </label>
               <input
@@ -174,18 +175,18 @@ export default function AnalysisForm() {
                 autoComplete="email"
                 inputMode="email"
                 placeholder="kurumsal@sirketiniz.com"
-                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 outline-none focus:border-brand-blue transition-all font-medium text-white placeholder:text-white/10"
+                className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 font-medium text-white outline-none transition-all placeholder:text-white/10 focus:border-brand-blue sm:px-6 sm:py-5"
               />
               {errors.email && (
-                <p className="text-red-500 text-[10px] ml-2 uppercase font-bold">
+                <p className="ml-1.5 text-[10px] font-bold uppercase text-red-500 sm:ml-2">
                   {errors.email.message}
                 </p>
               )}
             </div>
 
             {/* Website */}
-            <div className="space-y-3 md:col-span-2">
-              <label className="text-[10px] uppercase tracking-[0.4em] text-white/30 font-black ml-2">
+            <div className="space-y-2.5 sm:space-y-3 md:col-span-2">
+              <label className="ml-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-white/30 sm:ml-2 sm:tracking-[0.32em] md:tracking-[0.4em]">
                 İncelenecek Platform URL
               </label>
               <input
@@ -193,25 +194,25 @@ export default function AnalysisForm() {
                 autoComplete="url"
                 inputMode="url"
                 placeholder="https://www.sirketiniz.com"
-                className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 outline-none focus:border-brand-blue transition-all font-medium text-white placeholder:text-white/10"
+                className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 font-medium text-white outline-none transition-all placeholder:text-white/10 focus:border-brand-blue sm:px-6 sm:py-5"
               />
               {errors.website && (
-                <p className="text-red-500 text-[10px] ml-2 uppercase font-bold">
+                <p className="ml-1.5 text-[10px] font-bold uppercase text-red-500 sm:ml-2">
                   {errors.website.message}
                 </p>
               )}
             </div>
 
             {/* Goal Select */}
-            <div className="space-y-3 md:col-span-2 relative">
-              <label className="text-[10px] uppercase tracking-[0.4em] text-white/30 font-black ml-2">
+            <div className="relative space-y-2.5 sm:space-y-3 md:col-span-2">
+              <label className="ml-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-white/30 sm:ml-2 sm:tracking-[0.32em] md:tracking-[0.4em]">
                 Stratejik Hedef
               </label>
 
-              <div className="relative group">
+              <div className="group relative">
                 <select
                   {...register("goal")}
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 outline-none focus:border-brand-blue transition-all font-medium appearance-none cursor-pointer pr-12 text-white"
+                  className="w-full cursor-pointer appearance-none rounded-2xl border border-white/10 bg-white/5 px-5 py-4 pr-12 font-medium text-white outline-none transition-all focus:border-brand-blue sm:px-6 sm:py-5"
                 >
                   <option value="" className="bg-black">
                     Lütfen seçim yapınız
@@ -233,7 +234,7 @@ export default function AnalysisForm() {
                   </option>
                 </select>
 
-                <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-white/30 group-hover:text-brand-blue transition-colors">
+                <div className="pointer-events-none absolute right-5 top-1/2 -translate-y-1/2 text-white/30 transition-colors group-hover:text-brand-blue sm:right-6">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="20"
@@ -251,7 +252,7 @@ export default function AnalysisForm() {
               </div>
 
               {errors.goal && (
-                <p className="text-red-500 text-[10px] ml-2 uppercase font-bold mt-2">
+                <p className="mt-2 ml-1.5 text-[10px] font-bold uppercase text-red-500 sm:ml-2">
                   {errors.goal.message}
                 </p>
               )}
@@ -264,18 +265,18 @@ export default function AnalysisForm() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="space-y-3 md:col-span-2 overflow-hidden"
+                  className="space-y-2.5 overflow-hidden sm:space-y-3 md:col-span-2"
                 >
-                  <label className="text-[10px] uppercase tracking-[0.4em] text-white/30 font-black ml-2">
+                  <label className="ml-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-white/30 sm:ml-2 sm:tracking-[0.32em] md:tracking-[0.4em]">
                     İhtiyacınızı Belirtin
                   </label>
                   <textarea
                     {...register("otherGoal")}
                     placeholder="Size nasıl yardımcı olabiliriz?"
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-5 outline-none focus:border-brand-blue transition-all font-medium text-white min-h-[120px] resize-none"
+                    className="min-h-[110px] w-full resize-none rounded-2xl border border-white/10 bg-white/5 px-5 py-4 font-medium text-white outline-none transition-all focus:border-brand-blue sm:min-h-[120px] sm:px-6 sm:py-5"
                   />
                   {errors.otherGoal && (
-                    <p className="text-red-500 text-[10px] ml-2 uppercase font-bold">
+                    <p className="ml-1.5 text-[10px] font-bold uppercase text-red-500 sm:ml-2">
                       {errors.otherGoal.message}
                     </p>
                   )}
@@ -284,29 +285,28 @@ export default function AnalysisForm() {
             </AnimatePresence>
 
             {serverError && (
-              <div className="md:col-span-2 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-xs font-bold text-center">
+              <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-4 text-center text-xs font-bold text-red-500 md:col-span-2">
                 {serverError}
               </div>
             )}
 
-            <div className="md:col-span-2 pt-6">
+            <div className="pt-2 sm:pt-4 md:col-span-2 md:pt-6">
               <button
                 type="submit"
                 disabled={isPending}
                 aria-busy={isPending}
-                className={`w-full relative h-20 rounded-3xl font-black text-sm uppercase tracking-[0.3em] overflow-hidden
-                  shadow-2xl shadow-brand-blue/30 transition-all active:scale-95
+                className={`relative h-16 w-full overflow-hidden rounded-[1.6rem] text-xs font-black uppercase tracking-[0.18em] shadow-2xl shadow-brand-blue/30 transition-all active:scale-95 sm:h-18 sm:rounded-[1.8rem] sm:text-sm sm:tracking-[0.24em] md:h-20 md:rounded-3xl md:tracking-[0.3em]
                   ${
                     isPending
-                      ? "bg-brand-blue/70 cursor-not-allowed opacity-80"
-                      : "bg-brand-blue cursor-pointer hover:shadow-[0_0_60px_rgba(0,0,200,0.5)]"
+                      ? "cursor-not-allowed bg-brand-blue/70 opacity-80"
+                      : "cursor-pointer bg-brand-blue hover:shadow-[0_0_60px_rgba(0,0,200,0.5)]"
                   }`}
               >
                 {!isPending && (
-                  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full animate-[shimmer_3s_infinite]" />
+                  <span className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent animate-[shimmer_3s_infinite]" />
                 )}
 
-                <span className="relative z-10 flex items-center justify-center gap-3">
+                <span className="relative z-10 flex items-center justify-center gap-3 px-4 text-center">
                   {isPending ? (
                     <>
                       <span className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
