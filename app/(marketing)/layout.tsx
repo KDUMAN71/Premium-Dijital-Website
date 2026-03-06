@@ -1,12 +1,16 @@
 // app/(marketing)/layout.tsx
+
 import type { ReactNode } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import MarketingNav from "@/components/layout/MarketingNav";
+import WhatsAppCTA from "@/components/global/WhatsAppCTA";
+import WhatsAppCTAGlass from "@/components/global/WhatsAppCTAGlass";
+import SocialSidebar from "@/components/global/SocialSidebar";
 
 export default function MarketingLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="relative isolate min-h-screen bg-brand-dark text-white selection:bg-brand-blue/30">
+    <div className="relative isolate min-h-screen bg-brand-dark text-white selection:bg-brand-blue/30 overflow-x-clip">
       <header className="fixed left-0 right-0 top-0 z-[100] border-b border-white/5 bg-brand-dark/80 backdrop-blur-xl">
         <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
           {/* Logo */}
@@ -52,7 +56,8 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
       </div>
 
       {/* SOCIALS */}
-      <aside
+      <SocialSidebar />
+      {/* <aside
         className="fixed left-6 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col gap-5"
         aria-label="Sosyal bağlantılar"
       >
@@ -73,27 +78,11 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
             <span className="text-sm font-bold opacity-80">{item.text}</span>
           </a>
         ))}
-      </aside>
+      </aside> */}
 
-      {/* WHATSAPP */}
-      <div className="fixed right-6 bottom-6 z-50">
-        <a
-          href="https://wa.me/90XXXXXXXXXX"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="WhatsApp ile iletişime geç"
-          className="shimmer-effect flex items-center gap-3 bg-[#25D366] px-6 py-4 rounded-full shadow-[0_10px_40px_rgba(37,211,102,0.4)] relative overflow-hidden"
-        >
-          <span className="text-white font-bold text-sm uppercase">
-            Büyümeyi Başlatın
-          </span>
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
-          </span>
-        </a>
-      </div>
-
+      {/* WHATSAPP (Premium) */}
+      {/* <WhatsAppCTA /> */}
+      <WhatsAppCTAGlass />
       <main id="content" className="relative z-10 pt-20">
         {children}
       </main>

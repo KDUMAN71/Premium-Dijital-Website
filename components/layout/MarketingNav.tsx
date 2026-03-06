@@ -18,7 +18,7 @@ export default function MarketingNav() {
 
   return (
     <>
-      {/* Desktop Nav - Zarif Hover Etkisi */}
+      {/* Desktop Nav - Mevcut Premium Görünüm Korundu */}
       <nav className="hidden md:flex items-center gap-1" aria-label="Ana menü">
         {items.map((it) => (
           <Link
@@ -31,32 +31,54 @@ export default function MarketingNav() {
         ))}
       </nav>
 
-      {/* Mobile button */}
+      {/* Mobil Hamburger Butonu - Daha Şık ve Hareketli */}
       <button
         type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="md:hidden flex h-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 px-4 text-xs font-bold uppercase tracking-widest"
+        onClick={() => setOpen(!open)}
+        className="md:hidden relative z-[120] flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/5 transition-colors hover:bg-white/10"
       >
-        Menü
+        <span
+          className={`h-0.5 w-5 bg-white transition-all duration-300 ${open ? "rotate-45 translate-y-2" : ""}`}
+        />
+        <span
+          className={`h-0.5 w-5 bg-white transition-all duration-300 ${open ? "opacity-0" : ""}`}
+        />
+        <span
+          className={`h-0.5 w-5 bg-white transition-all duration-300 ${open ? "-rotate-45 -translate-y-2" : ""}`}
+        />
       </button>
 
-      {/* Mobile Panel (Açıldığında) */}
-      {open && (
-        <div className="absolute left-0 right-0 top-20 z-[110] border-b border-white/10 bg-brand-dark/95 p-6 backdrop-blur-2xl md:hidden">
-          <div className="flex flex-col gap-4">
-            {items.map((it) => (
-              <Link
-                key={it.href}
-                href={it.href}
-                onClick={() => setOpen(false)}
-                className="text-xl font-bold"
-              >
-                {it.label}
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Mobil Panel - Yukarıdan Aşağı Süzülen Premium Efekt */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            className="absolute left-0 right-0 top-20 z-[110] overflow-hidden border-b border-white/10 bg-brand-dark/95 backdrop-blur-2xl md:hidden"
+          >
+            <nav className="flex flex-col gap-4 p-8">
+              {items.map((it, idx) => (
+                <motion.div
+                  key={it.href}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.05 }}
+                >
+                  <Link
+                    href={it.href}
+                    onClick={() => setOpen(false)}
+                    className="text-xl font-bold uppercase tracking-widest text-white/90 hover:text-brand-blue transition-colors"
+                  >
+                    {it.label}
+                  </Link>
+                </motion.div>
+              ))}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
