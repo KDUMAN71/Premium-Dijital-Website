@@ -10,6 +10,7 @@ interface ShimmerButtonProps {
   className?: string;
   variant?: "primary" | "secondary" | "ghost";
   showShimmer?: boolean;
+  size?: "sm" | "md" | "lg";
 }
 
 export default function ShimmerButton({
@@ -17,44 +18,77 @@ export default function ShimmerButton({
   href,
   className,
   variant = "primary",
-  showShimmer = false,
+  showShimmer = true,
+  size = "md",
 }: ShimmerButtonProps) {
   return (
-    <Link href={href}>
+    <Link href={href} className="inline-block">
       <motion.button
         whileHover={{
-          scale: 1.05,
-          boxShadow: "0 0 40px rgba(0, 100, 255, 0.3)",
+          scale: 1.03,
+          boxShadow:
+            "0 0 48px rgba(190,41,236,0.35), 0 0 80px rgba(0,0,200,0.25)",
         }}
-        whileTap={{ scale: 0.95 }}
+        whileTap={{ scale: 0.97 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
         className={cn(
-          "relative overflow-hidden rounded-full font-black uppercase tracking-widest transition-all duration-300",
-          "flex items-center justify-center min-w-[200px]",
+          "relative overflow-hidden font-bold tracking-wide transition-all duration-300",
+          "flex items-center justify-center",
+          // Size variants
           {
-            "bg-brand-blue text-white shadow-lg": variant === "primary",
-            "bg-white text-brand-dark shadow-lg": variant === "secondary",
-            "bg-white/5 text-white/90 border border-white/10 backdrop-blur-md":
+            "rounded-xl text-sm min-w-[140px]": size === "sm",
+            "rounded-xl text-sm min-w-[180px]": size === "md",
+            "rounded-2xl text-base min-w-[220px]": size === "lg",
+          },
+          // Color variants
+          {
+            // Brand gradient — primary CTA
+            "text-white": variant === "primary",
+            // Glass — secondary
+            "bg-white/5 text-white/90 border border-white/10 backdrop-blur-md hover:border-[rgba(190,41,236,0.4)] hover:bg-white/8":
+              variant === "secondary",
+            // Ghost
+            "bg-transparent text-white/80 border border-white/10 hover:text-white hover:border-white/20":
               variant === "ghost",
           },
           className,
         )}
+        style={
+          variant === "primary"
+            ? {
+                background:
+                  "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02))",
+                border: "1px solid rgba(255,255,255,0.10)",
+                backdropFilter: "blur(10px)",
+              }
+            : undefined
+        }
       >
-        {/* Işıldama (Shimmer) Efekti */}
-        {showShimmer && (
+        {/* Shimmer efekti — sadece primary */}
+        {showShimmer && variant === "primary" && (
           <motion.div
             initial={{ x: "-150%" }}
             animate={{ x: "150%" }}
             transition={{
               repeat: Infinity,
-              duration: 2,
+              duration: 2.5,
               ease: "linear",
+              repeatDelay: 1,
             }}
-            className="absolute inset-y-0 w-1/2 bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-[-20deg] pointer-events-none"
+            className="absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-20deg] pointer-events-none"
           />
         )}
 
-        {/* Buton Metni */}
-        <span className="relative z-10 block px-10 py-5">{children}</span>
+        {/* İçerik */}
+        <span
+          className={cn("relative z-10 flex items-center gap-2", {
+            "px-6 py-3": size === "sm",
+            "px-8 py-4": size === "md",
+            "px-10 py-5": size === "lg",
+          })}
+        >
+          {children}
+        </span>
       </motion.button>
     </Link>
   );

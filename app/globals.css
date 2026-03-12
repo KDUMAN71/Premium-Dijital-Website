@@ -1,32 +1,60 @@
 @import "tailwindcss";
 
 @theme {
-  /* Marka Renklerimiz */
-  --color-brand-blue: #0000c8;
+  /* ── Brand Renk Sistemi ── */
   --color-brand-purple: #be29ec;
+  --color-brand-blue: #0000c8;
   --color-brand-dark: #050505;
 
-  --bg-glow: radial-gradient(
+  /* Gradient shortcuts */
+  --gradient-brand: linear-gradient(135deg, #be29ec, #0000c8);
+  --gradient-brand-r: linear-gradient(90deg, #be29ec, #0000c8);
+
+  /* Glow efektleri */
+  --bg-glow-purple: radial-gradient(
     circle,
-    rgba(190, 41, 236, 0.2) 0%,
-    rgba(0, 0, 200, 0) 70%
+    rgba(190, 41, 236, 0.25) 0%,
+    transparent 70%
   );
+  --bg-glow-blue: radial-gradient(
+    circle,
+    rgba(0, 0, 200, 0.2) 0%,
+    transparent 70%
+  );
+
+  /* ── Tipografi ── */
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-inter);
+
+  /* ── Spacing & Radius ── */
+  --radius-card: 1rem;
+  --radius-btn: 0.875rem;
 }
 
 :root {
-  --background: var(--color-brand-dark);
+  --background: #050505;
   --foreground: #ffffff;
+  --foreground-muted: rgba(255, 255, 255, 0.65);
+  --foreground-subtle: rgba(255, 255, 255, 0.4);
+  --card-bg: rgba(255, 255, 255, 0.04);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --brand-glow: rgba(190, 41, 236, 0.3);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+  font-feature-settings:
+    "rlig" 1,
+    "calt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 html,
 body {
   width: 100%;
-  overflow-x: clip; /* destek yoksa hidden davranır gibi */
+  overflow-x: clip;
 }
 
 @supports not (overflow-x: clip) {
@@ -36,7 +64,64 @@ body {
   }
 }
 
-/* SHIMMER ANIMASYONU - Tailwind v4 uyumlu */
+html {
+  scroll-behavior: smooth;
+}
+
+section[id] {
+  scroll-margin-top: 132px;
+}
+
+/* ── Brand Gradient Text ── */
+.text-brand-gradient {
+  background: var(--gradient-brand-r);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Brand Gradient Border ── */
+.border-brand-gradient {
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+}
+
+.border-brand-gradient::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: var(--gradient-brand);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ── Glassmorphism Card ── */
+.glass-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ── Brand Glow ── */
+.glow-purple {
+  box-shadow: 0 0 40px rgba(190, 41, 236, 0.2);
+}
+
+.glow-purple-strong {
+  box-shadow:
+    0 0 80px rgba(190, 41, 236, 0.35),
+    0 0 160px rgba(0, 0, 200, 0.15);
+}
+
+/* ── Shimmer Animation ── */
 @utility shimmer-effect {
   position: relative;
   overflow: hidden;
@@ -44,14 +129,11 @@ body {
   &::after {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.2),
+      rgba(255, 255, 255, 0.08),
       transparent
     );
     transform: translateX(-100%);
@@ -71,19 +153,6 @@ body {
   }
 }
 
-@utility hero-vignette {
-  mask-image: radial-gradient(
-    circle,
-    rgba(0, 0, 0, 1) 60%,
-    rgba(0, 0, 0, 0) 100%
-  );
-  -webkit-mask-image: radial-gradient(
-    circle,
-    rgba(0, 0, 0, 1) 60%,
-    rgba(0, 0, 0, 0) 100%
-  );
-}
-
 @keyframes shimmer {
   0% {
     transform: translateX(-150%);
@@ -100,6 +169,21 @@ body {
   animation: shimmer 2.5s infinite;
 }
 
+/* ── Hero Vignette ── */
+@utility hero-vignette {
+  mask-image: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 1) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  -webkit-mask-image: radial-gradient(
+    circle,
+    rgba(0, 0, 0, 1) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+/* ── Line Clamp ── */
 .line-clamp-4 {
   display: -webkit-box;
   -webkit-line-clamp: 4;
@@ -107,10 +191,37 @@ body {
   overflow: hidden;
 }
 
-section[id] {
-  scroll-margin-top: 120px;
+/* ── Brand Button Base ── */
+.btn-brand {
+  background: var(--gradient-brand-r);
+  color: #ffffff;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-html {
-  scroll-behavior: smooth;
+.btn-brand:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 32px rgba(190, 41, 236, 0.35);
+}
+
+.btn-ghost {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(190, 41, 236, 0.4);
+  transform: translateY(-1px);
 }

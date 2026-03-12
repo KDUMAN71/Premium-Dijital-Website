@@ -4,49 +4,54 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import MarketingNav from "@/components/layout/MarketingNav";
-import WhatsAppCTA from "@/components/global/WhatsAppCTA";
 import WhatsAppCTAGlass from "@/components/global/WhatsAppCTAGlass";
 import SocialSidebar from "@/components/global/SocialSidebar";
+import NavWrapper from "@/components/layout/NavWrapper";
 
 export default function MarketingLayout({ children }: { children: ReactNode }) {
   return (
     <div className="relative isolate min-h-screen bg-brand-dark text-white selection:bg-brand-blue/30 overflow-x-clip">
-      <header className="fixed left-0 right-0 top-0 z-[100] border-b border-white/5 bg-brand-dark/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-4">
-            <span className="h-16 w-16 rounded-2xl bg-gradient-to-br from-brand-blue to-brand-purple p-[2px] shadow-[0_0_30px_rgba(0,0,200,0.25)]">
-              <span className="flex h-full w-full items-center justify-center rounded-2xl bg-brand-dark">
-                <Image
-                  src="/img/premiumdijital-logo.webp"
-                  alt="Premium Dijital Reklam Ajansı"
-                  width={160}
-                  height={115}
-                  priority
-                  className="h-14 w-auto object-contain"
-                />
+      <header>
+        <NavWrapper>
+          <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
+            {/* Logo */}
+            <Link href="/" className="flex items-center gap-4">
+              <span className="h-16 w-16 rounded-2xl bg-gradient-to-br from-brand-blue to-brand-purple p-[2px] shadow-[0_0_30px_rgba(0,0,200,0.25)]">
+                <span className="flex h-full w-full items-center justify-center rounded-2xl bg-brand-dark">
+                  <Image
+                    src="/img/premiumdijital-logo.webp"
+                    alt="Premium Dijital Reklam Ajansı"
+                    width={160}
+                    height={115}
+                    priority
+                    className="h-14 w-auto object-contain"
+                  />
+                </span>
               </span>
-            </span>
 
-            <span className="text-xl font-bold tracking-tight uppercase">
-              Premium <span className="text-brand-blue">Dijital</span>
-            </span>
-          </Link>
-
-          {/* Menü */}
-          <MarketingNav />
-
-          {/* CTA */}
-          <div className="hidden md:block">
-            <Link
-              href="/iletisim#analiz"
-              className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full bg-brand-blue px-10 text-[14px] font-bold uppercase tracking-wider text-white shadow-[0_0_30px_rgba(0,0,200,0.4)] transition-all hover:scale-105 active:scale-95"
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-shimmer" />
-              <span className="relative z-10">Randevu Al</span>
+              <span className="font-bold text-white uppercase tracking-widest">
+                PREMIUM{" "}
+                <span className="text-brand-blue brightness-150 drop-shadow-[0_0_8px_rgba(0,0,200,0.4)]">
+                  DIJITAL
+                </span>
+              </span>
             </Link>
+
+            {/* Menü */}
+            <MarketingNav />
+
+            {/* CTA */}
+            <div className="hidden md:block">
+              <Link
+                href="/iletisim#analiz"
+                className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full bg-brand-blue px-10 text-[14px] font-bold uppercase tracking-wider text-white shadow-[0_0_30px_rgba(0,0,200,0.4)] transition-all hover:scale-105 active:scale-95"
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-shimmer" />
+                <span className="relative z-10">Randevu Al</span>
+              </Link>
+            </div>
           </div>
-        </div>
+        </NavWrapper>
       </header>
 
       {/* GLOBAL AMBIENT LIGHT LAYER */}
@@ -114,15 +119,18 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
                 />
                 <div>
                   <div className="mt-2 text-sm font-semibold tracking-tight text-white/90 sm:mt-3 sm:text-base md:mt-4">
-                    Premium <span className="text-brand-blue">Dijital</span>
+                    Premium{" "}
+                    <span className="text-brand-blue brightness-150">
+                      Dijital
+                    </span>
                   </div>
-                  <div className="text-[10px] uppercase tracking-[0.18em] text-white/45 sm:text-xs sm:tracking-[0.22em] md:tracking-[0.28em]">
+                  <div className="text-[10px] uppercase tracking-[0.18em] text-white/60 sm:text-xs sm:tracking-[0.22em] md:tracking-[0.28em]">
                     Reklam {" · "} Dönüşüm {" · "} Büyüme
                   </div>
                 </div>
               </a>
 
-              <p className="mt-4 text-sm italic leading-relaxed text-gray-400 sm:mt-5 md:mt-6">
+              <p className="mt-4 text-sm italic leading-relaxed text-white/60 sm:mt-5 md:mt-6">
                 İstanbul merkezli ajansımızla markanızı pazarın zirvesine
                 taşıyoruz.
               </p>
@@ -130,10 +138,10 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
 
             {/* Expertise */}
             <div>
-              <h4 className="mb-4 text-[11px] font-bold uppercase tracking-[0.22em] text-white/50 sm:mb-5 sm:text-xs sm:tracking-[0.28em] md:mb-6 md:tracking-widest">
+              <h2 className="mb-4 text-[11px] font-bold uppercase tracking-[0.22em] text-white/60 sm:mb-5 sm:text-xs sm:tracking-[0.28em] md:mb-6 md:tracking-widest">
                 Sektörel Uzmanlık
-              </h4>
-              <ul className="space-y-2.5 text-sm text-gray-400 sm:space-y-3">
+              </h2>
+              <ul className="space-y-2.5 text-sm text-white/60 sm:space-y-3">
                 {["Sağlık Turizmi", "B2B & Sanayi", "E-Ticaret ROI"].map(
                   (t) => (
                     <li key={t} className="transition hover:text-white">
@@ -146,10 +154,10 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
 
             {/* Services */}
             <div>
-              <h4 className="mb-4 text-[11px] font-bold uppercase tracking-[0.22em] text-white/50 sm:mb-5 sm:text-xs sm:tracking-[0.28em] md:mb-6 md:tracking-widest">
+              <h4 className="mb-4 text-[11px] font-bold uppercase tracking-[0.22em] text-white/60 sm:mb-5 sm:text-xs sm:tracking-[0.28em] md:mb-6 md:tracking-widest">
                 Taktik Servisler
               </h4>
-              <ul className="space-y-2.5 text-sm text-gray-400 sm:space-y-3">
+              <ul className="space-y-2.5 text-sm text-white/60 sm:space-y-3">
                 {[
                   "Google & YouTube Ads",
                   "Meta (IG/FB) Ads",
@@ -164,7 +172,7 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
 
             {/* Contact */}
             <div>
-              <h4 className="mb-4 text-[11px] font-bold uppercase tracking-[0.22em] text-white/50 sm:mb-5 sm:text-xs sm:tracking-[0.28em] md:mb-6 md:tracking-widest">
+              <h4 className="mb-4 text-[11px] font-bold uppercase tracking-[0.22em] text-white/60 sm:mb-5 sm:text-xs sm:tracking-[0.28em] md:mb-6 md:tracking-widest">
                 İletişim
               </h4>
 
@@ -188,11 +196,11 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
           </div>
 
           <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 sm:mt-12 sm:pt-7 md:mt-16 md:flex-row md:gap-4 md:pt-8">
-            <div className="text-center text-[9px] uppercase tracking-[0.22em] text-white/35 sm:text-[10px] sm:tracking-[0.3em] md:text-left md:tracking-[0.4em]">
+            <div className="text-center text-[9px] uppercase tracking-[0.22em] text-white/50 sm:text-[10px] sm:tracking-[0.3em] md:text-left md:tracking-[0.4em]">
               {"(c) "} {new Date().getFullYear()} Premium Dijital Reklam Ajansı
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-2 text-[9px] uppercase tracking-[0.18em] text-white/40 sm:gap-3 sm:text-[10px] sm:tracking-[0.24em] md:justify-end md:gap-4 md:tracking-[0.3em]">
+            <div className="flex flex-wrap items-center justify-center gap-2 text-[9px] uppercase tracking-[0.18em] text-white/50 sm:gap-3 sm:text-[10px] sm:tracking-[0.24em] md:justify-end md:gap-4 md:tracking-[0.3em]">
               <a className="transition hover:text-white" href="#gizlilik">
                 Gizlilik
               </a>

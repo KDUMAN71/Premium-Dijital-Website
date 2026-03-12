@@ -1,46 +1,65 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type NavItem = {
   id: string;
   label: string;
 };
 
+const HEADER_OFFSET = 132;
+
 export default function ServicePageStickyNav({ items }: { items: NavItem[] }) {
   const [activeId, setActiveId] = useState<string>(items[0]?.id ?? "");
 
+  const sectionIds = useMemo(() => items.map((item) => item.id), [items]);
+
   useEffect(() => {
-    const sections = items
-      .map((item) => document.getElementById(item.id))
-      .filter(Boolean) as HTMLElement[];
+    if (!sectionIds.length) return;
 
-    if (!sections.length) return;
+    let ticking = false;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort(
-            (a, b) =>
-              Math.abs(a.boundingClientRect.top) -
-              Math.abs(b.boundingClientRect.top),
-          );
+    const updateActiveSection = () => {
+      const viewportAnchor = HEADER_OFFSET + 40;
 
-        if (visible[0]?.target?.id) {
-          setActiveId(visible[0].target.id);
+      let bestId = sectionIds[0];
+      let bestDistance = Number.POSITIVE_INFINITY;
+
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+
+        const rect = el.getBoundingClientRect();
+        const distance = Math.abs(rect.top - viewportAnchor);
+
+        // Section tamamen ekranın üstünde kaldıysa ama bir sonrakine geçilmediyse
+        // yine de mantıklı section'ı tutabilmek için mesafeyi esas alıyoruz.
+        if (distance < bestDistance) {
+          bestDistance = distance;
+          bestId = id;
         }
-      },
-      {
-        rootMargin: "-20% 0px -65% 0px",
-        threshold: [0.1, 0.25, 0.4],
-      },
-    );
+      }
 
-    sections.forEach((section) => observer.observe(section));
+      setActiveId(bestId);
+      ticking = false;
+    };
 
-    return () => observer.disconnect();
-  }, [items]);
+    const onScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateActiveSection);
+        ticking = true;
+      }
+    };
+
+    updateActiveSection();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [sectionIds]);
 
   if (!items?.length) return null;
 
@@ -52,7 +71,7 @@ export default function ServicePageStickyNav({ items }: { items: NavItem[] }) {
             Bölümler
           </span>
 
-          <div className="h-4 w-px bg-white/10" />
+          <div className="hidden h-4 w-px bg-white/10 sm:block" />
 
           <nav
             aria-label="Sayfa içi bölüm navigasyonu"

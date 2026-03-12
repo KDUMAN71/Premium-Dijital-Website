@@ -149,10 +149,14 @@ export default function AnalysisForm() {
 
             {/* Full Name */}
             <div className="space-y-2.5 sm:space-y-3">
-              <label className="ml-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-white/30 sm:ml-2 sm:tracking-[0.32em] md:tracking-[0.4em]">
+              <label
+                htmlFor="name-input"
+                className="ml-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-white/60 sm:ml-2 sm:tracking-[0.32em] md:tracking-[0.4em]"
+              >
                 Yetkili Ad Soyad
               </label>
               <input
+                id="name-input"
                 {...register("fullName")}
                 autoComplete="name"
                 placeholder="Örn: Ahmet Yılmaz"
@@ -167,10 +171,14 @@ export default function AnalysisForm() {
 
             {/* Email */}
             <div className="space-y-2.5 sm:space-y-3">
-              <label className="ml-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-white/30 sm:ml-2 sm:tracking-[0.32em] md:tracking-[0.4em]">
+              <label
+                htmlFor="email-input"
+                className="ml-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-white/30 sm:ml-2 sm:tracking-[0.32em] md:tracking-[0.4em]"
+              >
                 Kurumsal E-Posta
               </label>
               <input
+                id="email-input"
                 {...register("email")}
                 autoComplete="email"
                 inputMode="email"
@@ -186,10 +194,14 @@ export default function AnalysisForm() {
 
             {/* Website */}
             <div className="space-y-2.5 sm:space-y-3 md:col-span-2">
-              <label className="ml-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-white/30 sm:ml-2 sm:tracking-[0.32em] md:tracking-[0.4em]">
+              <label
+                htmlFor="url-input"
+                className="ml-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-white/30 sm:ml-2 sm:tracking-[0.32em] md:tracking-[0.4em]"
+              >
                 İncelenecek Platform URL
               </label>
               <input
+                id="url-input"
                 {...register("website")}
                 autoComplete="url"
                 inputMode="url"
@@ -204,20 +216,23 @@ export default function AnalysisForm() {
             </div>
 
             {/* Goal Select */}
-            <div className="relative space-y-2.5 sm:space-y-3 md:col-span-2">
-              <label className="ml-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-white/30 sm:ml-2 sm:tracking-[0.32em] md:tracking-[0.4em]">
-                Stratejik Hedef
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="goal-select"
+                className="ml-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-white/60"
+              >
+                STRATEJİK HEDEF
               </label>
-
-              <div className="group relative">
+              <div className="relative">
                 <select
+                  id="goal-select" // Eklendi: id ile label bağlandı
                   {...register("goal")}
-                  className="w-full cursor-pointer appearance-none rounded-2xl border border-white/10 bg-white/5 px-5 py-4 pr-12 font-medium text-white outline-none transition-all focus:border-brand-blue sm:px-6 sm:py-5"
+                  className="w-full cursor-pointer appearance-none rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-white focus:border-brand-blue/40 outline-none transition-all hover:bg-white/[0.08]"
                 >
-                  <option value="" className="bg-black">
+                  <option value="" disabled>
                     Lütfen seçim yapınız
                   </option>
-                  <option value="SATIŞ" className="bg-black">
+                  <option value="SALES">
                     Satışları ve Ciro Verimliliğini Artırmak
                   </option>
                   <option value="LEAD" className="bg-black">
@@ -267,10 +282,14 @@ export default function AnalysisForm() {
                   exit={{ opacity: 0, height: 0 }}
                   className="space-y-2.5 overflow-hidden sm:space-y-3 md:col-span-2"
                 >
-                  <label className="ml-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-white/30 sm:ml-2 sm:tracking-[0.32em] md:tracking-[0.4em]">
+                  <label
+                    htmlFor="othertext-input"
+                    className="ml-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-white/30 sm:ml-2 sm:tracking-[0.32em] md:tracking-[0.4em]"
+                  >
                     İhtiyacınızı Belirtin
                   </label>
                   <textarea
+                    id="othertext-input"
                     {...register("otherGoal")}
                     placeholder="Size nasıl yardımcı olabiliriz?"
                     className="min-h-[110px] w-full resize-none rounded-2xl border border-white/10 bg-white/5 px-5 py-4 font-medium text-white outline-none transition-all focus:border-brand-blue sm:min-h-[120px] sm:px-6 sm:py-5"
