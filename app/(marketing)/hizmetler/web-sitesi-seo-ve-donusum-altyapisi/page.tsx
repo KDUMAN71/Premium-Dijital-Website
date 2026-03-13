@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/ScrollStagger";
 import Link from "next/link";
 import WebsiteHeroConcept from "@/components/templates/WebsiteHeroConcept";
+import IcebergVisual from "@/components/sections/IcebergVisual";
 
 function VisualPlaceholder({
   title,
@@ -528,7 +529,7 @@ export default function WebSitesiSeoVeDonusumAltyapisiPage() {
         secondaryCtaHref="/hizmetler"
         secondaryCtaLabel="Tüm Hizmetleri Gör"
         navItems={navItems}
-        heroVisual={<WebsiteHeroConcept />}
+        heroVisual={<IcebergVisual />}
       >
         {/* 1) HERO CONCEPT */}
         <ScrollReveal y={18}>
