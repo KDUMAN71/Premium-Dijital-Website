@@ -1,85 +1,74 @@
 import type { FAQItem } from "./FAQSection";
 
+/* ─────────────────────────────────────────────
+   ANASAYFA SSS
+   İlk 4 soru varsayılan görünür — geri kalanlar
+   "Tümünü Gör" ile açılır.
+   Her soru: q (başlık) + a (detay cevap)
+───────────────────────────────────────────── */
 export const homeFaqs: FAQItem[] = [
-  // KÜME 1 – GOOGLE ADS / LEAD GEN (A)
+  // ── İlk 4: Her zaman görünür ──
+
   {
-    q: "Google Ads ajansı tam olarak ne yapar?",
-    a: "Anahtar kelime araştırması, kampanya mimarisi, teklif stratejisi, reklam metni ve dönüşüm ölçümü kurar. Asıl hedef, CPA ve lead kalitesini sürekli optimize ederek bütçeyi verimli büyüme motoruna dönüştürmektir.",
+    q: "Neden başka bir ajans değil de siz?",
+    a: "Çoğu ajans reklam kurar, biz büyüme sistemi kurarız. Reklam hesabınız, web siteniz, ölçüm altyapınız ve raporlamanız birbirine bağlı çalışmıyorsa bütçenizin büyük kısmı boşa gider. Biz bu dört katmanı aynı anda yönetir, her kararı veriyle alırız. Hesaplar her zaman sizin mülkiyetinizde kalır — ama sistemi canlı tutan optimizasyon, test ve strateji sürekli gelişen bir iş. Kurmak başlangıçtır, büyütmek esas iştir.",
   },
   {
-    q: "Google Ads ile ne kadar sürede sonuç alınır?",
-    a: "Çoğu sektörde ilk sinyaller 2–4 hafta içinde gelir. 60–90 gün arası kampanya yapısı oturur, negatif kelimeler, arama terimleri ve dönüşüm optimizasyonu netleşir.",
+    q: "Sonuç garantisi veriyor musunuz?",
+    a: "Belirli bir ROAS veya lead sayısı garantisi veren ajanslardan uzak durun — piyasa koşulları, rekabet ve sezonluk etkiler hiçbir ajansın kontrolünde değildir. Bizim garantimiz farklı: şeffaf raporlama, yapılandırılmış iletişim ve veriyle desteklenen her karar. Sonuç beklentinizi ilk görüşmede gerçekçi biçimde netleştiririz. Daha önce benzer sektörde elde ettiğimiz sonuçları Sonuçlar sayfamızda inceleyebilirsiniz.",
+  },
+  {
+    q: "Raporlama nasıl yapılıyor?",
+    a: "Google Ads, Meta ve GA4 verilerini birleştiren Looker Studio panelini ilk haftada kuruyoruz. Bu panel size özel, 7/24 canlı erişilebilir — rapor beklemenize gerek yok, istediğiniz an açıp bakabilirsiniz. Bunun yanında haftalık kısa özet ve aylık strateji görüşmesi yapıyoruz. Raporun sadece sayı değil, yorum ve bir sonraki aksiyon önerisini de içerdiğini göreceksiniz.",
+  },
+  {
+    q: "Sürece ne kadar dahil olmam gerekiyor?",
+    a: "Stratejik kararları aylık görüşmede birlikte alırız — kampanya yönü, bütçe dağılımı, yeni testler hep bu toplantıda netleşir. Günlük optimizasyon ve operasyonel detaylar bizde kalır, zamanınızı bunlarla harcamazsınız. Bu yapı hem sizi gereksiz detaydan korur hem de kararların sık değişmesini önler. Paketinize göre haftalık özet raporu da bu sürecin parçası olabilir.",
   },
 
-  // KÜME 1 – META / INSTAGRAM (B)
-  {
-    q: "Instagram reklamları satış veya lead getirir mi?",
-    a: "Doğru kreatif + doğru hedef kitle + remarketing kurgusu ile Instagram reklamları güçlü dönüşüm sağlar. En büyük farkı, talep yaratma ve marka güvenini hızla artırmasıdır.",
-  },
-  {
-    q: "Meta Ads yönetiminde en kritik fark nedir?",
-    a: "Segmentasyon + kreatif test sistemi + event ölçümü. Reklam ‘harcamak’ ile ‘ölçerek optimize etmek’ arasında ciddi sonuç farkı olur.",
-  },
+  // ── Geri kalan 7: "Tümünü Gör" ile açılır ──
 
-  // KÜME 2 – SEKTÖREL (E – Sağlık Turizmi gibi)
   {
-    q: "Sağlık turizmi reklamlarında lead kalitesi nasıl artırılır?",
-    a: "Ülke bazlı hedefleme, güven unsuru içeren kreatifler, form alanlarında filtreleme ve hızlı dönüş süreçleriyle ‘kalitesiz lead’ oranı düşürülür. Ayrıca remarketing ile karar süreci desteklenir.",
-  },
-
-  // KÜME 3 – DİJİTAL AJANS GENEL (yüksek hacim)
-  {
-    q: "Dijital ajans ne iş yapar?",
-    a: "Reklam yönetimi, web/landing dönüşüm optimizasyonu, SEO ve içerik stratejisiyle markanın dijital büyümesini uçtan uca yönetir.",
+    q: "Daha önce ajans deneyimim iyi olmadı. Fark ne?",
+    a: "Bu çok duyduğumuz bir itiraz ve genellikle üç nedenden kaynaklanır: ölçüm altyapısı yoktu, iletişim kopuktu ya da ajans sadece reklam kurdu, dönüşüm altyapısına dokunmadı. Biz bu üçünü baştan netleştiririz. İlk ay teslim ettiğimiz durum raporu bile çoğu müşterimizin daha önce görmediği bilgileri içerir.",
   },
   {
-    q: "SEO ajansı ile reklam ajansı arasındaki fark nedir?",
-    a: "SEO organik görünürlüğü büyütür; reklam ise hızlı talep yakalar. En iyi sonuç, SEO + reklam + dönüşüm altyapısı birlikte çalıştığında gelir.",
-  },
-
-  // TICARİ İTİRAZLAR (kapanış hızlandırır) ✅
-  {
-    q: "Minimum çalışma süresi var mı?",
-    a: "Evet. Sağlıklı optimizasyon döngüsü için minimum 3 ay öneriyoruz. İlk 30 günde ölçüm ve kampanya mimarisi kurulur, sonraki dönemde kalite/CPA optimizasyonu hızlanır.",
+    q: "Süreç nasıl işliyor, ne zaman başlıyoruz?",
+    a: "Ücretsiz analiz talebinizin ardından 1 iş günü içinde dönüyoruz. İlk görüşmede mevcut durumu, hedefleri ve beklentileri netleştiriyoruz. Anlaşma sonrası ilk 2 haftada teknik altyapı ve ölçüm kurulumu tamamlanır, 3. haftada kampanyalar canlıya alınır. Tüm süreçte onaysız hiçbir adım atılmaz.",
   },
   {
-    q: "Reklam bütçesi ayrı mı?",
-    a: "Evet. Reklam bütçesi Google/Meta’ya doğrudan gider. Ajans hizmet bedeli; strateji, kurulum, optimizasyon ve raporlama içindir.",
+    q: "Sağlık ve klinik sektöründe deneyiminiz var mı?",
+    a: "Evet. Sağlık turizmi, estetik klinik ve diş kliniklerinde hasta edinimi, randevu dönüşümü ve yerel SEO üzerine aktif projelerimiz var. Google reklam politikaları ve sektöre özgü dijital kısıtlamalar konusunda deneyimliyiz — ancak tıbbi içerik onayı ve yasal uyumluluk sorumluluğu müşterimize aittir, bu konuda hukuki danışmanınızla çalışmanızı öneririz. Bu sektörde kritik fark hızdır: bir lead'i 5 dakika içinde takibe almayan klinik rakibine kaptırır.",
   },
   {
-    q: "Hesap sahipliği kimde kalır?",
-    a: "Google Ads ve Meta hesapları sizin mülkiyetinizde kalır. Biz yönetim erişimi ile çalışırız; şeffaflık ve taşınabilirlik esastır.",
+    q: "Turizm ve konaklama için dijital pazarlama nasıl işliyor?",
+    a: "Turizm sektöründe sezonluk bütçe yönetimi, çok dilli kampanya kurulumu ve rezervasyon dönüşüm optimizasyonu öncelikli konulardır. Google Oteller, Meta dinamik reklamlar ve yerel SEO kombinasyonu en güçlü sonuçları veriyor. Yabancı turist hedefleyen işletmeler için İngilizce ve Arapça kampanya deneyimimiz var.",
   },
   {
-    q: "Raporlama örneği var mı?",
-    a: "Evet. GA4 + Ads verisini bir araya getirip haftalık kısa özet ve aylık karar raporu formatında sunuyoruz. İsterseniz örnek rapor yapısını paylaşabiliriz.",
+    q: "KOBİ ölçeğindeki işletmeler için uygun musunuz?",
+    a: "Evet. Büyük bütçelere özel tasarlanmış ajans modelleri yerine modüler çalışıyoruz: ihtiyacınıza göre tek hizmet alanı veya tüm sistem. Küçük bütçelerle maksimum verim için önceliklendirme kritik — bunu ilk görüşmede birlikte yapıyoruz.",
+  },
+  {
+    q: "Minimum çalışma süresi ve sözleşme yapısı nasıl?",
+    a: "Minimum 3 ay öneriyoruz: ilk ay kurulum ve ölçüm, ikinci ay optimizasyon, üçüncü ayda net kararlar mümkün oluyor. Sözleşme aylık yenilenebilir yapıda — haksız nedenle bağlı kalamazsınız. Yıllık taahhütte indirim uyguluyoruz.",
+  },
+  {
+    q: "Reklam bütçesi nasıl belirleniyor, ayrı mı ödeniyor?",
+    a: "Evet, reklam bütçesi Google ve Meta'ya doğrudan sizin ödemenizdir. Ajans hizmet bedeli ayrıdır: strateji, kurulum, optimizasyon ve raporlama için alınır. Minimum reklam bütçesi sektöre ve hedefe göre değişir — ilk görüşmede sektörünüz için gerçekçi rakamı netleştiririz.",
+  },
+  {
+    q: "Hesaplarım ve verilerim bana mı ait?",
+    a: "Kesinlikle. Google Ads, Meta Business, GA4, Search Console — tüm hesaplar sizin mülkiyetinizde kalır. Biz yönetim erişimiyle çalışırız. Çalışmayı sonlandırdığınızda tüm veriler ve erişimler size aittir. Bunu sözleşmeye yazılı olarak da ekliyoruz.",
   },
 ];
 
-export const googleAdsFaqs: FAQItem[] = [
-  // Google Ads sayfasına özel (çok daha derin) 8–12 soru
-];
-
-export const metaAdsFaqs: FAQItem[] = [
-  // Instagram/Meta özel
-];
-
-export const webDesignFaqs: FAQItem[] = [
-  // website tasarımı + landing + hız + CWV
-];
-
-export const seoFaqs: FAQItem[] = [
-  // teknik seo + içerik + local seo
-];
-
-export const ecommerceFaqs: FAQItem[] = [
-  // ROAS, ürün feed, katalog, ödeme/UX
-];
-
-export const socialMgmtFaqs: FAQItem[] = [
-  // sosyal medya yönetimi + içerik + reklam entegrasyonu
-];
-
-export const brandingFaqs: FAQItem[] = [
-  // kurumsal kimlik + görsel dil + uygulama
-];
+/* ─────────────────────────────────────────────
+   Hizmet sayfası SSS'leri — ileride doldurulacak
+───────────────────────────────────────────── */
+export const googleAdsFaqs: FAQItem[] = [];
+export const metaAdsFaqs: FAQItem[] = [];
+export const webDesignFaqs: FAQItem[] = [];
+export const seoFaqs: FAQItem[] = [];
+export const ecommerceFaqs: FAQItem[] = [];
+export const socialMgmtFaqs: FAQItem[] = [];
+export const brandingFaqs: FAQItem[] = [];

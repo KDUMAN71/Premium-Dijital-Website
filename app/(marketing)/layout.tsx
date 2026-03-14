@@ -1,58 +1,16 @@
 // app/(marketing)/layout.tsx
 
 import type { ReactNode } from "react";
+import MarketingNav from "@/components/layout/MarketingNav";
 import Link from "next/link";
 import Image from "next/image";
-import MarketingNav from "@/components/layout/MarketingNav";
 import WhatsAppCTAGlass from "@/components/global/WhatsAppCTAGlass";
 import SocialSidebar from "@/components/global/SocialSidebar";
-import NavWrapper from "@/components/layout/NavWrapper";
 
 export default function MarketingLayout({ children }: { children: ReactNode }) {
   return (
     <div className="relative isolate min-h-screen bg-brand-dark text-white selection:bg-brand-blue/30 overflow-x-clip">
-      <header>
-        <NavWrapper>
-          <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-4">
-              <span className="h-16 w-16 rounded-2xl bg-gradient-to-br from-brand-blue to-brand-purple p-[2px] shadow-[0_0_30px_rgba(0,0,200,0.25)]">
-                <span className="flex h-full w-full items-center justify-center rounded-2xl bg-brand-dark">
-                  <Image
-                    src="/img/premiumdijital-logo.webp"
-                    alt="Premium Dijital Reklam Ajansı"
-                    width={160}
-                    height={115}
-                    priority
-                    className="h-14 w-auto object-contain"
-                  />
-                </span>
-              </span>
-
-              <span className="font-bold text-white uppercase tracking-widest">
-                PREMIUM{" "}
-                <span className="text-brand-blue brightness-150 drop-shadow-[0_0_8px_rgba(0,0,200,0.4)]">
-                  DIJITAL
-                </span>
-              </span>
-            </Link>
-
-            {/* Menü */}
-            <MarketingNav />
-
-            {/* CTA */}
-            <div className="hidden md:block">
-              <Link
-                href="/iletisim#analiz"
-                className="group relative inline-flex h-12 items-center justify-center overflow-hidden rounded-full bg-brand-blue px-10 text-[14px] font-bold uppercase tracking-wider text-white shadow-[0_0_30px_rgba(0,0,200,0.4)] transition-all hover:scale-105 active:scale-95"
-              >
-                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full animate-shimmer" />
-                <span className="relative z-10">Randevu Al</span>
-              </Link>
-            </div>
-          </div>
-        </NavWrapper>
-      </header>
+      <MarketingNav />
 
       {/* GLOBAL AMBIENT LIGHT LAYER */}
       <div className="pointer-events-none fixed inset-0 -z-0">

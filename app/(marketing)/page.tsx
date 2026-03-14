@@ -9,6 +9,7 @@ import AnalysisForm from "@/components/sections/AnalysisForm";
 import ProcessRoadmap from "@/components/sections/ProcessRoadmap";
 import Reveal from "@/components/ui/Reveal";
 import GrowthEcosystem from "@/components/sections/GrowthEcosystem";
+import ProcessRoadmapAlt from "@/components/sections/ProcessRoadmapAlt";
 
 const serviceCards = [
   {
@@ -91,6 +92,9 @@ export default function Page() {
           <ProcessRoadmap />
         </Reveal>
 
+        {/* <Reveal delay={0.12}>
+          <ProcessRoadmapAlt />
+        </Reveal> */}
         {/* CASE STUDIES */}
         <Reveal delay={0.16}>
           <CaseStudiesSection items={homeCaseStudies} />

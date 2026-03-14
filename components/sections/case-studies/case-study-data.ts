@@ -1,5 +1,10 @@
-import build from "next/dist/build";
+// components/sections/case-studies/case-study-data.ts
 
+/* ─────────────────────────────────────────────
+   Type Tanımları
+   Not: secondaryMetrics eklendi — CaseStudiesSection featured kartta
+   ana metriğin altında 2x2 grid olarak gösterilir.
+───────────────────────────────────────────── */
 export interface CaseStudy {
   slug: string;
   sector: string;
@@ -29,12 +34,28 @@ export interface CaseStudy {
     bullets?: string[];
     primaryMetric?: {
       label: string;
+      value: string; // Format: "%340", "4.2x", "₺2.1M", "+%64" vb.
+      context?: string; // "90 gün içinde", "SEO revizyonu sonrası" vb.
+    };
+    secondaryMetrics?: {
+      label: string;
       value: string;
+    }[];
+    problem?: string; // Featured: "Yüksek trafik, düşük dönüşüm"
+    insight?: {
+      // Compact kartlar için editorial insight
+      issue: string; // "Sorun: ..."
+      result: string; // "Sonuç: ..."
+      lever: string; // "Kaldıraç: ..."
     };
   };
 }
 
+/* ─────────────────────────────────────────────
+   Vaka Verileri
+───────────────────────────────────────────── */
 export const allCaseStudies: CaseStudy[] = [
+  /* ── 01 ── Sağlık Turizmi */
   {
     slug: "saglik-turizmi-hasta-edinimi",
     sector: "Sağlık & Medikal",
@@ -55,7 +76,7 @@ export const allCaseStudies: CaseStudy[] = [
       problem:
         "Marka yüksek bütçe harcamasına rağmen formların randevuya dönüşme oranı düşüktü. Manuel takip süreçleri potansiyel hastaların rakiplere kaçmasına sebep oluyordu.",
       approach:
-        "Arama niyetine göre segmente edilmiş Landing Page'ler ve anlık yanıt veren CRM otomasyon kurgusunu merkeze aldık.",
+        "Arama niyetine göre segmente edilmiş landing page'ler ve anlık yanıt veren CRM otomasyon kurgusunu merkeze aldık.",
       execution:
         "Google & Meta Ads entegrasyonu ile 'sosyal kanıt' odaklı bir remarketing döngüsü kurularak karar süreci desteklendi.",
       results:
@@ -77,19 +98,36 @@ export const allCaseStudies: CaseStudy[] = [
       ],
     },
     home: {
-      title: "Sağlıkta Hasta Edinimi & Funnel Otomasyonu",
+      title: "Hasta Sayısı %64 Arttı — Reklam Maliyeti %42 Düştü",
       summary:
-        "Reklamlardan randevuya giden süreci otomatize ederek nitelikli hasta akışı sağladık.",
+        "Sağlık turizminde dağınık reklam bütçelerini, otomatik hasta edinim makinesine dönüştürdük. 90 günde randevu akışı iki katına çıkarken maliyet yarıya indi.",
+      problem: "Reklam bütçesi vardı — ama formlar randevuya dönüşmüyordu",
       bullets: [
-        "Google & Meta Ads Optimizasyonu",
-        "Uçtan Uca Lead Takip Sistemi",
+        "Google & Meta Ads entegrasyonuyla hedefli hasta segmentasyonu kuruldu",
+        "CRM otomasyonuyla her lead 5 dakika içinde takibe alındı",
+        "Sosyal kanıt odaklı remarketing döngüsüyle karar süreci kısaldı",
       ],
-      primaryMetric: { label: "Randevu Artışı", value: "+%64" },
+      primaryMetric: {
+        label: "Randevu Artışı",
+        value: "+%64",
+        context: "90 gün içinde, funnel otomasyonu devreye alındıktan sonra",
+      },
+      secondaryMetrics: [
+        { label: "CPL Düşüşü", value: "-%42" },
+        { label: "ROAS", value: "5.8x" },
+      ],
+      insight: {
+        issue: "Trafik vardı, takip sistemi yoktu",
+        result: "%64 randevu artışı",
+        lever: "CRM otomasyon + funnel",
+      },
     },
   },
+
+  /* ── 02 ── Kurumsal Kimlik */
   {
     slug: "kurumsal-kimlik-marka-donusumu",
-    sector: "Teknoloji • Kurumsal",
+    sector: "Teknoloji & Kurumsal",
     timeframeDays: 120,
     serviceTags: ["Kurumsal Kimlik", "Web Tasarım", "Sosyal Medya"],
     title:
@@ -128,21 +166,39 @@ export const allCaseStudies: CaseStudy[] = [
       ],
     },
     home: {
-      title: "Kurumsal Kimlik & Stratejik Marka İletişimi",
+      title: "Görsel Dil Değişti, Trafik %110 Arttı",
       summary:
-        "Görsel dilden web tasarımına, markayı doğru kitleyle buluşturan 360° dijital dönüşüm.",
+        "Hizmet kalitesi zaten vardı — dijital varlık buna yetişemiyordu. 120 günde marka kimliğini sıfırdan inşa ederek premium segmentin güvenini kazandık.",
+      problem: "Hizmet kalitesi çok iyiydi — dijital görünümü güven vermiyordu",
       bullets: [
-        "Premium Görsel Dil & UI Kit",
-        "Stratejik Sosyal Medya Yönetimi",
+        "Core Web Vitals uyumlu Next.js web sitesi sıfırdan kuruldu",
+        "Premium görsel dil & UI Kit tüm mecralara uygulandı",
+        "İçerik liderliği stratejisiyle organik otorite inşa edildi",
       ],
-      primaryMetric: { label: "Trafik Artışı", value: "+%110" },
+      primaryMetric: {
+        label: "Trafik Artışı",
+        value: "+%110",
+        context:
+          "120 gün içinde, marka kimliği ve web revizyonu tamamlandıktan sonra",
+      },
+      secondaryMetrics: [
+        { label: "Etkileşim Artışı", value: "+%85" },
+        { label: "Marka Algısı", value: "Premium" },
+      ],
+      insight: {
+        issue: "Dijital varlık hizmet kalitesinin gerisindeydi",
+        result: "%110 trafik + premium algı",
+        lever: "Kimlik + web + içerik stratejisi",
+      },
     },
   },
+
+  /* ── 03 ── E-Ticaret */
   {
     slug: "e-ticaret-roas-olcekleme",
     sector: "E-Ticaret / Moda",
     timeframeDays: 45,
-    serviceTags: ["Meta Ads", "CRO", "Checkout"],
+    serviceTags: ["Meta Ads", "CRO", "Checkout Optimizasyonu"],
     title: "E-Ticarette ROAS Bariyerini Aşmak: Kârlı Ölçekleme Stratejisi",
     tag: "E-Com / ROI",
     summary:
@@ -178,18 +234,28 @@ export const allCaseStudies: CaseStudy[] = [
       ],
     },
     home: {
-      title: "ROAS Odaklı E-Ticaret Ölçekleme",
+      title: "45 Günde Satış 3.2x Büyüdü — ROAS %145 Arttı",
       summary:
-        "Reklam verimliliğini %145 artırarak satış hacmini kârlı bir şekilde 3 katına çıkardık.",
-      bullets: ["Kreatif Scaling Modeli", "Dönüşüm Odaklı Checkout"],
-      primaryMetric: { label: "ROAS Artışı", value: "+%145" },
+        "Bütçe büyüdükçe verimlilik düşüyordu. Meta Ads kreatif scaling ve checkout optimizasyonuyla bu döngüyü kırdık: daha az harcamayla daha fazla satış.",
+      bullets: [
+        "Manuel segmentasyon ve A/B kreatif testleriyle reklam yorgunluğu engellendi",
+        "Ödeme sayfası optimizasyonuyla sepet terk oranı %28 düşürüldü",
+        "Dinamik remarketing döngüsüyle satın alma kararı hızlandırıldı",
+      ],
+      primaryMetric: { label: "Satış Hacmi", value: "3.2x" },
+      secondaryMetrics: [
+        { label: "ROAS Artışı", value: "+%145" },
+        { label: "Sepet Terk ↓", value: "-%28" },
+      ],
     },
   },
+
+  /* ── 04 ── Global SaaS */
   {
     slug: "global-saas-seo-stratejisi",
     sector: "Yazılım / SaaS",
     timeframeDays: 180,
-    serviceTags: ["SEO", "İçerik Pazarlaması", "Global"],
+    serviceTags: ["Teknik SEO", "İçerik Pazarlaması", "Uluslararası SEO"],
     title: "Global SaaS Pazarında Organik Otorite ve Düşük Maliyetli Kayıt",
     tag: "SaaS / SEO",
     summary:
@@ -225,18 +291,28 @@ export const allCaseStudies: CaseStudy[] = [
       ],
     },
     home: {
-      title: "Global SaaS: Organik Büyüme",
+      title: "Reklama $12k/Ay Tasarruf — Organik Trafik %210 Büyüdü",
       summary:
-        "Teknik SEO ve içerik otoritesi ile global organik trafiği %210 artırarak reklam bağımlılığını bitirdik.",
-      bullets: ["Topic Authority İnşası", "Uluslararası SEO Altyapısı"],
-      primaryMetric: { label: "Organik Artış", value: "+%210" },
+        "CPC maliyetleri $20'ı aştığında reklam büyümesi durdu. Teknik SEO ve içerik otoritesiyle organik kanalı satış motoruna dönüştürdük.",
+      bullets: [
+        "Topic Authority mimarisiyle hedef anahtar kelimelerde ilk 3 sıra alındı",
+        "Hreflang ve teknik SEO revizyonuyla global indeksleme optimize edildi",
+        "Organik kullanıcıların LTV değeri reklam trafiğinden %35 yüksek çıktı",
+      ],
+      primaryMetric: { label: "Organik Trafik Artışı", value: "+%210" },
+      secondaryMetrics: [
+        { label: "Signup Artışı", value: "+%42" },
+        { label: "Aylık CPC Tasarrufu", value: "$12k" },
+      ],
     },
   },
+
+  /* ── 05 ── B2B Sanayi */
   {
     slug: "b2b-sanayi-lead-mimarisi",
     sector: "Sanayi / Üretim",
     timeframeDays: 60,
-    serviceTags: ["Google Ads", "LinkedIn Marketing", "CRM"],
+    serviceTags: ["Google Ads", "LinkedIn Marketing", "CRM Entegrasyonu"],
     title: "Geleneksel Sanayiden Dijital Liderliğe: B2B Lead Mimarisi",
     tag: "B2B / Sanayi",
     summary:
@@ -251,7 +327,7 @@ export const allCaseStudies: CaseStudy[] = [
       problem:
         "Satış ekibi sadece fuarlardan ve eski referanslardan besleniyordu; dijitalden gelen talepler ise kalitesiz ve verimsizdi.",
       approach:
-        "Karar vericilere (Satınalma Md, Mühendisler) özel LinkedIn kurgusu ve spesifik Google Search kampanyaları başlattık.",
+        "Karar vericilere (Satınalma Müdürü, Mühendisler) özel LinkedIn kurgusu ve spesifik Google Search kampanyaları başlattık.",
       execution:
         "Teknik whitepaper'lar ile veri toplandı ve bu veriler CRM üzerinden anlık olarak satış ekiplerine iletildi.",
       results:
@@ -272,18 +348,38 @@ export const allCaseStudies: CaseStudy[] = [
       ],
     },
     home: {
-      title: "B2B Sanayi: Küresel Lead Mimarisi",
+      title: "Fuar Bağımlılığı Bitti — İhracat Talebi 2.5x Arttı",
       summary:
-        "Fuarlara bağımlılığı azaltıp, dijitalden gelen nitelikli ihracat taleplerini %80 artırdık.",
-      bullets: ["Nitelikli Karar Verici Hedefleme", "CRM Destekli Lead Takibi"],
-      primaryMetric: { label: "Lead Artışı", value: "+%80" },
+        "Yalnızca fuarlara ve referansa dayanan satış modelini kırdık. 60 günde LinkedIn ve Google üzerinden küresel nitelikli talep akışı inşa ettik.",
+      problem: "Satış yalnızca fuarlara ve eski referanslara bağlıydı",
+      bullets: [
+        "Satınalma müdürü ve mühendislere özel LinkedIn kampanyaları kuruldu",
+        "Teknik whitepaper ile nitelikli lead verisi toplandı",
+        "CRM otomasyonuyla her talep anlık olarak satış ekibine iletildi",
+      ],
+      primaryMetric: {
+        label: "İhracat Talebi Artışı",
+        value: "2.5x",
+        context: "60 gün içinde, LinkedIn + CRM sistemi kurulumu sonrası",
+      },
+      secondaryMetrics: [
+        { label: "Nitelikli Lead ↑", value: "+%80" },
+        { label: "Dijital Görünürlük", value: "+%150" },
+      ],
+      insight: {
+        issue: "Dijitalden gelen talepler kalitesiz ve verimsizdi",
+        result: "İhracat talebi 2.5x büyüdü",
+        lever: "LinkedIn hedefleme + CRM otomasyon",
+      },
     },
   },
+
+  /* ── 06 ── Lokal SEO */
   {
     slug: "lokal-seo-harita-dominasyonu",
     sector: "Yerel Hizmet / Franchise",
     timeframeDays: 30,
-    serviceTags: ["Local SEO", "Maps", "Call Tracking"],
+    serviceTags: ["Yerel SEO", "Google Haritalar", "İtibar Yönetimi"],
     title: "Lokal Hizmetlerde Bölgesel Dominasyon ve Telefon Trafiği Artışı",
     tag: "Local / Call",
     summary:
@@ -293,14 +389,14 @@ export const allCaseStudies: CaseStudy[] = [
       { label: "Telefon Araması", value: "+%90" },
       { label: "Dönüşüm Maliyeti", value: "-%35" },
     ],
-    highlights: ["GMB Optimizasyonu", "Bölgesel SEO", "Yorum"],
+    highlights: ["GMB Optimizasyonu", "Bölgesel SEO", "İtibar Yönetimi"],
     story: {
       problem:
         "Müşteriler hizmeti haritalar üzerinden arıyor ancak marka, rakiplerinin çok gerisinde kalıyor, potansiyel aramalar kaçıyordu.",
       approach:
         "Tüm şubeler için Google İşletme Profili (GMB) optimizasyonu ve 'bölge bazlı' lokal açılış sayfaları kurguladık.",
       execution:
-        "Yerel alıntılar (citations) temizlendi ve şubelere özel 'itibar yönetimi' ile yorum puanları yükseltildi.",
+        "Yerel alıntılar (citations) temizlendi ve şubelere özel itibar yönetimi ile yorum puanları yükseltildi.",
       results:
         "Fiziksel dükkan trafiği ve telefonla randevu talepleri bir ay içinde katlanarak arttı.",
       implementationSubtitle:
@@ -320,13 +416,41 @@ export const allCaseStudies: CaseStudy[] = [
       ],
     },
     home: {
-      title: "Lokal SEO ve Harita Dominasyonu",
+      title: "30 Günde Harita Görünümü %300 Arttı — Telefon Doldu",
       summary:
-        "Google Haritalar'da ilk sıraya yerleşerek telefonla randevu taleplerini %90 artırdık.",
-      bullets: ["GMB (Harita) Optimizasyonu", "Bölgesel SEO Stratejisi"],
-      primaryMetric: { label: "Harita Görünümü", value: "+%300" },
+        "Fiziksel şubesi var ama haritada yok gibiydi. GMB optimizasyonu ve lokal SEO stratejisiyle 30 günde 'yakınımdaki' aramalarını domine ettik.",
+      problem: "Rakipler haritada görünüyor, bu işletme kaybolup gidiyordu",
+      bullets: [
+        "Tüm şubeler için Google İşletme Profili optimize edildi",
+        "Lokasyon bazlı SEO sayfaları ve yorum stratejisi hayata geçirildi",
+        "Map Pack ilk 3'e girerek reklam maliyeti %35 düştü",
+      ],
+      primaryMetric: {
+        label: "Harita Görünümü",
+        value: "+%300",
+        context: "30 gün içinde, GMB ve lokal SEO revizyonu sonrası",
+      },
+      secondaryMetrics: [
+        { label: "Telefon Araması ↑", value: "+%90" },
+        { label: "Dönüşüm Maliyeti ↓", value: "-%35" },
+      ],
+      insight: {
+        issue: "Fiziksel konum vardı, haritada yoktu",
+        result: "%300 görünürlük artışı",
+        lever: "GMB optimizasyon + lokal SEO",
+      },
     },
   },
 ];
 
-export const homeCaseStudies = allCaseStudies.slice(0, 6);
+// Anasayfa için 4 vaka — her biri farklı ana hizmet alanını temsil eder:
+// 1. PPC & Performans      → Sağlık Turizmi (Google+Meta Ads, ROAS, funnel)
+// 2. SEO & Dönüşüm         → Lokal SEO (harita dominasyonu, organik büyüme)
+// 3. Marka & İletişim      → Kurumsal Kimlik (görsel dil, web, içerik)
+// 4. Dijital Operasyon     → B2B Sanayi (CRM, otomasyon, lead sistemi)
+export const homeCaseStudies = [
+  "saglik-turizmi-hasta-edinimi",
+  "lokal-seo-harita-dominasyonu",
+  "kurumsal-kimlik-marka-donusumu",
+  "b2b-sanayi-lead-mimarisi",
+].map((slug) => allCaseStudies.find((c) => c.slug === slug)!);
