@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import WhatsAppCTAGlass from "@/components/global/WhatsAppCTAGlass";
 import SocialSidebar from "@/components/global/SocialSidebar";
+import Footer from "@/components/global/Footer";
 
 export default function MarketingLayout({ children }: { children: ReactNode }) {
   return (
@@ -52,128 +53,8 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
       </main>
 
       {/* FOOTER */}
-      <footer className="relative z-10 overflow-hidden border-t border-white/10 bg-black/85 backdrop-blur-xl">
-        {/* Ambient glow layer */}
-        <div className="pointer-events-none absolute inset-0 opacity-70">
-          <div className="absolute -top-24 left-1/2 h-72 w-[48rem] -translate-x-1/2 rounded-full bg-brand-blue/15 blur-[120px]" />
-          <div className="absolute -bottom-28 left-1/4 h-72 w-[40rem] rounded-full bg-brand-purple/15 blur-[120px]" />
-        </div>
 
-        <div className="relative mx-auto max-w-6xl px-4 pt-12 pb-8 sm:px-5 sm:pt-16 sm:pb-9 md:px-6 md:pt-20 md:pb-10">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-4 md:gap-12">
-            {/* Brand */}
-            <div className="col-span-1">
-              <a
-                href="/"
-                className="group inline-flex items-center gap-3 cursor-pointer select-none"
-              >
-                <Image
-                  src="/img/premiumdijital-logo-500px.webp"
-                  alt="Premium Dijital"
-                  width={240}
-                  height={170}
-                  className="h-14 w-auto object-contain drop-shadow-[0_0_25px_rgba(0,0,200,0.25)] sm:h-16 md:h-20"
-                  priority={false}
-                />
-                <div>
-                  <div className="mt-2 text-sm font-semibold tracking-tight text-white/90 sm:mt-3 sm:text-base md:mt-4">
-                    Premium{" "}
-                    <span className="text-brand-blue brightness-150">
-                      Dijital
-                    </span>
-                  </div>
-                  <div className="text-[10px] uppercase tracking-[0.18em] text-white/60 sm:text-xs sm:tracking-[0.22em] md:tracking-[0.28em]">
-                    Reklam {" · "} Dönüşüm {" · "} Büyüme
-                  </div>
-                </div>
-              </a>
-
-              <p className="mt-4 text-sm italic leading-relaxed text-white/60 sm:mt-5 md:mt-6">
-                İstanbul merkezli ajansımızla markanızı pazarın zirvesine
-                taşıyoruz.
-              </p>
-            </div>
-
-            {/* Expertise */}
-            <div>
-              <h2 className="mb-4 text-[11px] font-bold uppercase tracking-[0.22em] text-white/60 sm:mb-5 sm:text-xs sm:tracking-[0.28em] md:mb-6 md:tracking-widest">
-                Sektörel Uzmanlık
-              </h2>
-              <ul className="space-y-2.5 text-sm text-white/60 sm:space-y-3">
-                {["Sağlık Turizmi", "B2B & Sanayi", "E-Ticaret ROI"].map(
-                  (t) => (
-                    <li key={t} className="transition hover:text-white">
-                      {t}
-                    </li>
-                  ),
-                )}
-              </ul>
-            </div>
-
-            {/* Services */}
-            <div>
-              <h4 className="mb-4 text-[11px] font-bold uppercase tracking-[0.22em] text-white/60 sm:mb-5 sm:text-xs sm:tracking-[0.28em] md:mb-6 md:tracking-widest">
-                Taktik Servisler
-              </h4>
-              <ul className="space-y-2.5 text-sm text-white/60 sm:space-y-3">
-                {[
-                  "Google & YouTube Ads",
-                  "Meta (IG/FB) Ads",
-                  "SEO & İçerik",
-                ].map((t) => (
-                  <li key={t} className="transition hover:text-white">
-                    {t}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Contact */}
-            <div>
-              <h4 className="mb-4 text-[11px] font-bold uppercase tracking-[0.22em] text-white/60 sm:mb-5 sm:text-xs sm:tracking-[0.28em] md:mb-6 md:tracking-widest">
-                İletişim
-              </h4>
-
-              <a
-                href="mailto:info@premiumdijital.com"
-                className="inline-flex break-all font-bold text-brand-purple transition-colors hover:text-brand-blue"
-              >
-                info@premiumdijital.com
-              </a>
-
-              <div className="mt-5 sm:mt-6">
-                <a
-                  href="/iletisim#analiz"
-                  className="group relative inline-flex w-full items-center justify-center overflow-hidden rounded-xl border border-brand-blue/25 bg-brand-blue/15 py-3.5 text-[10px] font-bold uppercase tracking-[0.22em] text-brand-blue transition hover:border-brand-blue/45 hover:bg-brand-blue/25 hover:shadow-[0_0_40px_rgba(0,0,200,0.22)] sm:py-4 sm:tracking-widest"
-                >
-                  <span className="pointer-events-none absolute -left-24 top-0 h-full w-24 bg-white/10 blur-xl transition-transform duration-700 group-hover:translate-x-[32rem]" />
-                  Randevu Al
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 sm:mt-12 sm:pt-7 md:mt-16 md:flex-row md:gap-4 md:pt-8">
-            <div className="text-center text-[9px] uppercase tracking-[0.22em] text-white/50 sm:text-[10px] sm:tracking-[0.3em] md:text-left md:tracking-[0.4em]">
-              {"(c) "} {new Date().getFullYear()} Premium Dijital Reklam Ajansı
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-2 text-[9px] uppercase tracking-[0.18em] text-white/50 sm:gap-3 sm:text-[10px] sm:tracking-[0.24em] md:justify-end md:gap-4 md:tracking-[0.3em]">
-              <a className="transition hover:text-white" href="#gizlilik">
-                Gizlilik
-              </a>
-              <span className="opacity-30">.</span>
-              <a className="transition hover:text-white" href="#kvkk">
-                KVKK
-              </a>
-              <span className="opacity-30">.</span>
-              <a className="transition hover:text-white" href="#cerezler">
-                Çerezler
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

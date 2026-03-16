@@ -51,7 +51,7 @@ export default function ContactPage() {
                 </Link>
 
                 <Link
-                  href="/vaka-calismalari"
+                  href="/sonuclar"
                   className="inline-flex h-14 items-center justify-center rounded-full border border-white/10 bg-white/5 px-10 text-[12px] font-black uppercase tracking-[0.35em] text-white/80 hover:text-white hover:bg-white/10 transition"
                 >
                   Vaka Çalışmaları

@@ -9,77 +9,85 @@ import AnalysisForm from "@/components/sections/AnalysisForm";
 import ProcessRoadmap from "@/components/sections/ProcessRoadmap";
 import Reveal from "@/components/ui/Reveal";
 import GrowthEcosystem from "@/components/sections/GrowthEcosystem";
-import ProcessRoadmapAlt from "@/components/sections/ProcessRoadmapAlt";
-
-const serviceCards = [
-  {
-    title: "Performans Pazarlaması",
-    desc: "Sermayenizi kâra dönüştüren agresif reklam yönetimi.",
-    bullets: [
-      "Google & YouTube Ads",
-      "Meta (IG/FB) Ads",
-      "Remarketing",
-      "Bütçe ve teklif stratejileri",
-    ],
-    cta: "ROI Odaklı Reklamcılık →",
-  },
-  {
-    title: "Web & Dönüşüm Altyapıları",
-    desc: "Milisaniyelik hızda çalışan yüksek dönüşümlü landing mimarisi.",
-    bullets: [
-      "Next.js / WordPress Landing",
-      "Core Web Vitals optimizasyonu",
-      "CRO (A/B test hazırlığı)",
-      "GA4 + GTM ölçüm altyapısı",
-    ],
-    cta: "Dönüşüm Mimarisini Kur →",
-  },
-  {
-    title: "Marka & Görsel İletişim",
-    desc: "Premium algı yaratan, satışa hizmet eden tasarım sistemi.",
-    bullets: [
-      "Görsel dil + UI kit",
-      "Motion & mikro etkileşim",
-      "Teklif/sunum tasarımı",
-      "Kurumsal kimlik",
-    ],
-    cta: "Premium Görsel Dil →",
-  },
-];
 
 export default function Page() {
   return (
     <main className="relative">
       <Hero />
 
-      {/* LOGO CLOUD */}
-      <Reveal delay={0.08}>
-        <LogoCloud />
-      </Reveal>
-
       {/* TRUST STRIP */}
-      <section className="relative z-10 mx-auto w-full max-w-6xl px-4 py-10 sm:px-5 sm:py-12 md:px-6 md:py-14">
-        <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-6 backdrop-blur-2xl sm:rounded-3xl sm:px-6 sm:py-8 md:px-8 md:py-10">
-          <p className="text-xs uppercase tracking-[0.22em] text-white/50 sm:text-sm">
-            Premium Operasyon Standardı
-          </p>
+      <section
+        aria-label="Ölçülen sonuçlar"
+        className="relative z-10 mx-auto w-full max-w-6xl px-4 py-8 sm:px-5 sm:py-10 md:px-6 md:py-12"
+      >
+        <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-6 backdrop-blur-2xl sm:rounded-3xl sm:px-6 sm:py-8 md:px-10 md:py-8">
+          {/* Arka plan parıltısı */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -left-16 -top-16 h-48 w-48 rounded-full bg-brand-purple opacity-[0.06] blur-[60px]"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -bottom-16 -right-16 h-48 w-48 rounded-full bg-brand-blue opacity-[0.06] blur-[60px]"
+          />
 
-          <div className="mt-5 grid grid-cols-2 gap-3 text-xs text-white/70 sm:mt-6 sm:gap-4 sm:text-sm md:grid-cols-4 md:gap-6">
-            <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-center sm:px-5 sm:py-4">
-              GA4 + GTM
+          <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center sm:gap-0">
+            {/* Sol — label */}
+            <div className="shrink-0 sm:w-40 sm:border-r sm:border-white/8 sm:pr-6">
+              <p className="text-[10px] font-black uppercase tracking-[0.26em] text-white/30 sm:text-[11px]">
+                Ölçülen
+                <br className="hidden sm:block" /> Sonuçlar
+              </p>
             </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-center sm:px-5 sm:py-4">
-              Core Web Vitals
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-center sm:px-5 sm:py-4">
-              Google Ads
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3 text-center sm:px-5 sm:py-4">
-              SEO + CRO
+
+            {/* Sağ — 4 metrik */}
+            <div className="grid grid-cols-2 gap-3 sm:flex sm:flex-1 sm:items-center sm:justify-around sm:gap-0 sm:pl-6 md:gap-0">
+              {[
+                {
+                  stat: "50+",
+                  label: "Tamamlanan Proje",
+                  color: "#be29ec",
+                },
+                {
+                  stat: "4×",
+                  label: "Ortalama ROAS",
+                  color: "#a78bfa",
+                },
+                {
+                  stat: "%300+",
+                  label: "SEO Trafik Büyümesi",
+                  color: "#60a5fa",
+                },
+                {
+                  stat: "1 Gün",
+                  label: "Yanıt Süresi",
+                  color: "#34d399",
+                },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className="flex flex-col items-center gap-1 text-center sm:px-4"
+                >
+                  <span
+                    className="text-2xl font-black leading-none tracking-tighter tabular-nums sm:text-3xl"
+                    style={{ color: item.color }}
+                  >
+                    {item.stat}
+                  </span>
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-white/35 sm:text-[11px]">
+                    {item.label}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
+
+      {/* LOGO CLOUD */}
+      <Reveal delay={0.08}>
+        <LogoCloud />
+      </Reveal>
 
       {/* CONTENT WRAPPER */}
       <div className="relative z-10 bg-brand-dark shadow-[0_-50px_100px_rgba(0,0,0,1)]">
@@ -92,9 +100,6 @@ export default function Page() {
           <ProcessRoadmap />
         </Reveal>
 
-        {/* <Reveal delay={0.12}>
-          <ProcessRoadmapAlt />
-        </Reveal> */}
         {/* CASE STUDIES */}
         <Reveal delay={0.16}>
           <CaseStudiesSection items={homeCaseStudies} />
@@ -111,11 +116,10 @@ export default function Page() {
         {/* FAQ */}
         <FAQSection
           id="sss"
-          title={"Stratejik {accent}SSS"}
-          accent="purple"
+          title="Sıkça Sorulan"
+          accentText="Sorular"
+          accentColor="purple"
           items={homeFaqs}
-          ctaHref="/iletisim"
-          ctaLabel="Hemen Analiz Al →"
         />
 
         {/* CONTACT CTA */}

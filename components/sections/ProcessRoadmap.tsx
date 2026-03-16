@@ -172,6 +172,7 @@ const schemaData = {
   })),
 };
 
+
 export default function ProcessRoadmap() {
   const [activeStep, setActiveStep] = useState(0);
   const prefersReduced = useReducedMotion();
@@ -337,6 +338,19 @@ export default function ProcessRoadmap() {
               className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full blur-[100px] transition-all duration-700"
               style={{ background: current.color.dot, opacity: 0.12 }}
             />
+
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute bottom-0 right-0 z-0 select-none overflow-hidden leading-none font-black tracking-tighter text-white"
+              style={{
+                fontSize: "clamp(120px, 20vw, 180px)",
+                opacity: 0.05,
+                transform: "translateX(20%) translateY(10%)",
+                transition: "opacity 0.3s ease",
+              }}
+            >
+              {current.id}
+            </div>
 
             <AnimatePresence mode="wait">
               <motion.div

@@ -204,7 +204,7 @@ export default function MarketingNav() {
           >
             <span className="flex h-[calc(100%-2px)] w-[calc(100%-2px)] items-center justify-center rounded-[14px] bg-[#050505]">
               <Image
-                src="/img/premiumdijital-logo.webp"
+                src="/img/brand/premiumdijital-logo.webp"
                 alt="Premium Dijital Reklam Ajansı"
                 width={120}
                 height={86}

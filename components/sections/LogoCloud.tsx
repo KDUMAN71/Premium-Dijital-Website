@@ -18,15 +18,13 @@ const duplicatedLogos = [...logos, ...logos, ...logos];
 
 export default function LogoCloud() {
   return (
-    <section className="py-28 bg-brand-dark relative overflow-hidden border-y border-white/5">
-      {/* Yan Geçiş Maskeleri - Aydınlık logolar için geçişi biraz daha yumuşattım */}
+    <section className="py-12 sm:py-14 bg-brand-dark relative overflow-hidden border-y border-white/5">
       <div className="absolute inset-y-0 left-0 w-48 bg-gradient-to-r from-brand-dark via-brand-dark/90 to-transparent z-10" />
       <div className="absolute inset-y-0 right-0 w-48 bg-gradient-to-l from-brand-dark via-brand-dark/90 to-transparent z-10" />
 
-      <div className="max-w-7xl mx-auto px-6 mb-24 text-center">
-        {/* Punto 13px yapıldı, kontrast white/80'e çekildi ve padding (mb-24) artırıldı */}
-        <p className="text-[13px] uppercase tracking-[0.5em] text-white/80 font-black italic">
-          KULLANDIĞIMIZ TEKNOLOJİLER VE OPERASYON STANDARTLARI
+      <div className="max-w-7xl mx-auto px-6 mb-8 sm:mb-10 text-center">
+        <p className="text-[11px] uppercase tracking-[0.18em] text-white/50 font-bold">
+          Kullandığımız Teknolojiler & Operasyon Standartları
         </p>
       </div>
 
@@ -45,13 +43,10 @@ export default function LogoCloud() {
               key={index}
               className="group relative flex items-center justify-center w-[220px] h-24"
             >
-              {/* Glow Efekti - Hover'da daha belirgin */}
               <div className="absolute inset-0 bg-brand-blue/20 blur-[60px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-
               <img
                 src={logo.src}
                 alt={logo.name}
-                // opacity-40 ve brightness-150: Logoları daha belirgin ve "aydınlık gümüş" tonuna çeker
                 className="h-14 md:h-16 w-auto max-w-[180px] object-contain opacity-45 grayscale invert brightness-[1.8] contrast-100 group-hover:opacity-100 group-hover:grayscale-0 group-hover:invert-0 group-hover:brightness-100 transition-all duration-700 relative z-10 filter"
               />
             </div>

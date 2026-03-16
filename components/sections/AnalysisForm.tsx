@@ -5,6 +5,19 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion, AnimatePresence } from "framer-motion";
 import { z } from "zod";
+import {
+  Stethoscope,
+  Plane,
+  ShoppingBag,
+  Briefcase,
+  Sparkles,
+  LayoutGrid,
+  Lock,
+  CheckCircle2,
+  Pencil,
+  ArrowLeft,
+  Check,
+} from "lucide-react";
 
 /* ─────────────────────────────────────────────
    Schema — inline (dışarıdan import da edilebilir)
@@ -47,12 +60,12 @@ type AnalysisInput = z.infer<typeof AnalysisSchema>;
    Sektör & hedef verileri
 ───────────────────────────────────────────── */
 const SECTORS = [
-  { value: "HEALTH", label: "Sağlık & Klinik", icon: "🏥" },
-  { value: "TOURISM", label: "Turizm & Konaklama", icon: "✈️" },
-  { value: "ECOMM", label: "E-Ticaret", icon: "🛒" },
-  { value: "SERVICE", label: "Hizmet & Danışmanlık", icon: "💼" },
-  { value: "BEAUTY", label: "Estetik & Güzellik", icon: "✨" },
-  { value: "OTHER", label: "Diğer", icon: "🔷" },
+  { value: "HEALTH", label: "Sağlık & Klinik", Icon: Stethoscope },
+  { value: "TOURISM", label: "Turizm & Konaklama", Icon: Plane },
+  { value: "ECOMM", label: "E-Ticaret", Icon: ShoppingBag },
+  { value: "SERVICE", label: "Hizmet & Danışmanlık", Icon: Briefcase },
+  { value: "BEAUTY", label: "Estetik & Güzellik", Icon: Sparkles },
+  { value: "OTHER", label: "Diğer", Icon: LayoutGrid },
 ];
 
 const GOALS_BY_SECTOR: Record<string, { value: string; label: string }[]> = {
@@ -159,7 +172,11 @@ function ProgressBar({
                       : "none",
                   }}
                 >
-                  {done ? "✓" : i + 1}
+                  {done ? (
+                    <Check size={14} strokeWidth={2.5} aria-hidden="true" />
+                  ) : (
+                    i + 1
+                  )}
                 </div>
                 <span
                   className="text-[9px] font-bold uppercase tracking-[0.14em] whitespace-nowrap"
@@ -228,7 +245,7 @@ function StepSector({
               key={s.value}
               type="button"
               onClick={() => onChange(s.value)}
-              className="flex flex-col items-start gap-2 rounded-2xl border p-4 text-left transition-all duration-250 hover:border-white/20 active:scale-[0.97] md:p-5"
+              className="flex flex-col items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-250 hover:border-white/20 active:scale-[0.97] md:p-5"
               style={{
                 background: selected
                   ? "linear-gradient(135deg,rgba(190,41,236,0.15),rgba(0,0,200,0.1))"
@@ -238,7 +255,14 @@ function StepSector({
               }}
               aria-pressed={selected}
             >
-              <span className="text-xl">{s.icon}</span>
+              <s.Icon
+                size={18}
+                strokeWidth={1.5}
+                aria-hidden="true"
+                style={{
+                  color: selected ? "#d8b4fe" : "rgba(255,255,255,0.35)",
+                }}
+              />
               <span className="text-[12px] font-bold leading-snug text-white md:text-[13px]">
                 {s.label}
               </span>
@@ -339,16 +363,22 @@ function StepGoal({
                 {g.label}
               </span>
               <span
-                className="ml-3 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 text-[9px] font-black transition-all"
+                className="ml-3 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-all"
                 style={{
                   background: selected
                     ? "linear-gradient(135deg,#be29ec,#0000c8)"
                     : "transparent",
                   borderColor: selected ? "#be29ec" : "rgba(255,255,255,0.15)",
-                  color: "#fff",
                 }}
               >
-                {selected && "✓"}
+                {selected && (
+                  <Check
+                    size={10}
+                    strokeWidth={2.5}
+                    color="#fff"
+                    aria-hidden="true"
+                  />
+                )}
               </span>
             </button>
           );
@@ -498,9 +528,12 @@ function StepContact({
 
       {/* Güven sinyali */}
       <div className="flex items-center gap-2 rounded-xl border border-white/5 bg-white/[0.02] px-4 py-3">
-        <span className="text-base" aria-hidden="true">
-          🔒
-        </span>
+        <Lock
+          size={14}
+          strokeWidth={1.5}
+          className="shrink-0 text-white/25"
+          aria-hidden="true"
+        />
         <p className="text-[11px] leading-snug text-white/30">
           Bilgileriniz yalnızca analiziniz için kullanılır, üçüncü taraflarla
           paylaşılmaz.
@@ -532,9 +565,12 @@ function SuccessScreen({ onReset }: { onReset: () => void }) {
           boxShadow: "0 0 40px rgba(190,41,236,0.2)",
         }}
       >
-        <span className="text-3xl md:text-4xl" aria-hidden="true">
-          ✦
-        </span>
+        <CheckCircle2
+          size={36}
+          strokeWidth={1.5}
+          style={{ color: "#d8b4fe" }}
+          aria-hidden="true"
+        />
       </div>
 
       <div className="flex flex-col gap-3">
@@ -544,8 +580,8 @@ function SuccessScreen({ onReset }: { onReset: () => void }) {
         <p className="text-sm leading-relaxed text-white/45 sm:text-base">
           Dijital stratejinizi incelemeye başladık.
           <br />
-          En geç <span className="font-bold text-white/70">4 saat</span> içinde
-          sizinle iletişime geçeceğiz.
+          En geç <span className="font-bold text-white/70">1 iş günü</span>{" "}
+          içinde sizinle iletişime geçeceğiz.
         </p>
       </div>
 
@@ -853,7 +889,11 @@ export default function AnalysisForm({
                       className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition hover:bg-white/10 hover:text-white"
                       aria-label="Önceki adım"
                     >
-                      ←
+                      <ArrowLeft
+                        size={16}
+                        strokeWidth={1.5}
+                        aria-hidden="true"
+                      />
                     </button>
                   )}
 
@@ -913,9 +953,13 @@ export default function AnalysisForm({
                           onClick={() => handleStepClick(0)}
                           className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[10px] font-bold text-white/50 transition hover:text-white"
                         >
-                          {SECTORS.find((s) => s.value === sector)?.icon}{" "}
                           {SECTORS.find((s) => s.value === sector)?.label}
-                          <span className="text-white/25">✎</span>
+                          <Pencil
+                            size={10}
+                            strokeWidth={1.5}
+                            className="text-white/25"
+                            aria-hidden="true"
+                          />
                         </button>
                       )}
                       {completedSteps.has(1) && goal && (
@@ -929,7 +973,12 @@ export default function AnalysisForm({
                               (g) => g.value === goal,
                             )?.label
                           }
-                          <span className="text-white/25">✎</span>
+                          <Pencil
+                            size={10}
+                            strokeWidth={1.5}
+                            className="text-white/25"
+                            aria-hidden="true"
+                          />
                         </button>
                       )}
                     </div>

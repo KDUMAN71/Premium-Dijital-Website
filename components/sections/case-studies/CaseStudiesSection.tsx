@@ -506,7 +506,7 @@ export default function CaseStudiesSection({
     <section
       id="sonuclar"
       aria-label="Müşteri sonuçları"
-      className="border-t border-white/5 bg-brand-dark px-4 py-16 sm:px-5 sm:py-20 md:px-6 md:py-28"
+      className="border-t border-white/5 bg-[#07070d] px-4 py-16 sm:px-5 sm:py-20 md:px-6 md:py-28"
       itemScope
       itemType="https://schema.org/ItemList"
     >

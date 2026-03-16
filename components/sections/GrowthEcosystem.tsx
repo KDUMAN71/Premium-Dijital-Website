@@ -15,7 +15,7 @@ const PILLARS = [
     shortTitle: "Performans",
     keyword: "Google Ads & Meta Ads Yönetimi",
     desc: "Daha fazla nitelikli trafik, daha düşük edinim maliyeti. Google Ads ve Meta Ads kampanyalarını dönüşüm odaklı kurgular ve sürekli optimizasyonla yönetiyoruz.",
-    href: "/hizmetler/ppc-ve-performans-pazarlama",
+    href: "/cozumler/ppc-performans-pazarlama",
     bullets: [
       "Google Ads arama ve alışveriş kampanyaları",
       "Meta Ads hedefleme ve yaratıcı optimizasyon",
@@ -41,7 +41,7 @@ const PILLARS = [
     shortTitle: "Altyapı",
     keyword: "Teknik SEO & Dönüşüm Odaklı Web Sitesi",
     desc: "Arama motorlarında görünür, hızlı yüklenen ve ziyaretçiyi müşteriye dönüştüren web sitesi ve teknik SEO altyapısı kuruyoruz.",
-    href: "/hizmetler/web-sitesi-seo-ve-donusum-altyapisi",
+    href: "/cozumler/web-seo-donusum",
     bullets: [
       "Dönüşüm odaklı web sitesi ve landing page tasarımı",
       "Teknik SEO: Core Web Vitals, schema, site mimarisi",
@@ -67,7 +67,7 @@ const PILLARS = [
     shortTitle: "Marka",
     keyword: "Kurumsal Kimlik & Dijital Marka Tasarımı",
     desc: "Markanızı rakiplerden ayıran, güven oluşturan ve akılda kalan görsel kimlik ve iletişim sistemi tasarlıyoruz.",
-    href: "/hizmetler/marka-ve-gorsel-iletisim",
+    href: "/cozumler/marka-gorsel-iletisim",
     bullets: [
       "Kurumsal kimlik ve logo tasarımı",
       "Dijital UI sistemi ve görsel dil rehberi",
@@ -93,7 +93,7 @@ const PILLARS = [
     shortTitle: "Operasyon",
     keyword: "Bulut Altyapısı & İş Süreci Otomasyonu",
     desc: "Dağınık araçlar, kopyala-yapıştır süreçler, kayıp bilgiler. İşletmenizin tüm dijital operasyonunu — iletişimden müşteri yönetimine, dosya paylaşımından otomasyon akışlarına — birbirine bağlı, otomatik çalışan bir sisteme dönüştürüyoruz.",
-    href: "/hizmetler/dijital-operasyon-sistemi",
+    href: "/cozumler/dijital-operasyon-sistemi",
     bullets: [
       "Google Workspace kurulum, yapılandırma ve ekip eğitimi",
       "CRM & müşteri iletişim sistemi (Zoho, Zendesk)",
@@ -246,36 +246,36 @@ function ConnectorCanvas({ activeId }: { activeId: string | null }) {
         const pA = PILLARS[ai],
           pB = PILLARS[bi];
         const isActive = activeId === pA.id || activeId === pB.id;
-        const alpha = isActive
-          ? 0.55
-          : prefersReduced
-            ? 0.12
-            : 0.08 + Math.abs(Math.sin(t * 0.0008)) * 0.1;
 
-        // Ana çizgi
+        // Ana çizgi — aktif: brand gradient %60, pasif: beyaz %6
         const lg = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
-        lg.addColorStop(0, pA.color.glow.replace("0.18", String(alpha)));
-        lg.addColorStop(1, pB.color.glow.replace("0.18", String(alpha)));
+        if (isActive) {
+          lg.addColorStop(0, "rgba(190,41,236,0.6)");
+          lg.addColorStop(1, "rgba(0,0,200,0.6)");
+        } else {
+          lg.addColorStop(0, "rgba(255,255,255,0.06)");
+          lg.addColorStop(1, "rgba(255,255,255,0.06)");
+        }
         ctx.beginPath();
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(b.x, b.y);
         ctx.strokeStyle = lg;
-        ctx.lineWidth = isActive ? 1.5 : 0.8;
+        ctx.lineWidth = isActive ? 1.8 : 0.8;
         ctx.setLineDash(isActive ? [] : [4, 8]);
         ctx.stroke();
         ctx.setLineDash([]);
 
-        // Akan nokta
+        // Akan nokta — aktif: r:4 parlak, pasif: r:2.5 subtle
         if (!prefersReduced) {
           const phase = ai * 0.33;
           const prog = (t * 0.00045 + phase) % 1;
           const px = a.x + (b.x - a.x) * prog;
           const py = a.y + (b.y - a.y) * prog;
           ctx.beginPath();
-          ctx.arc(px, py, isActive ? 3 : 2, 0, Math.PI * 2);
+          ctx.arc(px, py, isActive ? 4 : 2.5, 0, Math.PI * 2);
           ctx.fillStyle = isActive
-            ? pA.color.primary
-            : `rgba(255,255,255,${alpha * 1.8})`;
+            ? "rgba(190,41,236,0.85)"
+            : "rgba(255,255,255,0.5)";
           ctx.fill();
         }
       });
@@ -298,6 +298,30 @@ function ConnectorCanvas({ activeId }: { activeId: string | null }) {
     />
   );
 }
+
+/* ─────────────────────────────────────────────
+   Kart ikonları — SVG, 16×16, stroke-only
+───────────────────────────────────────────── */
+const PILLAR_ICONS: Record<string, React.ReactNode> = {
+  ppc: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M2 12L6 8L9 11L14 4" stroke="#be29ec" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10 4h4v4" stroke="#0000c8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+  web: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M5 4L2 8L5 12" stroke="#93c5fd" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M11 4L14 8L11 12" stroke="#93c5fd" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M9.5 3L6.5 13" stroke="#60a5fa" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  ),
+  marka: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M8 1.5L9.6 6.2H14.5L10.5 9L12 13.5L8 10.8L4 13.5L5.5 9L1.5 6.2H6.4L8 1.5Z" stroke="#5eead4" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+};
 
 /* ─────────────────────────────────────────────
    Hizmet kartı
@@ -362,16 +386,19 @@ function PillarCard({
       />
 
       <div className="relative flex flex-col gap-4 p-5 sm:p-6 md:p-7">
-        {/* Üst satır: numara + keyword rozeti */}
+        {/* Üst satır: ikon + numara + keyword rozeti */}
         <div className="flex items-center justify-between">
-          <span
-            className="font-mono text-[11px] font-bold tracking-[0.2em]"
-            style={{
-              color: expanded ? pillar.color.text : "rgba(255,255,255,0.2)",
-            }}
-          >
-            {pillar.index}
-          </span>
+          <div className="flex items-center gap-2">
+            {PILLAR_ICONS[pillar.id]}
+            <span
+              className="font-mono text-[11px] font-bold tracking-[0.2em]"
+              style={{
+                color: expanded ? pillar.color.text : "rgba(255,255,255,0.2)",
+              }}
+            >
+              {pillar.index}
+            </span>
+          </div>
           <span
             className="rounded-full px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.15em] transition-all duration-300"
             style={{
@@ -512,6 +539,7 @@ export default function GrowthEcosystem() {
   const autoRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const userRef = useRef(false);
   const indexRef = useRef(0);
+  const prefersReduced = useReducedMotion();
 
   // Mobil tespiti
   useEffect(() => {
@@ -563,7 +591,7 @@ export default function GrowthEcosystem() {
     <section
       id="hizmetler"
       aria-label="Dijital büyüme hizmetleri"
-      className="relative overflow-hidden bg-brand-dark px-4 py-16 sm:px-5 sm:py-20 md:px-6 md:py-28"
+      className="relative overflow-hidden bg-[#060609] px-4 py-16 sm:px-5 sm:py-20 md:px-6 md:py-28"
       itemScope
       itemType="https://schema.org/ItemList"
     >
@@ -712,6 +740,10 @@ export default function GrowthEcosystem() {
                   {/* Sol: başlık + açıklama + CTA */}
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center gap-3">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <circle cx="8" cy="8" r="2.5" stroke="#93c5fd" strokeWidth="1.2" />
+                        <path d="M8 1.5V3M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M12.6 3.4l-1.1 1.1M4.5 11.5l-1.1 1.1" stroke="#93c5fd" strokeWidth="1.2" strokeLinecap="round" />
+                      </svg>
                       <span
                         className="font-mono text-[11px] font-bold tracking-[0.2em]"
                         style={{ color: ops.color.text }}
@@ -792,10 +824,33 @@ export default function GrowthEcosystem() {
                   {/* Sağ: 2×2 alt hizmet grid */}
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     {"subServices" in ops &&
-                      ops.subServices.map((sub) => (
-                        <div
+                      ops.subServices.map((sub, subIdx) => (
+                        <motion.div
                           key={sub.label}
-                          className="relative flex flex-col gap-2.5 overflow-hidden rounded-xl border p-4 transition-all duration-300"
+                          className="relative flex flex-col gap-2.5 overflow-hidden rounded-xl border p-4"
+                          animate={
+                            !prefersReduced
+                              ? {
+                                  boxShadow: sub.highlight
+                                    ? [
+                                        "0 0 24px rgba(0,0,200,0.2), inset 0 0 20px rgba(190,41,236,0.06)",
+                                        "0 0 40px rgba(190,41,236,0.35), inset 0 0 28px rgba(0,0,200,0.15)",
+                                        "0 0 24px rgba(0,0,200,0.2), inset 0 0 20px rgba(190,41,236,0.06)",
+                                      ]
+                                    : [
+                                        "0 0 0px rgba(255,255,255,0)",
+                                        "0 0 10px rgba(255,255,255,0.05)",
+                                        "0 0 0px rgba(255,255,255,0)",
+                                      ],
+                                }
+                              : {}
+                          }
+                          transition={{
+                            duration: 3,
+                            repeat: Infinity,
+                            delay: subIdx * 0.75,
+                            ease: "easeInOut",
+                          }}
                           style={{
                             background: sub.highlight
                               ? `linear-gradient(135deg, rgba(0,0,200,0.22), rgba(190,41,236,0.16))`
@@ -803,9 +858,6 @@ export default function GrowthEcosystem() {
                             borderColor: sub.highlight
                               ? "rgba(147,197,253,0.5)"
                               : "rgba(255,255,255,0.08)",
-                            boxShadow: sub.highlight
-                              ? "0 0 24px rgba(0,0,200,0.2), inset 0 0 20px rgba(190,41,236,0.06)"
-                              : "none",
                           }}
                         >
                           {/* Badge — AI kartında */}
@@ -859,7 +911,7 @@ export default function GrowthEcosystem() {
                               </li>
                             ))}
                           </ul>
-                        </div>
+                        </motion.div>
                       ))}
                   </div>
                 </div>
@@ -931,7 +983,7 @@ export default function GrowthEcosystem() {
               Hangi Alan Zayıf? Ücretsiz Analiz Yapalım →
             </Link>
             <p className="text-[11px] text-white/25">
-              Ortalama yanıt süresi 4 saat · Ücretsiz · Bağlayıcı değil
+              1 iş günü içinde yanıt · Ücretsiz · Bağlayıcı değil
             </p>
           </div>
         </motion.div>
