@@ -18,11 +18,11 @@ const duplicatedLogos = [...logos, ...logos, ...logos];
 
 export default function LogoCloud() {
   return (
-    <section className="py-12 sm:py-14 bg-brand-dark relative overflow-hidden border-y border-white/5">
+    <section className="py-28 bg-brand-dark relative overflow-hidden border-y border-white/5">
       <div className="absolute inset-y-0 left-0 w-48 bg-gradient-to-r from-brand-dark via-brand-dark/90 to-transparent z-10" />
       <div className="absolute inset-y-0 right-0 w-48 bg-gradient-to-l from-brand-dark via-brand-dark/90 to-transparent z-10" />
 
-      <div className="max-w-7xl mx-auto px-6 mb-8 sm:mb-10 text-center">
+      <div className="max-w-7xl mx-auto px-6 mb-24 text-center">
         <p className="text-[11px] uppercase tracking-[0.18em] text-white/50 font-bold">
           Kullandığımız Teknolojiler & Operasyon Standartları
         </p>

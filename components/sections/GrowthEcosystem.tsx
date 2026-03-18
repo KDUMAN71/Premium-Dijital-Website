@@ -11,11 +11,11 @@ const PILLARS = [
   {
     id: "ppc",
     index: "01",
-    title: "PPC ve Performans Pazarlama",
+    title: "Performans & Büyüme",
     shortTitle: "Performans",
     keyword: "Google Ads & Meta Ads Yönetimi",
     desc: "Daha fazla nitelikli trafik, daha düşük edinim maliyeti. Google Ads ve Meta Ads kampanyalarını dönüşüm odaklı kurgular ve sürekli optimizasyonla yönetiyoruz.",
-    href: "/cozumler/ppc-performans-pazarlama",
+    href: "/hizmetler/performans-pazarlama",
     bullets: [
       "Google Ads arama ve alışveriş kampanyaları",
       "Meta Ads hedefleme ve yaratıcı optimizasyon",
@@ -37,11 +37,11 @@ const PILLARS = [
   {
     id: "web",
     index: "02",
-    title: "Web Sitesi, SEO ve Dönüşüm Altyapısı",
+    title: "Dijital Mimari",
     shortTitle: "Altyapı",
     keyword: "Teknik SEO & Dönüşüm Odaklı Web Sitesi",
     desc: "Arama motorlarında görünür, hızlı yüklenen ve ziyaretçiyi müşteriye dönüştüren web sitesi ve teknik SEO altyapısı kuruyoruz.",
-    href: "/cozumler/web-seo-donusum",
+    href: "/hizmetler/dijital-mimari",
     bullets: [
       "Dönüşüm odaklı web sitesi ve landing page tasarımı",
       "Teknik SEO: Core Web Vitals, schema, site mimarisi",
@@ -63,11 +63,11 @@ const PILLARS = [
   {
     id: "marka",
     index: "03",
-    title: "Marka & Görsel İletişim",
+    title: "Marka & Strateji",
     shortTitle: "Marka",
     keyword: "Kurumsal Kimlik & Dijital Marka Tasarımı",
     desc: "Markanızı rakiplerden ayıran, güven oluşturan ve akılda kalan görsel kimlik ve iletişim sistemi tasarlıyoruz.",
-    href: "/cozumler/marka-gorsel-iletisim",
+    href: "/hizmetler/marka-stratejisi",
     bullets: [
       "Kurumsal kimlik ve logo tasarımı",
       "Dijital UI sistemi ve görsel dil rehberi",
@@ -89,11 +89,11 @@ const PILLARS = [
   {
     id: "ops",
     index: "04",
-    title: "Dijital Operasyon Sistemi",
+    title: "Dijital Operasyon",
     shortTitle: "Operasyon",
     keyword: "Bulut Altyapısı & İş Süreci Otomasyonu",
     desc: "Dağınık araçlar, kopyala-yapıştır süreçler, kayıp bilgiler. İşletmenizin tüm dijital operasyonunu — iletişimden müşteri yönetimine, dosya paylaşımından otomasyon akışlarına — birbirine bağlı, otomatik çalışan bir sisteme dönüştürüyoruz.",
-    href: "/cozumler/dijital-operasyon-sistemi",
+    href: "/hizmetler/dijital-operasyon",
     bullets: [
       "Google Workspace kurulum, yapılandırma ve ekip eğitimi",
       "CRM & müşteri iletişim sistemi (Zoho, Zendesk)",
@@ -101,7 +101,7 @@ const PILLARS = [
       "AI destekli iş akışları: form → döküman, otomatik raporlama",
     ],
     stack: ["Google Workspace", "Make", "Zoho", "Zendesk", "ChatGPT", "Zapier"],
-    cta: "Dijital Operasyon Sistemini İncele",
+    cta: "Dijital Operasyonu İncele",
     color: {
       primary: "#3b82f6",
       glow: "rgba(0,0,200,0.2)",

@@ -213,7 +213,7 @@ function FeaturedCard({ c, index }: { c: CaseStudy; index: number }) {
           {/* CTA */}
           <div className="flex flex-col gap-3 border-t border-white/6 pt-6 sm:flex-row sm:items-center sm:justify-between">
             <Link
-              href={`/sonuclar/${c.slug}`}
+              href={`/basari-hikayeleri/${c.slug}`}
               className="text-[11px] font-black uppercase tracking-[0.22em] text-white/50 transition-colors hover:text-white"
               itemProp="url"
             >
@@ -439,7 +439,7 @@ function CompactCard({ c, index }: { c: CaseStudy; index: number }) {
       {/* Alt CTA */}
       <div className="relative z-10 mt-5 flex items-center justify-between border-t border-white/6 pt-4">
         <Link
-          href={`/sonuclar/${c.slug}`}
+          href={`/basari-hikayeleri/${c.slug}`}
           className="text-[10px] font-black uppercase tracking-[0.18em] text-white/45 transition-colors hover:text-white"
           itemProp="url"
         >
@@ -464,7 +464,7 @@ function Schema({ items, total }: { items: CaseStudy[]; total: number }) {
   const data = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "Premium Dijital — Müşteri Sonuçları",
+    name: "Premium Dijital — Başarı Hikayeleri",
     description:
       "Dijital pazarlama, SEO ve performans reklamcılığıyla elde edilen ölçülebilir sonuçlar",
     numberOfItems: total,
@@ -475,7 +475,7 @@ function Schema({ items, total }: { items: CaseStudy[]; total: number }) {
         "@type": "Article",
         name: c.home?.title,
         description: c.home?.summary,
-        url: `https://premiumdijital.com/sonuclar/${c.slug}`,
+        url: `https://premiumdijital.com/basari-hikayeleri/${c.slug}`,
         about: { "@type": "Thing", name: c.sector },
       },
     })),
@@ -504,7 +504,7 @@ export default function CaseStudiesSection({
 
   return (
     <section
-      id="sonuclar"
+      id="basari-hikayeleri"
       aria-label="Müşteri sonuçları"
       className="border-t border-white/5 bg-[#07070d] px-4 py-16 sm:px-5 sm:py-20 md:px-6 md:py-28"
       itemScope
@@ -525,7 +525,7 @@ export default function CaseStudiesSection({
             <div>
               <div className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-2 mb-4">
                 <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-white/50">
-                  Sonuçlar
+                  Başarı Hikayeleri
                 </span>
               </div>
               <h2
@@ -573,11 +573,11 @@ export default function CaseStudiesSection({
           className="mt-12 flex flex-col items-center gap-4 sm:flex-row sm:justify-center md:mt-16"
         >
           <Link
-            href="/sonuclar"
+            href="/basari-hikayeleri"
             className="group inline-flex flex-col items-center justify-center rounded-full border border-white/10 bg-white/5 px-8 py-4 transition-all hover:bg-white/10 hover:scale-[1.02]"
           >
             <span className="text-[11px] font-black uppercase tracking-[0.3em] text-white/60 transition-colors group-hover:text-white">
-              Tüm Sonuçları Gör
+              Tüm Başarı Hikayelerini Gör
             </span>
             <span className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.2em] text-white/30">
               {total}+ sektörler arası gerçek sonuç

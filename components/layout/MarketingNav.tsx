@@ -13,26 +13,26 @@ import { cn } from "@/utils/cn";
 ───────────────────────────────────────────── */
 const SERVICES = [
   {
-    href: "/cozumler/ppc-performans-pazarlama",
-    label: "PPC & Performans Pazarlama",
+    href: "/hizmetler/performans-pazarlama",
+    label: "Performans & Büyüme",
     desc: "Google Ads, Meta Ads, ölçülebilir ROAS",
     icon: Crosshair,
   },
   {
-    href: "/cozumler/web-seo-donusum",
-    label: "Web Sitesi, SEO & Dönüşüm",
+    href: "/hizmetler/dijital-mimari",
+    label: "Dijital Mimari",
     desc: "Teknik altyapı, organik büyüme, CRO",
     icon: LayoutPanelTop,
   },
   {
-    href: "/cozumler/marka-gorsel-iletisim",
-    label: "Marka & Görsel İletişim",
+    href: "/hizmetler/marka-stratejisi",
+    label: "Marka & Strateji",
     desc: "Kimlik, UI/UX, stratejik içerik",
     icon: Palette,
   },
   {
-    href: "/cozumler/dijital-operasyon-sistemi",
-    label: "Dijital Operasyon Sistemi",
+    href: "/hizmetler/dijital-operasyon",
+    label: "Dijital Operasyon",
     desc: "CRM, otomasyon, AI iş akışları",
     icon: Workflow,
   },
@@ -40,9 +40,9 @@ const SERVICES = [
 
 const NAV_ITEMS = [
   { href: "/", label: "Anasayfa" },
-  { href: "/cozumler", label: "Çözümler", hasDropdown: true },
+  { href: "/hizmetler", label: "Hizmetler", hasDropdown: true },
   { href: "/hakkimizda", label: "Hakkımızda" },
-  { href: "/sonuclar", label: "Sonuçlar" },
+  { href: "/basari-hikayeleri", label: "Başarı Hikayeleri" },
   { href: "/blog", label: "Blog" },
   { href: "/iletisim", label: "İletişim" },
 ];
@@ -111,11 +111,11 @@ function ServicesDropdown({ onClose }: { onClose: () => void }) {
 
       <div className="border-t border-white/6 px-5 py-3.5">
         <Link
-          href="/cozumler"
+          href="/hizmetler"
           onClick={onClose}
           className="group flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.2em] text-white/35 transition-colors hover:text-white"
         >
-          <span>Tüm Çözümleri İncele</span>
+          <span>Tüm Hizmetleri İncele</span>
           <span className="transition-transform group-hover:translate-x-0.5">
             →
           </span>
@@ -465,11 +465,11 @@ export default function MarketingNav() {
                               })}
 
                               <Link
-                                href="/cozumler"
+                                href="/hizmetler"
                                 onClick={() => setMobileOpen(false)}
                                 className="mt-1 px-3 py-2 text-[11px] font-black uppercase tracking-[0.2em] text-white/30 transition-colors hover:text-white"
                               >
-                                Tüm Çözümler →
+                                Tüm Hizmetler →
                               </Link>
                             </div>
                           </motion.div>

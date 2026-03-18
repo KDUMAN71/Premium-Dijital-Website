@@ -128,7 +128,7 @@ export default function FAQSection({
   };
   const itemVariant = {
     hidden: { opacity: 0, y: prefersReduced ? 0 : 16 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
+    show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] } },
   };
 
   return (
@@ -291,6 +291,29 @@ export default function FAQSection({
               </motion.span>
             </motion.button>
           )}
+        </motion.div>
+
+        {/* ── Alt CTA — "Cevabını bulamadın mı?" ── */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mt-12 flex flex-col items-center gap-3 text-center md:mt-16"
+        >
+          <p className="text-sm text-white/35">
+            Cevabını bulamadığın bir soru mu var?
+          </p>
+          <Link
+            href={ctaHref}
+            className="group relative inline-flex h-11 items-center justify-center overflow-hidden rounded-xl px-8 text-[13px] font-bold uppercase tracking-[0.08em] text-white transition-all hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(190,41,236,0.4)]"
+            style={{
+              background: "linear-gradient(90deg,#be29ec,#0000c8)",
+              boxShadow: "0 0 20px rgba(190,41,236,0.3)",
+            }}
+          >
+            <span className="absolute inset-0 -translate-x-full skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+            <span className="relative z-10">{ctaLabel}</span>
+          </Link>
         </motion.div>
       </div>
 

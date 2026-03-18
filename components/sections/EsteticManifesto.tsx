@@ -51,9 +51,9 @@ const MANIFESTO_ITEMS = [
     icon: <LayoutPanelTop size={18} />,
     title: "Stratejik Temel",
     beforeImage:
-      "/img/cozumler/web-seo-donusum/EstetikManifesto-strategy-before-1A.webp",
+      "/img/hizmetler/dijital-mimari/EstetikManifesto-strategy-before-1A.webp",
     afterImage:
-      "/img/cozumler/web-seo-donusum/EstetikManifesto-strategy-after-1B.webp",
+      "/img/hizmetler/dijital-mimari/EstetikManifesto-strategy-after-1B.webp",
     old: "Önce tasarımı bitirelim, gerisini sonra hallederiz.",
     new: "Stratejisi kurulmamış bir tasarım sadece dekorasyondur. Mühendislik, ilk pikselden önce başlar.",
     tag: "PLANLAMA",
@@ -63,9 +63,9 @@ const MANIFESTO_ITEMS = [
     icon: <Zap size={18} />,
     title: "Hızın Estetiği",
     beforeImage:
-      "/img/cozumler/web-seo-donusum/EstetikManifesto-speed-before-2A.webp",
+      "/img/hizmetler/dijital-mimari/EstetikManifesto-speed-before-2A.webp",
     afterImage:
-      "/img/cozumler/web-seo-donusum/EstetikManifesto-speed-after-2B.webp",
+      "/img/hizmetler/dijital-mimari/EstetikManifesto-speed-after-2B.webp",
     old: "Güzel görünsün, biraz yavaş olsa da olur.",
     new: "Ağırlık bir zenginlik değil, teknik bir zaaftır. Gerçek estetik, milisaniyelik hızın konforuyla mühürlenir.",
     tag: "PERFORMANS",
@@ -75,9 +75,9 @@ const MANIFESTO_ITEMS = [
     icon: <Search size={18} />,
     title: "DNA'ya İşlenmiş SEO",
     beforeImage:
-      "/img/cozumler/web-seo-donusum/EstetikManifesto-seo-before-3A.webp",
+      "/img/hizmetler/dijital-mimari/EstetikManifesto-seo-before-3A.webp",
     afterImage:
-      "/img/cozumler/web-seo-donusum/EstetikManifesto-seo-after-3B.webp",
+      "/img/hizmetler/dijital-mimari/EstetikManifesto-seo-after-3B.webp",
     old: "SEO'yu yayından sonra bir ara ekleriz.",
     new: "SEO sonradan eklenmez, yapıya işlenir. Temel atılırken düşünülmeyen SEO, gelecekte yıkıp yeniden inşa etmektir.",
     tag: "GÖRÜNÜRLÜK",
@@ -87,9 +87,9 @@ const MANIFESTO_ITEMS = [
     icon: <BarChart3 size={18} />,
     title: "Veri Odaklılık",
     beforeImage:
-      "/img/cozumler/web-seo-donusum/EstetikManifesto-data-before-4A.webp",
+      "/img/hizmetler/dijital-mimari/EstetikManifesto-data-before-4A.webp",
     afterImage:
-      "/img/cozumler/web-seo-donusum/EstetikManifesto-data-after-4B.webp",
+      "/img/hizmetler/dijital-mimari/EstetikManifesto-data-after-4B.webp",
     old: "Analytics kodu ekledik, yeterli.",
     new: "Kaç kişinin geldiğini bilmek merakı, ne yaptıklarını bilmek ise ciroyu yönetmektir. Her aksiyon görünür olmalı.",
     tag: "ANALİTİK",
@@ -99,9 +99,9 @@ const MANIFESTO_ITEMS = [
     icon: <MonitorSmartphone size={18} />,
     title: "Mobile-First",
     beforeImage:
-      "/img/cozumler/web-seo-donusum/EstetikManifesto-mobile-before-5A.webp",
+      "/img/hizmetler/dijital-mimari/EstetikManifesto-mobile-before-5A.webp",
     afterImage:
-      "/img/cozumler/web-seo-donusum/EstetikManifesto-mobile-after-5B.webp",
+      "/img/hizmetler/dijital-mimari/EstetikManifesto-mobile-after-5B.webp",
     old: "Masaüstünü mobil ekrana uyduralım.",
     new: "Mobil artık çoğunluk değil, asıldır. Tasarım mobil için doğarsa kusursuzdur, tersi her zaman tavizdir.",
     tag: "MOBİLİTE",
@@ -111,9 +111,9 @@ const MANIFESTO_ITEMS = [
     icon: <Cpu size={18} />,
     title: "Teknoloji Yatırımı",
     beforeImage:
-      "/img/cozumler/web-seo-donusum/EstetikManifesto-tech-before-6A.webp",
+      "/img/hizmetler/dijital-mimari/EstetikManifesto-tech-before-6A.webp",
     afterImage:
-      "/img/cozumler/web-seo-donusum/EstetikManifesto-tech-after-6B.webp",
+      "/img/hizmetler/dijital-mimari/EstetikManifesto-tech-after-6B.webp",
     old: "Hazır şablon hızlı olur, sonra geliştiririz.",
     new: "Şablonlar bugünü kurtarır, geleceği ipotek altına alır. Ölçeklenebilir teknoloji, büyümenin önündeki en ucuz sigortadır.",
     tag: "ALTYAPI",

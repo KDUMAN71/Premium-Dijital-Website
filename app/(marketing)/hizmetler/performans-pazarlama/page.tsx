@@ -37,7 +37,7 @@ export const metadata = {
 };
 
 const pageUrl =
-  "https://premiumdijital.com/cozumler/ppc-performans-pazarlama";
+  "https://premiumdijital.com/hizmetler/performans-pazarlama";
 
 const ppcFaqs = [
   {
@@ -145,7 +145,7 @@ const breadcrumbSchema = {
       "@type": "ListItem",
       position: 2,
       name: "Hizmetler",
-      item: "https://premiumdijital.com/cozumler",
+      item: "https://premiumdijital.com/hizmetler",
     },
     {
       "@type": "ListItem",
@@ -196,7 +196,7 @@ const ppcNavItems = [
   { id: "kapsam", label: "Hizmet Kapsamı" },
   { id: "teknoloji", label: "Teknoloji" },
   { id: "surec", label: "Süreç" },
-  { id: "sonuclar", label: "Sonuçlar" },
+  { id: "sonuclar", label: "Başarılar" },
   { id: "kimler-icin", label: "Kimler İçin" },
   { id: "sss", label: "SSS" },
 ];
@@ -440,7 +440,7 @@ export default function PPCPage() {
         description="Google Ads ve Meta Ads stratejileri ile markanız için daha fazla nitelikli talep, daha verimli reklam bütçesi ve ölçülebilir dijital büyüme sağlıyoruz."
         primaryCtaHref="/iletisim#analiz"
         primaryCtaLabel="Ücretsiz Analiz Al"
-        secondaryCtaHref="/cozumler"
+        secondaryCtaHref="/hizmetler"
         secondaryCtaLabel="Tüm Hizmetleri Gör"
         trustItems={ppcTrustItems}
         navItems={ppcNavItems}

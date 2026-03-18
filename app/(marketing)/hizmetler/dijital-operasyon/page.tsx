@@ -6,7 +6,7 @@ export default function DijitalOperasyonSistemiPage() {
       <section className="relative mx-auto max-w-6xl px-4 py-20 sm:px-5 sm:py-24 md:px-6 md:py-32">
         <div className="inline-flex items-center rounded-full border border-brand-blue/20 bg-white/5 px-4 py-2">
           <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/85 sm:text-xs sm:tracking-[0.28em]">
-            Çözümler
+            Hizmetler
           </span>
         </div>
 

@@ -32,7 +32,7 @@ export default function ServicePageTemplate({
   description,
   primaryCtaHref,
   primaryCtaLabel,
-  secondaryCtaHref = "/cozumler",
+  secondaryCtaHref = "/hizmetler",
   secondaryCtaLabel = "Tüm Hizmetleri Gör",
   trustItems,
   navItems,

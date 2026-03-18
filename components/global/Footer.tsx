@@ -80,16 +80,16 @@ export default function Footer() {
             <div className="flex flex-col gap-8">
               <FooterHeader>Uzmanlıklar</FooterHeader>
               <ul className="space-y-4">
-                <FooterLink href="/cozumler/ppc-performans-pazarlama">
+                <FooterLink href="/hizmetler/performans-pazarlama">
                   PPC & Performans
                 </FooterLink>
-                <FooterLink href="/cozumler/web-seo-donusum">
+                <FooterLink href="/hizmetler/dijital-mimari">
                   Web & SEO Mimari
                 </FooterLink>
-                <FooterLink href="/cozumler/marka-gorsel-iletisim">
+                <FooterLink href="/hizmetler/marka-stratejisi">
                   Marka İletişimi
                 </FooterLink>
-                <FooterLink href="/cozumler/dijital-operasyon-sistemi">
+                <FooterLink href="/hizmetler/dijital-operasyon">
                   Dijital Operasyon
                 </FooterLink>
               </ul>

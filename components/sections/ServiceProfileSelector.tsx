@@ -246,7 +246,7 @@ function ServiceSchema() {
   const schema = {
     "@context": "https://schema.org",
     "@type": "Service",
-    name: "Web Sitesi, SEO ve Dönüşüm Altyapısı",
+    name: "Dijital Mimari",
     provider: { "@type": "Organization", name: "Premium Dijital" },
     hasOfferCatalog: {
       "@type": "OfferCatalog",

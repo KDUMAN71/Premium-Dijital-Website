@@ -13,7 +13,7 @@ import {
   MousePointer2,
   ShieldCheck,
   Globe,
-  Stethoscop,
+  Stethoscope,
   Briefcase,
 } from "lucide-react";
 

@@ -30,7 +30,6 @@ import ProcessTimeline from "@/components/sections/Processtimeline";
 import InvestmentCalculator from "@/components/sections/InvestmentCalculator";
 import FAQSection from "@/components/sections/faq/FAQSection";
 import { webSeoFaqs } from "@/components/sections/faq/faq-data";
-import FinalAction from "@/components/sections/FinalAction";
 import ContactCTA from "@/components/sections/ContactCTA";
 
 /* ─── Metadata ────────────────────────────────────────────────────────────── */
@@ -43,12 +42,12 @@ export const metadata = {
 
 /* ─── Schema ──────────────────────────────────────────────────────────────── */
 
-const pageUrl = "https://premiumdijital.com/cozumler/web-seo-donusum";
+const pageUrl = "https://premiumdijital.com/hizmetler/dijital-mimari";
 
 const webPageSchema = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  name: "Web Sitesi, SEO ve Dönüşüm Altyapısı",
+  name: "Dijital Mimari",
   url: pageUrl,
   description:
     "Kurumsal web sitesi tasarımı, teknik SEO, Core Web Vitals optimizasyonu, GA4-GTM ölçümleme ve dönüşüm odaklı web altyapıları.",
@@ -63,8 +62,8 @@ const webPageSchema = {
 const serviceSchema = {
   "@context": "https://schema.org",
   "@type": "Service",
-  name: "Web Sitesi, SEO ve Dönüşüm Altyapısı",
-  serviceType: "Web Sitesi, SEO ve Dönüşüm Altyapısı",
+  name: "Dijital Mimari",
+  serviceType: "Dijital Mimari",
   provider: {
     "@type": "Organization",
     name: "Premium Dijital",
@@ -121,12 +120,12 @@ const breadcrumbSchema = {
       "@type": "ListItem",
       position: 2,
       name: "Hizmetler",
-      item: "https://premiumdijital.com/cozumler",
+      item: "https://premiumdijital.com/hizmetler",
     },
     {
       "@type": "ListItem",
       position: 3,
-      name: "Web Sitesi, SEO ve Dönüşüm Altyapısı",
+      name: "Dijital Mimari",
       item: pageUrl,
     },
   ],
@@ -139,7 +138,7 @@ const navItems = [
   { id: "kapsam", label: "Hizmet Kapsamı" },
   { id: "surec", label: "Süreç" },
   { id: "fiyat", label: "Yatırım" },
-  { id: "sonuclar", label: "Sonuçlar" },
+  { id: "sonuclar", label: "Başarılar" },
   { id: "sss", label: "SSS" },
   { id: "iletisim", label: "İletişim" },
 ];
@@ -204,7 +203,7 @@ export default function WebSitesiSeoVeDonusumAltyapisiPage() {
         description="Kurumsal web sitesi tasarımını yalnızca görsel bir çıktı olarak değil; teknik SEO, hız, ölçümleme ve dönüşüm odaklı büyüme altyapısı olarak ele alıyoruz."
         primaryCtaHref="/iletisim#analiz"
         primaryCtaLabel="Projenizi Değerlendirelim"
-        secondaryCtaHref="/cozumler"
+        secondaryCtaHref="/hizmetler"
         secondaryCtaLabel="Tüm Hizmetleri Gör"
         navItems={navItems}
         heroVisual={<IcebergVisual />}
@@ -293,7 +292,7 @@ export default function WebSitesiSeoVeDonusumAltyapisiPage() {
             <div className="mx-auto max-w-7xl px-4 py-20 sm:px-5 md:px-6 md:py-24">
               <div className="mb-14 text-center">
                 <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-brand-blue/80">
-                  Sonuçlar
+                  Başarılar
                 </p>
 
                 <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">

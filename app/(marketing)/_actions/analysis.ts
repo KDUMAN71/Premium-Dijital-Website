@@ -32,7 +32,7 @@ const GOAL_LABELS: Record<string, string> = {
   RETENTION: "Tekrar Satın Alma & Müşteri Sadakati",
   LEAD: "Nitelikli Lead & Teklif Talebi",
   BRAND: "Marka Bilinirliği & Pazar Otoritesi",
-  SYSTEM: "Dijital Operasyon Sistemi Kurulumu",
+  SYSTEM: "Dijital Operasyon Kurulumu",
   SEO: "SEO & Teknik Altyapı",
   SOCIAL: "Sosyal Medya & İçerik Stratejisi",
   OTHER: "Diğer",

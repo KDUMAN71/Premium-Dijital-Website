@@ -33,16 +33,16 @@ const serviceSchema = {
         "@type": "Offer",
         itemOffered: {
           "@type": "Service",
-          name: "PPC ve Performans Pazarlama",
+          name: "Performans & Büyüme",
         },
       },
       {
         "@type": "Offer",
-        itemOffered: { "@type": "Service", name: "Web Sitesi, SEO ve Dönüşüm" },
+        itemOffered: { "@type": "Service", name: "Dijital Mimari" },
       },
       {
         "@type": "Offer",
-        itemOffered: { "@type": "Service", name: "Marka ve Görsel İletişim" },
+        itemOffered: { "@type": "Service", name: "Marka & Strateji" },
       },
       {
         "@type": "Offer",
@@ -60,8 +60,8 @@ const serviceSchema = {
  */
 const services = [
   {
-    title: "PPC ve Performans Pazarlama",
-    slug: "ppc-ve-performans-pazarlama",
+    title: "Performans & Büyüme",
+    slug: "performans-pazarlama",
     desc: "Google Ads ve Meta Ads yönetiminde ROI odaklı, veri madenciliği ile desteklenen yüksek performanslı reklam stratejileri.",
     icon: <Target className="text-brand-blue" size={26} />,
     items: [
@@ -73,8 +73,8 @@ const services = [
     color: "blue",
   },
   {
-    title: "Web Sitesi, SEO ve Dönüşüm",
-    slug: "web-sitesi-seo-ve-donusum-altyapisi",
+    title: "Dijital Mimari",
+    slug: "dijital-mimari",
     desc: "Teknik SEO, hız optimizasyonu ve yüksek dönüşüm (CRO) odaklı modern web altyapıları ile markanızı güçlendiriyoruz.",
     icon: <Globe className="text-brand-purple" size={26} />,
     items: [
@@ -86,8 +86,8 @@ const services = [
     color: "purple",
   },
   {
-    title: "Marka ve Görsel İletişim",
-    slug: "marka-ve-gorsel-iletisim",
+    title: "Marka & Strateji",
+    slug: "marka-stratejisi",
     desc: "Kurumsal kimlikten medya üretimine, markanızın hikayesini dijital dünyada sarsılmaz bir estetikle anlatıyoruz.",
     icon: <Palette className="text-brand-blue" size={26} />,
     items: [
@@ -168,7 +168,7 @@ export default function HizmetlerPage() {
                     {service.icon}
                   </div>
                   <Link
-                    href={`/cozumler/${service.slug}`}
+                    href={`/hizmetler/${service.slug}`}
                     className="text-white/20 group-hover:text-white transition-all transform group-hover:translate-x-1 group-hover:-translate-y-1"
                     title={`${service.title} detaylarını incele`}
                   >

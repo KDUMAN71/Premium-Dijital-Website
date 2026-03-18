@@ -34,7 +34,7 @@ export const homeFaqs: FAQItem[] = [
   },
   {
     q: "Sonuç garantisi veriyor musunuz?",
-    a: "Belirli bir ROAS veya lead sayısı garantisi veren ajanslardan uzak durun — piyasa koşulları, rekabet ve sezonluk etkiler hiçbir ajansın kontrolünde değildir. Bizim taahhüdümüz farklıdır: şeffaf raporlama, veriyle desteklenen her karar ve gerçekçi beklenti yönetimi. Sonuç beklentinizi ilk görüşmede netleştiririz; benzer sektörde elde ettiğimiz sonuçları Sonuçlar sayfamızda görebilirsiniz.",
+    a: "Belirli bir ROAS veya lead sayısı garantisi veren ajanslardan uzak durun — piyasa koşulları, rekabet ve sezonluk etkiler hiçbir ajansın kontrolünde değildir. Bizim taahhüdümüz farklıdır: şeffaf raporlama, veriyle desteklenen her karar ve gerçekçi beklenti yönetimi. Sonuç beklentinizi ilk görüşmede netleştiririz; benzer sektörde elde ettiğimiz sonuçları Başarı Hikayeleri sayfamızda görebilirsiniz.",
   },
   {
     q: "Sürece ne kadar dahil olmam gerekiyor?",
