@@ -109,49 +109,66 @@ export default function BlogPostTemplate({ post }: { post: BlogPost }) {
           {/* ARTICLE */}
 
           <article
-            className="
-            prose
-            prose-invert
-            prose-zinc
-            max-w-none
+            className="blog-article prose prose-invert prose-zinc 
+      max-w-[720px] mx-auto lg:mx-0
 
-            prose-p:text-[18px]
-            prose-p:leading-[1.85]
-            prose-p:text-zinc-100
-            prose-p:mb-8
+      /* Paragraf Ayarları */
+      prose-p:text-[18px]
+      prose-p:leading-[1.8]
+      prose-p:text-zinc-100
+      prose-p:mb-8
+      prose-p:text-justify
 
-            prose-h2:text-[32px]
-            prose-h2:font-bold
-            prose-h2:mt-20
-            prose-h2:mb-6
+      /* Başlık Ayarları */
+      prose-h2:text-3xl
+      prose-h2:font-bold
+      prose-h2:mt-16
+      prose-h2:mb-6
+      prose-h2:text-white
+      prose-h2:tracking-tight
 
-            prose-h3:text-[24px]
-            prose-h3:mt-14
-            prose-h3:mb-4
+      pro-h3:text-2xl
+      prose-h3:font-semibold
+      prose-h3:mt-12
+      prose-h3:mb-4
+      prose-h3:text-zinc-100
 
-            prose-ul:list-disc
-            prose-ul:pl-6
-            prose-ul:my-8
+      /* Liste Ayarları (4. Madde Çözümü) */
+      prose-ul:list-disc
+      prose-ul:pl-6
+      prose-ul:my-8
+      prose-ul:text-zinc-300
+      prose-li:my-2
+      prose-li:marker:text-brand-purple
 
-            prose-li:my-2
+      /* Alıntı Ayarları */
+      prose-blockquote:border-l-brand-purple
+      prose-blockquote:bg-white/[0.02]
+      prose-blockquote:px-8
+      prose-blockquote:py-6
+      prose-blockquote:rounded-r-2xl
+      prose-blockquote:not-italic
+      prose-blockquote:text-zinc-400
 
-            prose-blockquote:border-l-brand-purple
-            prose-blockquote:bg-white/[0.02]
-            prose-blockquote:rounded-r-xl
-            prose-blockquote:px-8
-            prose-blockquote:py-5
+      /* Görsel Ayarları (3. Madde Çözümü) */
+      prose-img:rounded-2xl
+      prose-img:my-20
+      prose-img:border
+      prose-img:border-white/5
+      prose-img:shadow-2xl
 
-            prose-img:rounded-xl
-            prose-img:my-20
-            prose-img:border
-            prose-img:border-white/5
-            "
+      /* Link Ayarları */
+      prose-a:text-brand-blue
+      prose-a:no-underline
+      hover:prose-a:underline
+      "
             dangerouslySetInnerHTML={{ __html: post.content }}
+            itemProp="articleBody"
           />
 
           {/* SIDEBAR */}
 
-          <aside className="hidden lg:block">
+          <aside className="hidden lg:block w-[280px]">
             <div className="sticky top-28 space-y-6">
               {/* info */}
 
