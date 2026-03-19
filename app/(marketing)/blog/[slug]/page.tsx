@@ -26,7 +26,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: post.title,
       description: post.metaDescription,
-      images: [post.image],
+      // Eğer post.image yoksa varsayılan bir OG görseli (logo gibi) kullan:
+      images: [post.image || "/img/og-default.webp"],
       type: "article",
     },
   };
