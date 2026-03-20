@@ -110,13 +110,13 @@ app/(marketing)/_actions/
 - `MarketingNav` kendi `<header>`'ını yönetir — wrapper anti-pattern
 - Menü linkleri: Anasayfa / Çözümler (dropdown) / Hakkımızda / Sonuçlar / Blog
 - "Hizmetler" → **"Çözümler"**, "Vaka Çalışmaları" → **"Sonuçlar"**
-- URL yapısı: `/cozumler`, `/cozumler/[slug]`, `/sonuclar`, `/sonuclar/[slug]`
+- URL yapısı: `/cozumler`, `/hizmetler/[slug]`, `/sonuclar`, `/sonuclar/[slug]`
 
 ### Hizmet Alanları (4 ana alan)
-1. PPC & Performans Pazarlama → `/cozumler/ppc-performans-pazarlama`
-2. Web Sitesi, SEO & Dönüşüm → `/cozumler/web-seo-donusum`
-3. Marka & Görsel İletişim → `/cozumler/marka-gorsel-iletisim`
-4. Dijital Operasyon Sistemi → `/cozumler/dijital-operasyon-sistemi`
+1. PPC & Performans Pazarlama → `/hizmetler/ppc-performans-pazarlama`
+2. Web Sitesi, SEO & Dönüşüm → `/hizmetler/web-seo-donusum`
+3. Marka & Görsel İletişim → `/hizmetler/marka-gorsel-iletisim`
+4. Dijital Operasyon Sistemi → `/hizmetler/dijital-operasyon-sistemi`
 
 ### CaseStudies — Anasayfa Seçimi
 Slug sırası (her biri farklı hizmet alanını temsil eder):

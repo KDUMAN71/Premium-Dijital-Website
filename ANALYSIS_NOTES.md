@@ -145,7 +145,7 @@ Sayısal metrikler kalmalı. Sadece yerleşimi ve iç yapı sadeleştirilebilir.
 ### 2. GrowthEcosystem — URL güncellemesi doğru
 ```
 GitHub:  href: "/hizmetler/ppc-ve-performans-pazarlama"
-Lokal:   href: "/cozumler/ppc-performans-pazarlama"
+Lokal:   href: "/hizmetler/ppc-performans-pazarlama"
 ```
 CLAUDE.md'deki URL yapısıyla uyumlu. Korunacak.
 

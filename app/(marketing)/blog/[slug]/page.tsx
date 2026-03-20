@@ -1,62 +1,58 @@
-import { blogPosts } from "@/data/blogPosts";
-import BlogPostTemplate from "@/components/templates/BlogPostTemplate";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
+import { getAllPosts, getPostBySlug } from "@/lib/blog/mdx";
+import { getRelatedPosts } from "@/lib/blog/related";
+import BlogPostTemplate from "@/components/blog/BlogPostTemplate";
 
 interface Props {
-  params: Promise<{ slug: string }>; // Params artık bir Promise'dir
+  params: Promise<{ slug: string }>;
 }
 
-/**
- * SEO METADATA ÜRETİMİ
- */
+const BASE_URL = "https://premiumdijital.com";
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  // HATA DÜZELTME: params await edilmelidir
   const { slug } = await params;
-  const post = blogPosts.find((p) => p.slug === slug);
+  const post = getPostBySlug(slug);
 
   if (!post) return { title: "Yazı Bulunamadı | Premium Dijital" };
 
   return {
     title: `${post.title} | Premium Dijital Blog`,
     description: post.metaDescription,
+    keywords: post.tags,
     alternates: {
-      canonical: `https://premiumdijital.com/blog/${post.slug}`,
+      canonical: `${BASE_URL}/blog/${post.slug}`,
     },
     openGraph: {
       title: post.title,
       description: post.metaDescription,
-      // Eğer post.image yoksa varsayılan bir OG görseli (logo gibi) kullan:
-      images: [post.image || "/img/og-default.webp"],
+      images: [post.image ?? "/img/og-default.webp"],
       type: "article",
+      publishedTime: post.date,
+      authors: [post.author],
+      tags: post.tags,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.metaDescription,
+      images: [post.image ?? "/img/og-default.webp"],
     },
   };
 }
 
-/**
- * STATIC PARAMS (SSG)
- */
 export async function generateStaticParams() {
-  return blogPosts.map((post) => ({
-    slug: post.slug,
-  }));
+  const posts = getAllPosts();
+  return posts.map((post) => ({ slug: post.slug }));
 }
 
-/**
- * ANA SAYFA BİLEŞENİ
- */
 export default async function BlogPostPage({ params }: Props) {
-  // HATA DÜZELTME: params await edilmelidir
   const { slug } = await params;
+  const post = getPostBySlug(slug);
 
-  // Veriden ilgili yazıyı bul
-  const post = blogPosts.find((p) => p.slug === slug);
+  if (!post) notFound();
 
-  // Eğer yazı yoksa 404 sayfasına yönlendir
-  if (!post) {
-    notFound();
-  }
+  const relatedPosts = getRelatedPosts(post);
 
-  // Yazıyı şablona göndererek render et
-  return <BlogPostTemplate post={post} />;
+  return <BlogPostTemplate post={post} relatedPosts={relatedPosts} />;
 }
