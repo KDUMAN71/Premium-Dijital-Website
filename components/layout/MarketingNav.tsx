@@ -345,7 +345,7 @@ export default function MarketingNav() {
         {/* Desktop CTA */}
         <div className="hidden items-center md:flex">
           <Link
-            href="/#analiz"
+            href="/ucretsiz-analiz"
             className="group relative inline-flex h-10 items-center justify-center overflow-hidden rounded-xl px-5 text-[12px] font-bold uppercase tracking-[0.05em] text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
             style={{
               background: "linear-gradient(90deg,#be29ec,#0000c8)",
@@ -520,7 +520,7 @@ export default function MarketingNav() {
                 transition={{ delay: NAV_ITEMS.length * 0.04 + 0.06 }}
               >
                 <Link
-                  href="/#analiz"
+                  href="/ucretsiz-analiz"
                   onClick={() => setMobileOpen(false)}
                   className="group relative flex w-full items-center justify-center overflow-hidden rounded-xl px-6 py-4 text-[15px] font-bold text-white"
                   style={{

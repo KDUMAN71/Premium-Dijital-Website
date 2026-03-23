@@ -6,6 +6,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { motion, AnimatePresence } from "framer-motion";
 import { z } from "zod";
 import {
+  Megaphone,
+  Globe,
+  Palette,
+  Instagram,
+  Workflow,
   Stethoscope,
   Plane,
   ShoppingBag,
@@ -14,31 +19,135 @@ import {
   LayoutGrid,
   Lock,
   CheckCircle2,
-  Pencil,
   ArrowLeft,
   Check,
+  Monitor,
 } from "lucide-react";
 
-const AnalysisSchema = z
+/* ─────────────────────────────────────────────────────────────────────────────
+   VERİ — Hizmet alanları, sektörler, dinamik sorular
+   ───────────────────────────────────────────────────────────────────────────── */
+
+const SERVICE_AREAS = [
+  {
+    value: "ADS",
+    label: "Reklam & Performans",
+    desc: "Google Ads, Meta Ads, kampanya yönetimi",
+    Icon: Megaphone,
+  },
+  {
+    value: "WEB",
+    label: "Web Sitesi & SEO",
+    desc: "Web sitesi tasarımı, geliştirme, organik trafik",
+    Icon: Globe,
+  },
+  {
+    value: "BRAND",
+    label: "Marka & Kurumsal Kimlik",
+    desc: "Logo, brand book, görsel kimlik sistemi",
+    Icon: Palette,
+  },
+  {
+    value: "SOCIAL",
+    label: "Sosyal Medya Yönetimi",
+    desc: "İçerik üretimi, platform yönetimi, strateji",
+    Icon: Instagram,
+  },
+  {
+    value: "OPS",
+    label: "Dijital Operasyon",
+    desc: "CRM, otomasyon, süreç dijitalleştirme",
+    Icon: Workflow,
+  },
+] as const;
+
+type ServiceArea = (typeof SERVICE_AREAS)[number]["value"];
+
+const SECTORS = [
+  { value: "HEALTH", label: "Sağlık & Klinik", Icon: Stethoscope },
+  { value: "TOURISM", label: "Turizm & Konaklama", Icon: Plane },
+  { value: "ECOMM", label: "E-Ticaret", Icon: ShoppingBag },
+  { value: "SERVICE", label: "Hizmet & Danışmanlık", Icon: Briefcase },
+  { value: "BEAUTY", label: "Estetik & Güzellik", Icon: Sparkles },
+  { value: "OTHER", label: "Diğer", Icon: LayoutGrid },
+];
+
+const SOCIAL_PLATFORMS = [
+  { value: "instagram", label: "Instagram" },
+  { value: "facebook", label: "Facebook" },
+  { value: "linkedin", label: "LinkedIn" },
+  { value: "tiktok", label: "TikTok" },
+  { value: "youtube", label: "YouTube" },
+  { value: "twitter", label: "X / Twitter" },
+];
+
+const ACCESS_TOOLS = [
+  { value: "google_ads", label: "Google Ads" },
+  { value: "ga4", label: "GA4" },
+  { value: "search_console", label: "Search Console" },
+  { value: "meta_ads", label: "Meta Ads" },
+];
+
+// Dijital Operasyon — yetenek paketleri (MasterPlan v10)
+const OPS_CAPABILITIES = [
+  {
+    value: "VISIBILITY",
+    label:
+      "Veri görünürlüğü — reklam & dönüşüm performansını ölçülebilir hale getirmek",
+  },
+  {
+    value: "SALES_SYS",
+    label:
+      "Otonom satış sistemi — 7/24 müşteri kazanan web & reklam altyapısı kurmak",
+  },
+  {
+    value: "BRAND_MEM",
+    label:
+      "Kurumsal hafıza — marka sesi & içerik yönetimini sistematik hale getirmek",
+  },
+  {
+    value: "OPS_EFF",
+    label:
+      "Operasyonel verimlilik — CRM, otomasyon & dijital araç entegrasyonu",
+  },
+  {
+    value: "SCALE",
+    label:
+      "Ölçeklenebilir büyüme — yeni kanal, yeni pazar, yeni segment için altyapı",
+  },
+];
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   SCHEMA — tüm alanlar opsiyonel, superRefine ile bağlamsal zorunluluk
+   ───────────────────────────────────────────────────────────────────────────── */
+
+const FormSchema = z
   .object({
-    botField: z.string().max(0, "Bot detected"),
+    botField: z.string().max(0),
+    // Adım 1
+    serviceArea: z.string().min(1, "Hizmet alanı seçimi zorunludur"),
+    // Adım 2
     sector: z.string().min(1, "Sektör seçimi zorunludur"),
     otherSector: z.string().optional(),
-    goal: z.string().min(1, "Hedef seçimi zorunludur"),
+    // Adım 3 — hizmete özel (hepsi opsiyonel, superRefine ile kontrol)
+    budget: z.string().optional(),
+    hasWebsite: z.string().optional(), // "YES" | "NO"
+    website: z.string().optional(),
+    adAccess: z.array(z.string()).optional(), // seçilen erişim araçları
+    socialPlatforms: z.array(z.string()).optional(),
+    hasSocialAccounts: z.string().optional(), // "YES" | "NO"
+    hasExistingBrand: z.string().optional(), // "YES" | "NO"
+    currentTools: z.string().optional(),
+    socialHandles: z.string().optional(),
+    opsGoals: z.array(z.string()).optional(),
+    // Adım 4
     fullName: z.string().min(2, "Ad soyad en az 2 karakter olmalıdır"),
+    company: z.string().optional(),
     email: z.string().email("Geçerli bir e-posta adresi giriniz"),
     phone: z.string().optional(),
-    website: z.string().optional(),
-    otherGoal: z.string().optional(),
+    message: z.string().optional(),
   })
   .superRefine((d, ctx) => {
-    if (d.goal === "OTHER" && (!d.otherGoal || d.otherGoal.length < 3)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ["otherGoal"],
-        message: "Lütfen hedefinizi belirtiniz",
-      });
-    }
     if (
       d.sector === "OTHER" &&
       (!d.otherSector || d.otherSector.trim().length < 2)
@@ -51,62 +160,11 @@ const AnalysisSchema = z
     }
   });
 
-type AnalysisInput = z.infer<typeof AnalysisSchema>;
+type FormInput = z.infer<typeof FormSchema>;
 
-const SECTORS = [
-  { value: "HEALTH", label: "Sağlık & Klinik", Icon: Stethoscope },
-  { value: "TOURISM", label: "Turizm & Konaklama", Icon: Plane },
-  { value: "ECOMM", label: "E-Ticaret", Icon: ShoppingBag },
-  { value: "SERVICE", label: "Hizmet & Danışmanlık", Icon: Briefcase },
-  { value: "BEAUTY", label: "Estetik & Güzellik", Icon: Sparkles },
-  { value: "OTHER", label: "Diğer", Icon: LayoutGrid },
-];
-
-const GOALS_BY_SECTOR: Record<string, { value: string; label: string }[]> = {
-  HEALTH: [
-    { value: "PATIENT", label: "Hasta Kazanımı & Randevu Artışı" },
-    { value: "HTOURISM", label: "Sağlık Turizmi & Uluslararası Hasta" },
-    { value: "BRAND", label: "Klinik / Hastane Bilinirliği" },
-    { value: "SEO", label: "Google'da Üst Sıra & Yerel SEO" },
-    { value: "OTHER", label: "Diğer" },
-  ],
-  TOURISM: [
-    { value: "BOOKING", label: "Rezervasyon & Doluluk Oranı Artışı" },
-    { value: "INTL", label: "Yabancı Turist Çekimi" },
-    { value: "BRAND", label: "Destinasyon / Marka Bilinirliği" },
-    { value: "SEO", label: "Google'da Üst Sıra & Yerel SEO" },
-    { value: "OTHER", label: "Diğer" },
-  ],
-  ECOMM: [
-    { value: "SALES", label: "Satış & Ciro Artışı" },
-    { value: "ROAS", label: "Reklam Verimliliği (ROAS)" },
-    { value: "RETENTION", label: "Tekrar Satın Alma & Müşteri Sadakati" },
-    { value: "SEO", label: "Organik Trafik & SEO" },
-    { value: "OTHER", label: "Diğer" },
-  ],
-  SERVICE: [
-    { value: "LEAD", label: "Nitelikli Lead & Teklif Talebi" },
-    { value: "BRAND", label: "Pazar Otoritesi & Marka Bilinirliği" },
-    { value: "SYSTEM", label: "Dijital Operasyon Kurulumu" },
-    { value: "SEO", label: "Teknik Altyapı & SEO" },
-    { value: "OTHER", label: "Diğer" },
-  ],
-  BEAUTY: [
-    { value: "PATIENT", label: "Müşteri Kazanımı & Randevu Artışı" },
-    { value: "BRAND", label: "Marka & Strateji" },
-    { value: "SOCIAL", label: "Sosyal Medya & İçerik Stratejisi" },
-    { value: "SEO", label: "Google'da Üst Sıra & Yerel SEO" },
-    { value: "OTHER", label: "Diğer" },
-  ],
-  OTHER: [
-    { value: "SALES", label: "Satış & Ciro Artışı" },
-    { value: "LEAD", label: "Nitelikli Lead Kazanımı" },
-    { value: "BRAND", label: "Marka Bilinirliği" },
-    { value: "SYSTEM", label: "Dijital Operasyon" },
-    { value: "SEO", label: "SEO & Teknik Altyapı" },
-    { value: "OTHER", label: "Diğer" },
-  ],
-};
+/* ─────────────────────────────────────────────────────────────────────────────
+   PROGRESS BAR
+   ───────────────────────────────────────────────────────────────────────────── */
 
 function ProgressBar({
   current,
@@ -119,7 +177,7 @@ function ProgressBar({
   onStepClick: (i: number) => void;
   completedSteps: Set<number>;
 }) {
-  const labels = ["Sektör", "Hedef", "İletişim"];
+  const labels = ["Hizmet", "Sektör", "Detaylar", "İletişim"];
   return (
     <div className="mb-8 md:mb-10">
       <div className="flex items-center gap-0">
@@ -195,6 +253,191 @@ function ProgressBar({
   );
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   YARDIMCI: Tekli seçim kartı
+   ───────────────────────────────────────────────────────────────────────────── */
+
+function SelectCard({
+  selected,
+  onClick,
+  children,
+  accent = "purple",
+}: {
+  selected: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+  accent?: "purple" | "blue";
+}) {
+  const color = accent === "blue" ? "#0000c8" : "#be29ec";
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex items-center justify-between rounded-2xl border px-5 py-4 text-left text-sm font-semibold transition-all duration-200 cursor-pointer active:scale-[0.97] w-full ${
+        selected
+          ? "text-white"
+          : "border-white/10 bg-white/[0.02] text-white/60 hover:border-white/20 hover:bg-white/[0.04] hover:text-white"
+      }`}
+      style={
+        selected ? { borderColor: color, backgroundColor: `${color}18` } : {}
+      }
+    >
+      {children}
+      <span
+        className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[9px] transition-all ml-3"
+        style={
+          selected
+            ? { borderColor: color, backgroundColor: color }
+            : { borderColor: "rgba(255,255,255,0.15)" }
+        }
+      >
+        {selected && <Check size={10} strokeWidth={2.5} color="#fff" />}
+      </span>
+    </button>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   YARDIMCI: Çoklu seçim toggle
+   ───────────────────────────────────────────────────────────────────────────── */
+
+function MultiToggle({
+  id,
+  label,
+  checked,
+  onToggle,
+  accent = "blue",
+}: {
+  id: string;
+  label: string;
+  checked: boolean;
+  onToggle: () => void;
+  accent?: "purple" | "blue";
+}) {
+  const color = accent === "blue" ? "#0000c8" : "#be29ec";
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      className={`flex items-center justify-between rounded-xl border px-3 py-2.5 text-[11px] font-semibold transition-all cursor-pointer active:scale-[0.97] ${
+        checked
+          ? "text-white"
+          : "border-white/10 bg-white/[0.02] text-white/50 hover:border-white/20 hover:text-white/80"
+      }`}
+      style={
+        checked ? { borderColor: color, backgroundColor: `${color}15` } : {}
+      }
+    >
+      <span>{label}</span>
+      <span
+        className="flex h-4 w-4 shrink-0 items-center justify-center rounded border text-[8px] transition-all ml-2"
+        style={
+          checked
+            ? { borderColor: color, backgroundColor: color }
+            : { borderColor: "rgba(255,255,255,0.15)" }
+        }
+      >
+        {checked && <Check size={8} strokeWidth={3} color="#fff" />}
+      </span>
+    </button>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   ADIM 1 — Hizmet Alanı
+   ───────────────────────────────────────────────────────────────────────────── */
+
+function StepService({
+  value,
+  onChange,
+  error,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  error?: string;
+}) {
+  return (
+    <div className="flex flex-col gap-4">
+      <div>
+        <h3 className="text-lg font-bold text-white md:text-xl">
+          Ne konuda destek arıyorsunuz?
+        </h3>
+        <p className="mt-1 text-sm text-white/35">
+          Birden fazla alanla ilgileniyorsanız en öncelikliyi seçin.
+        </p>
+      </div>
+      <div className="flex flex-col gap-3">
+        {SERVICE_AREAS.map((s) => {
+          const selected = value === s.value;
+          return (
+            <button
+              key={s.value}
+              type="button"
+              onClick={() => onChange(s.value)}
+              className={`group flex items-center gap-4 rounded-2xl border p-4 text-left transition-all duration-200 cursor-pointer active:scale-[0.98] ${
+                selected
+                  ? "border-[#be29ec] bg-[#be29ec]/10"
+                  : "border-white/8 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
+              }`}
+            >
+              <div
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all"
+                style={
+                  selected
+                    ? {
+                        background:
+                          "linear-gradient(135deg,#be29ec22,#0000c822)",
+                        border: "1px solid #be29ec44",
+                      }
+                    : {
+                        background: "rgba(255,255,255,0.04)",
+                        border: "1px solid rgba(255,255,255,0.08)",
+                      }
+                }
+              >
+                <s.Icon
+                  size={18}
+                  className={
+                    selected
+                      ? "text-[#be29ec]"
+                      : "text-white/30 group-hover:text-white/60"
+                  }
+                  strokeWidth={1.5}
+                />
+              </div>
+              <div className="flex-1">
+                <div
+                  className={`font-bold text-sm ${selected ? "text-white" : "text-white/70 group-hover:text-white"}`}
+                >
+                  {s.label}
+                </div>
+                <div className="text-[11px] text-white/30 mt-0.5">{s.desc}</div>
+              </div>
+              <span
+                className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-all"
+                style={
+                  selected
+                    ? { borderColor: "#be29ec", backgroundColor: "#be29ec" }
+                    : { borderColor: "rgba(255,255,255,0.15)" }
+                }
+              >
+                {selected && <Check size={10} strokeWidth={2.5} color="#fff" />}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+      {error && (
+        <p className="text-[10px] font-bold uppercase text-red-400">{error}</p>
+      )}
+    </div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   ADIM 2 — Sektör
+   ───────────────────────────────────────────────────────────────────────────── */
+
 function StepSector({
   value,
   onChange,
@@ -217,7 +460,7 @@ function StepSector({
           Hangi sektördesiniz?
         </h3>
         <p className="mt-1 text-sm text-white/35">
-          Hedeflerinizi sektörünüze göre kişiselleştirelim.
+          Başvurunuzu sektörünüze göre değerlendireceğiz.
         </p>
       </div>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -230,25 +473,21 @@ function StepSector({
               onClick={() => onChange(s.value)}
               className={`group flex flex-col items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-300 cursor-pointer md:p-5 active:scale-[0.97] ${
                 selected
-                  ? "border-[#be29ec] bg-white/[0.08] shadow-[0_0_20px_rgba(190,41,236,0.25)]"
-                  : "border-white/10 bg-white/[0.03] hover:border-[#be29ec]/50 hover:bg-white/[0.06] hover:shadow-[0_0_15px_rgba(190,41,236,0.15)]"
+                  ? "border-[#be29ec] bg-[#be29ec]/10"
+                  : "border-white/8 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
               }`}
             >
               <s.Icon
                 size={20}
-                strokeWidth={1.5}
-                className={`transition-all duration-300 ${
+                className={
                   selected
-                    ? "text-[#be29ec] drop-shadow-[0_0_8px_rgba(190,41,236,0.6)]"
-                    : "text-white/30 group-hover:text-[#be29ec] group-hover:drop-shadow-[0_0_10px_rgba(190,41,236,0.9)]"
-                }`}
+                    ? "text-[#be29ec]"
+                    : "text-white/25 group-hover:text-white/50"
+                }
+                strokeWidth={1.5}
               />
               <span
-                className={`text-[12px] font-bold leading-snug transition-colors duration-300 md:text-[13px] ${
-                  selected
-                    ? "text-white"
-                    : "text-white/40 group-hover:text-white"
-                }`}
+                className={`text-[11px] font-bold uppercase tracking-[0.06em] ${selected ? "text-white" : "text-white/50 group-hover:text-white/70"}`}
               >
                 {s.label}
               </span>
@@ -259,7 +498,6 @@ function StepSector({
       {error && (
         <p className="text-[10px] font-bold uppercase text-red-400">{error}</p>
       )}
-
       <AnimatePresence>
         {value === "OTHER" && (
           <motion.div
@@ -272,12 +510,11 @@ function StepSector({
               <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
                 Sektörünüzü belirtin
               </label>
-              <textarea
+              <input
                 value={otherSector}
                 onChange={(e) => onOtherSectorChange(e.target.value)}
-                placeholder="Hangi sektörde faaliyet gösteriyorsunuz?"
-                rows={2}
-                className="w-full resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
+                placeholder="Sektörünüzü yazın"
+                className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
               />
               {otherSectorError && (
                 <p className="text-[10px] font-bold uppercase text-red-400">
@@ -292,111 +529,490 @@ function StepSector({
   );
 }
 
-function StepGoal({
-  sector,
-  value,
-  onChange,
-  error,
-  otherValue,
-  onOtherChange,
-  otherError,
-}: {
-  sector: string;
-  value: string;
-  onChange: (v: string) => void;
-  error?: string;
-  otherValue: string;
-  onOtherChange: (v: string) => void;
-  otherError?: string;
-}) {
-  const goals = GOALS_BY_SECTOR[sector] ?? GOALS_BY_SECTOR["OTHER"];
-  return (
-    <div className="flex flex-col gap-4">
-      <div>
-        <h3 className="text-lg font-bold text-white md:text-xl">
-          Temel hedefiniz nedir?
-        </h3>
-        <p className="mt-1 text-sm text-white/35">
-          Odaklanmamızı istediğiniz alanı seçin.
-        </p>
-      </div>
-      <div className="flex flex-col gap-2.5">
-        {goals.map((g) => {
-          const selected = value === g.value;
-          return (
-            <button
-              key={g.value}
-              type="button"
-              onClick={() => onChange(g.value)}
-              className={`flex items-center justify-between rounded-xl border px-4 py-3.5 text-left transition-all duration-250 active:scale-[0.98] md:px-5 md:py-4 ${
-                selected
-                  ? "border-[#be29ec] bg-white/[0.08]"
-                  : "border-white/10 bg-white/[0.03] hover:border-white/20"
-              }`}
-            >
-              <span
-                className="text-sm font-semibold"
-                style={{ color: selected ? "#fff" : "rgba(255,255,255,0.65)" }}
-              >
-                {g.label}
-              </span>
-              <span
-                className={`ml-3 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-all ${
-                  selected
-                    ? "bg-brand-purple border-brand-purple"
-                    : "border-white/15"
-                }`}
-              >
-                {selected && <Check size={10} strokeWidth={2.5} color="#fff" />}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-      {error && (
-        <p className="text-[10px] font-bold uppercase text-red-400">{error}</p>
-      )}
+/* ─────────────────────────────────────────────────────────────────────────────
+   ADIM 3 — Hizmete Özel Dinamik Sorular
+   ───────────────────────────────────────────────────────────────────────────── */
 
-      <AnimatePresence>
-        {value === "OTHER" && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden"
-          >
-            <div className="mt-1 space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
-                Hedefinizi belirtin
-              </label>
-              <textarea
-                value={otherValue}
-                onChange={(e) => onOtherChange(e.target.value)}
-                placeholder="Ne elde etmek istiyorsunuz?"
-                rows={3}
-                className="w-full resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
+function StepDetails({
+  serviceArea,
+  watch,
+  setValue,
+  errors,
+}: {
+  serviceArea: ServiceArea;
+  watch: ReturnType<typeof useForm<FormInput>>["watch"];
+  setValue: ReturnType<typeof useForm<FormInput>>["setValue"];
+  errors: ReturnType<typeof useForm<FormInput>>["formState"]["errors"];
+}) {
+  const budget = watch("budget") ?? "";
+  const hasWebsite = watch("hasWebsite") ?? "";
+  const website = watch("website") ?? "";
+  const adAccess = (watch("adAccess") as string[]) ?? [];
+  const socialPlatforms = (watch("socialPlatforms") as string[]) ?? [];
+  const hasSocialAccounts = watch("hasSocialAccounts") ?? "";
+  const hasExistingBrand = watch("hasExistingBrand") ?? "";
+
+  const toggleArray = (field: "adAccess" | "socialPlatforms", val: string) => {
+    const current = (watch(field) as string[]) ?? [];
+    const next = current.includes(val)
+      ? current.filter((v) => v !== val)
+      : [...current, val];
+    setValue(field, next);
+  };
+
+  // ── REKLAM & PERFORMANS ──
+  if (serviceArea === "ADS") {
+    return (
+      <div className="flex flex-col gap-6">
+        <div>
+          <h3 className="text-lg font-bold text-white md:text-xl">
+            Reklam detayları
+          </h3>
+          <p className="mt-1 text-sm text-white/35">
+            Mevcut durumunuzu anlamamıza yardımcı olur.
+          </p>
+        </div>
+
+        {/* Bütçe */}
+        <div className="space-y-2">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+            Aylık reklam bütçeniz
+          </label>
+          <input
+            value={budget}
+            onChange={(e) => setValue("budget", e.target.value)}
+            placeholder="Örn: 15.000 ₺, €500, henüz belirsiz..."
+            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
+          />
+        </div>
+
+        {/* Mevcut web sitesi */}
+        <div className="space-y-3">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+            Mevcut web siteniz var mı?
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            <SelectCard
+              selected={hasWebsite === "YES"}
+              onClick={() => setValue("hasWebsite", "YES")}
+            >
+              Evet, var
+            </SelectCard>
+            <SelectCard
+              selected={hasWebsite === "NO"}
+              onClick={() => setValue("hasWebsite", "NO")}
+            >
+              Hayır, yok
+            </SelectCard>
+          </div>
+        </div>
+
+        <AnimatePresence>
+          {hasWebsite === "YES" && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+                  Web sitesi adresi
+                </label>
+                <div className="flex overflow-hidden rounded-xl border border-white/10 bg-white/5 transition-all focus-within:border-[#be29ec]">
+                  <span className="flex items-center border-r border-white/10 bg-white/5 px-3 text-xs font-bold text-white/30 select-none">
+                    https://
+                  </span>
+                  <input
+                    value={website.replace(/^https?:\/\//i, "")}
+                    onChange={(e) =>
+                      setValue(
+                        "website",
+                        e.target.value
+                          ? `https://${e.target.value.replace(/^https?:\/\//i, "")}`
+                          : "",
+                      )
+                    }
+                    placeholder="sirketiniz.com"
+                    className="flex-1 bg-transparent px-4 py-3.5 text-sm font-medium text-white outline-none placeholder:text-white/15"
+                  />
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Erişim araçları */}
+        <div className="space-y-3 rounded-2xl border border-white/8 bg-white/[0.02] p-4">
+          <div>
+            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+              Analiz erişim izinleri{" "}
+              <span className="text-white/20 font-medium normal-case tracking-normal">
+                (opsiyonel — daha derin analiz sağlar)
+              </span>
+            </label>
+            <p className="mt-1 text-[11px] text-white/30 leading-relaxed">
+              Başvurunuz onaylanırsa hesabınıza okuma erişimi talep edeceğiz.
+              Şifre istemiyoruz — sizi adım adım yönlendireceğiz.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {ACCESS_TOOLS.map((t) => (
+              <MultiToggle
+                key={t.value}
+                id={t.value}
+                label={t.label}
+                checked={adAccess.includes(t.value)}
+                onToggle={() => toggleArray("adAccess", t.value)}
+                accent="blue"
               />
-              {otherError && (
-                <p className="text-[10px] font-bold uppercase text-red-400">
-                  {otherError}
-                </p>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── WEB SİTESİ & SEO ──
+  if (serviceArea === "WEB") {
+    return (
+      <div className="flex flex-col gap-6">
+        <div>
+          <h3 className="text-lg font-bold text-white md:text-xl">
+            Web sitesi detayları
+          </h3>
+          <p className="mt-1 text-sm text-white/35">
+            Mevcut durumunuzu anlamamıza yardımcı olur.
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+            Mevcut web siteniz var mı?
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            <SelectCard
+              selected={hasWebsite === "YES"}
+              onClick={() => setValue("hasWebsite", "YES")}
+            >
+              Evet, var
+            </SelectCard>
+            <SelectCard
+              selected={hasWebsite === "NO"}
+              onClick={() => setValue("hasWebsite", "NO")}
+            >
+              Hayır, sıfırdan yapılacak
+            </SelectCard>
+          </div>
+        </div>
+
+        <AnimatePresence>
+          {hasWebsite === "YES" && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="space-y-3">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+                    Mevcut web sitesi adresi
+                  </label>
+                  <div className="flex overflow-hidden rounded-xl border border-white/10 bg-white/5 transition-all focus-within:border-[#be29ec]">
+                    <span className="flex items-center border-r border-white/10 bg-white/5 px-3 text-xs font-bold text-white/30 select-none">
+                      https://
+                    </span>
+                    <input
+                      value={website.replace(/^https?:\/\//i, "")}
+                      onChange={(e) =>
+                        setValue(
+                          "website",
+                          e.target.value
+                            ? `https://${e.target.value.replace(/^https?:\/\//i, "")}`
+                            : "",
+                        )
+                      }
+                      placeholder="sirketiniz.com"
+                      className="flex-1 bg-transparent px-4 py-3.5 text-sm font-medium text-white outline-none placeholder:text-white/15"
+                    />
+                  </div>
+                </div>
+                {/* Search Console erişimi */}
+                <div className="space-y-2 rounded-2xl border border-white/8 bg-white/[0.02] p-4">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+                    SEO analizi erişim izinleri{" "}
+                    <span className="text-white/20 font-medium normal-case tracking-normal">
+                      (opsiyonel)
+                    </span>
+                  </label>
+                  <p className="text-[11px] text-white/30">
+                    Başvurunuz onaylanırsa hesaplarınıza okuma erişimi talep
+                    edeceğiz.
+                  </p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { value: "search_console", label: "Search Console" },
+                      { value: "ga4", label: "GA4" },
+                    ].map((t) => (
+                      <MultiToggle
+                        key={t.value}
+                        id={t.value}
+                        label={t.label}
+                        checked={adAccess.includes(t.value)}
+                        onToggle={() => toggleArray("adAccess", t.value)}
+                        accent="blue"
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  }
+
+  // ── MARKA & KURUMSAL KİMLİK ──
+  if (serviceArea === "BRAND") {
+    return (
+      <div className="flex flex-col gap-6">
+        <div>
+          <h3 className="text-lg font-bold text-white md:text-xl">
+            Marka durumu
+          </h3>
+          <p className="mt-1 text-sm text-white/35">
+            Nereden başlayacağımızı anlamamıza yardımcı olur.
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+            Mevcut bir marka kimliğiniz var mı?
+          </label>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+            {[
+              { v: "YES", label: "Evet, revize edilecek" },
+              { v: "PARTIAL", label: "Kısmen var, tamamlanacak" },
+              { v: "NO", label: "Hayır, sıfırdan oluşturulacak" },
+            ].map((o) => (
+              <SelectCard
+                key={o.v}
+                selected={hasExistingBrand === o.v}
+                onClick={() => setValue("hasExistingBrand", o.v)}
+              >
+                {o.label}
+              </SelectCard>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+            Varsa web sitesi / sosyal medya adresi{" "}
+            <span className="text-white/20 font-medium normal-case tracking-normal">
+              (opsiyonel)
+            </span>
+          </label>
+          <input
+            value={website}
+            onChange={(e) => setValue("website", e.target.value)}
+            placeholder="premiumdijital.com veya @hesap_adi"
+            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // ── SOSYAL MEDYA YÖNETİMİ ──
+  if (serviceArea === "SOCIAL") {
+    return (
+      <div className="flex flex-col gap-6">
+        <div>
+          <h3 className="text-lg font-bold text-white md:text-xl">
+            Sosyal medya detayları
+          </h3>
+          <p className="mt-1 text-sm text-white/35">
+            Hangi platformlarda destek istediğinizi belirtin.
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+            Hangi platformlar?{" "}
+            <span className="text-white/20 font-medium normal-case tracking-normal">
+              (birden fazla seçebilirsiniz)
+            </span>
+          </label>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {SOCIAL_PLATFORMS.map((p) => (
+              <MultiToggle
+                key={p.value}
+                id={p.value}
+                label={p.label}
+                checked={socialPlatforms.includes(p.value)}
+                onToggle={() => toggleArray("socialPlatforms", p.value)}
+                accent="purple"
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-3">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+            Mevcut hesaplarınız var mı?
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            <SelectCard
+              selected={hasSocialAccounts === "YES"}
+              onClick={() => setValue("hasSocialAccounts", "YES")}
+            >
+              Evet, aktif hesaplarım var
+            </SelectCard>
+            <SelectCard
+              selected={hasSocialAccounts === "NO"}
+              onClick={() => setValue("hasSocialAccounts", "NO")}
+            >
+              Hayır, sıfırdan başlayacağız
+            </SelectCard>
+          </div>
+        </div>
+
+        <AnimatePresence>
+          {hasSocialAccounts === "YES" && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+                  Hesap kullanıcı adları{" "}
+                  <span className="text-white/20 font-medium normal-case tracking-normal">
+                    (opsiyonel — inceleme için)
+                  </span>
+                </label>
+                <textarea
+                  value={watch("socialHandles") ?? ""}
+                  onChange={(e) => setValue("socialHandles", e.target.value)}
+                  placeholder="@instagram_hesabiniz, facebook.com/sayfaniz, linkedin.com/company/sirketiniz"
+                  rows={3}
+                  className="w-full resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  }
+
+  // ── DİJİTAL OPERASYON ──
+  if (serviceArea === "OPS") {
+    const opsGoals = (watch("opsGoals") as string[]) ?? [];
+    return (
+      <div className="flex flex-col gap-6">
+        <div>
+          <h3 className="text-lg font-bold text-white md:text-xl">
+            Operasyon detayları
+          </h3>
+          <p className="mt-1 text-sm text-white/35">
+            Mevcut durumunuzu ve hedeflerinizi anlamamıza yardımcı olur.
+          </p>
+        </div>
+
+        <div className="space-y-3">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+            Ne kazanmak istiyorsunuz?{" "}
+            <span className="text-white/20 font-medium normal-case tracking-normal">
+              (birden fazla seçebilirsiniz)
+            </span>
+          </label>
+          <div className="grid grid-cols-1 gap-2">
+            {OPS_CAPABILITIES.map((cap) => (
+              <MultiToggle
+                key={cap.value}
+                id={cap.value}
+                label={cap.label}
+                checked={opsGoals.includes(cap.value)}
+                onToggle={() => {
+                  const next = opsGoals.includes(cap.value)
+                    ? opsGoals.filter((v) => v !== cap.value)
+                    : [...opsGoals, cap.value];
+                  setValue("opsGoals", next);
+                }}
+                accent="purple"
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+            Kullandığınız araçlar / sistemler{" "}
+            <span className="text-white/20 font-medium normal-case tracking-normal">
+              (opsiyonel)
+            </span>
+          </label>
+          <textarea
+            value={watch("currentTools") ?? ""}
+            onChange={(e) => setValue("currentTools", e.target.value)}
+            placeholder="Örn: Excel, WhatsApp, Shopify, Paraşüt, HubSpot..."
+            rows={2}
+            className="w-full resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+            Varsa web sitesi{" "}
+            <span className="text-white/20 font-medium normal-case tracking-normal">
+              (opsiyonel)
+            </span>
+          </label>
+          <div className="flex overflow-hidden rounded-xl border border-white/10 bg-white/5 transition-all focus-within:border-[#be29ec]">
+            <span className="flex items-center border-r border-white/10 bg-white/5 px-3 text-xs font-bold text-white/30 select-none">
+              https://
+            </span>
+            <input
+              value={website.replace(/^https?:\/\//i, "")}
+              onChange={(e) =>
+                setValue(
+                  "website",
+                  e.target.value
+                    ? `https://${e.target.value.replace(/^https?:\/\//i, "")}`
+                    : "",
+                )
+              }
+              placeholder="sirketiniz.com"
+              className="flex-1 bg-transparent px-4 py-3.5 text-sm font-medium text-white outline-none placeholder:text-white/15"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   ADIM 4 — İletişim
+   ───────────────────────────────────────────────────────────────────────────── */
 
 function StepContact({
   register,
   errors,
   setValue,
+  watch,
 }: {
-  register: ReturnType<typeof useForm<AnalysisInput>>["register"];
-  errors: ReturnType<typeof useForm<AnalysisInput>>["formState"]["errors"];
-  setValue: ReturnType<typeof useForm<AnalysisInput>>["setValue"];
+  register: ReturnType<typeof useForm<FormInput>>["register"];
+  errors: ReturnType<typeof useForm<FormInput>>["formState"]["errors"];
+  setValue: ReturnType<typeof useForm<FormInput>>["setValue"];
+  watch: ReturnType<typeof useForm<FormInput>>["watch"];
 }) {
   return (
     <div className="flex flex-col gap-4">
@@ -405,7 +1021,7 @@ function StepContact({
           Size nasıl ulaşalım?
         </h3>
         <p className="mt-1 text-sm text-white/35">
-          Analizinizi kişiselleştirerek iletebiliriz.
+          Başvurunuzu değerlendirip en kısa sürede dönüş yapacağız.
         </p>
       </div>
 
@@ -425,6 +1041,21 @@ function StepContact({
             </p>
           )}
         </div>
+
+        <div className="space-y-2">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+            Şirket / Marka{" "}
+            <span className="text-white/20 font-medium normal-case tracking-normal">
+              (opsiyonel)
+            </span>
+          </label>
+          <input
+            {...register("company")}
+            placeholder="Şirket adı"
+            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
+          />
+        </div>
+
         <div className="space-y-2">
           <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
             E-Posta <span className="text-[#be29ec]">*</span>
@@ -440,6 +1071,7 @@ function StepContact({
             </p>
           )}
         </div>
+
         <div className="space-y-2">
           <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
             Telefon{" "}
@@ -453,40 +1085,275 @@ function StepContact({
             className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
           />
         </div>
-        <div className="space-y-2">
+
+        <div className="space-y-2 sm:col-span-2">
           <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
-            Website{" "}
+            Eklemek istediğiniz bir şey{" "}
             <span className="text-white/20 font-medium normal-case tracking-normal">
               (opsiyonel)
             </span>
           </label>
-          <div className="flex overflow-hidden rounded-xl border border-white/10 bg-white/5 transition-all focus-within:border-[#be29ec]">
-            <span className="flex items-center border-r border-white/10 bg-white/5 px-3 text-xs font-bold text-white/30 select-none">
-              https://
-            </span>
-            <input
-              {...register("website")}
-              placeholder="sirketiniz.com"
-              className="flex-1 bg-transparent px-4 py-3.5 text-sm font-medium text-white outline-none placeholder:text-white/15"
-              onChange={(e) => {
-                const val = e.target.value.replace(/^https?:\/\//i, "");
-                setValue("website", val ? `https://${val}` : "");
-              }}
-            />
-          </div>
+          <textarea
+            {...register("message")}
+            placeholder="Projeniz, beklentileriniz veya özel durumunuz hakkında kısa bir not..."
+            rows={3}
+            className="w-full resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
+          />
         </div>
       </div>
 
       <div className="flex items-center gap-2 rounded-xl border border-white/5 bg-white/[0.02] px-4 py-3">
         <Lock size={14} strokeWidth={1.5} className="shrink-0 text-white/25" />
         <p className="text-[11px] leading-snug text-white/30">
-          Bilgileriniz yalnızca analiziniz için kullanılır, üçüncü taraflarla
+          Bilgileriniz yalnızca başvurunuz için kullanılır, üçüncü taraflarla
           paylaşılmaz.
         </p>
       </div>
     </div>
   );
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   HIZLI TEMAS FORMU
+   ───────────────────────────────────────────────────────────────────────────── */
+
+const QuickSchema = z
+  .object({
+    quickBotField: z.string().max(0), // honeypot
+    quickName: z
+      .string()
+      .min(2, "Ad soyad en az 2 karakter olmalıdır")
+      .max(60, "Ad soyad çok uzun")
+      .regex(
+        /^[a-zA-ZğüşıöçĞÜŞİÖÇ\s]+$/,
+        "Lütfen geçerli bir ad soyad giriniz",
+      ),
+    quickEmail: z.string().email("Geçerli bir e-posta adresi giriniz"),
+    quickPhone: z
+      .string()
+      .optional()
+      .refine(
+        (v) => !v || /^[+]?[\d\s\-().]{7,20}$/.test(v),
+        "Geçerli bir telefon numarası giriniz",
+      ),
+    quickMessage: z
+      .string()
+      .min(10, "Lütfen talebinizi en az 10 karakter ile belirtin")
+      .max(1000, "Mesaj çok uzun"),
+  })
+  .refine((d) => d.quickEmail || d.quickPhone, {
+    message: "E-posta veya telefon alanlarından en az biri doldurulmalıdır",
+    path: ["quickEmail"],
+  });
+
+type QuickInput = z.infer<typeof QuickSchema>;
+
+function QuickForm({
+  onSubmitAction,
+  onSwitchFull,
+}: {
+  onSubmitAction?: (
+    data: QuickInput & { formStartTime: string },
+  ) => Promise<{ success?: boolean; error?: string }>;
+  onSwitchFull: () => void;
+}) {
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [startTime] = useState(() => Date.now().toString());
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<QuickInput>({
+    resolver: zodResolver(QuickSchema),
+    defaultValues: {
+      quickBotField: "",
+      quickName: "",
+      quickEmail: "",
+      quickPhone: "",
+      quickMessage: "",
+    },
+    mode: "onTouched",
+  });
+
+  const onSubmit = (data: QuickInput) => {
+    setServerError(null);
+    startTransition(async () => {
+      if (onSubmitAction) {
+        const result = await onSubmitAction({
+          ...data,
+          formStartTime: startTime,
+        });
+        if (result?.error) {
+          setServerError(result.error);
+          return;
+        }
+      } else {
+        await new Promise((r) => setTimeout(r, 900));
+      }
+      setIsSuccess(true);
+      reset();
+    });
+  };
+
+  if (isSuccess) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="flex flex-col items-center gap-5 py-8 text-center"
+      >
+        <div
+          className="flex h-16 w-16 items-center justify-center rounded-full"
+          style={{
+            background:
+              "linear-gradient(135deg,rgba(190,41,236,0.2),rgba(0,0,200,0.2))",
+            border: "1px solid rgba(190,41,236,0.3)",
+          }}
+        >
+          <CheckCircle2
+            size={28}
+            strokeWidth={1.5}
+            style={{ color: "#d8b4fe" }}
+          />
+        </div>
+        <div>
+          <h3 className="text-xl font-bold uppercase tracking-tight text-white">
+            Mesajınız Alındı
+          </h3>
+          <p className="mt-2 text-sm text-white/45">
+            En geç <span className="font-bold text-white/70">1 iş günü</span>{" "}
+            içinde dönüş yapacağız.
+          </p>
+        </div>
+      </motion.div>
+    );
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex flex-col gap-4"
+    >
+      {/* Honeypot — botlar için gizli alan */}
+      <input
+        {...register("quickBotField")}
+        type="text"
+        className="hidden"
+        aria-hidden="true"
+        tabIndex={-1}
+      />
+
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <div className="space-y-2">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+            Ad Soyad <span className="text-[#be29ec]">*</span>
+          </label>
+          <input
+            {...register("quickName")}
+            placeholder="Ahmet Yılmaz"
+            autoComplete="name"
+            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
+          />
+          {errors.quickName && (
+            <p className="text-[10px] font-bold uppercase text-red-400">
+              {errors.quickName.message}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+            E-posta <span className="text-[#be29ec]">*</span>
+          </label>
+          <input
+            {...register("quickEmail")}
+            type="email"
+            placeholder="ornek@email.com"
+            autoComplete="email"
+            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
+          />
+          {errors.quickEmail && (
+            <p className="text-[10px] font-bold uppercase text-red-400">
+              {errors.quickEmail.message}
+            </p>
+          )}
+        </div>
+
+        <div className="space-y-2 sm:col-span-2">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+            Telefon{" "}
+            <span className="text-white/20 font-medium normal-case tracking-normal">
+              (opsiyonel)
+            </span>
+          </label>
+          <input
+            {...register("quickPhone")}
+            type="tel"
+            placeholder="+90 5XX XXX XX XX"
+            autoComplete="tel"
+            className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
+          />
+          {errors.quickPhone && (
+            <p className="text-[10px] font-bold uppercase text-red-400">
+              {errors.quickPhone.message}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+          Ne konuda görüşmek istersiniz?{" "}
+          <span className="text-[#be29ec]">*</span>
+        </label>
+        <textarea
+          {...register("quickMessage")}
+          placeholder="Kısaca anlatın — hangi konuda destek arıyorsunuz, beklentiniz nedir?"
+          rows={4}
+          className="w-full resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
+        />
+        {errors.quickMessage && (
+          <p className="text-[10px] font-bold uppercase text-red-400">
+            {errors.quickMessage.message}
+          </p>
+        )}
+      </div>
+
+      {serverError && (
+        <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+          {serverError}
+        </div>
+      )}
+
+      <button
+        type="button"
+        onClick={handleSubmit(onSubmit)}
+        disabled={isPending}
+        className="w-full cursor-pointer py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white transition-all hover:scale-[1.01] active:scale-[0.98] shadow-[0_0_24px_rgba(190,41,236,0.3)] disabled:opacity-60 disabled:cursor-not-allowed"
+        style={{ background: "linear-gradient(90deg,#be29ec,#0000c8)" }}
+      >
+        {isPending ? "Gönderiliyor..." : "Mesajı Gönder →"}
+      </button>
+
+      <button
+        type="button"
+        onClick={onSwitchFull}
+        className="text-[10px] text-white/30 hover:text-white/60 transition cursor-pointer text-center uppercase tracking-[0.2em] font-bold"
+      >
+        Detaylı başvuru formu için tıklayın →
+      </button>
+    </motion.div>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   SUCCESS SCREEN
+   ───────────────────────────────────────────────────────────────────────────── */
 
 function SuccessScreen({ onReset }: { onReset: () => void }) {
   return (
@@ -514,10 +1381,10 @@ function SuccessScreen({ onReset }: { onReset: () => void }) {
 
       <div className="flex flex-col gap-3">
         <h3 className="text-2xl font-bold uppercase tracking-tight text-white sm:text-3xl">
-          Analiz Talebiniz Alındı
+          Başvurunuz Alındı
         </h3>
         <p className="text-sm leading-relaxed text-white/45 sm:text-base">
-          Dijital stratejinizi incelemeye başladık. En geç{" "}
+          Başvurunuzu inceleyip en geç{" "}
           <span className="font-bold text-white/70">1 iş günü</span> içinde
           sizinle iletişime geçeceğiz.
         </p>
@@ -528,27 +1395,41 @@ function SuccessScreen({ onReset }: { onReset: () => void }) {
         onClick={onReset}
         className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 py-3.5 text-[10px] font-bold uppercase tracking-[0.22em] text-white/60 transition hover:bg-white/10 hover:text-white"
       >
-        Yeni Talep Oluştur
+        Yeni Başvuru Oluştur
       </button>
     </motion.div>
   );
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   ANA FORM BİLEŞENİ
+   ───────────────────────────────────────────────────────────────────────────── */
+
 interface AnalysisFormProps {
   sectionId?: string;
   showHeading?: boolean;
+  defaultMode?: "full" | "quick";
   onSubmitAction?: (
-    data: AnalysisInput & { formStartTime: string },
+    data: FormInput & { formStartTime: string },
+  ) => Promise<{ success?: boolean; error?: string }>;
+  onQuickSubmitAction?: (
+    data: QuickInput & { formStartTime: string },
   ) => Promise<{ success?: boolean; error?: string }>;
   className?: string;
 }
 
+// QuickInput'u export ediyoruz ki onSubmitAction tipi kullanılabilsin
+export type { QuickInput };
+
 export default function AnalysisForm({
-  sectionId = "analiz",
+  sectionId = "basvuru",
   showHeading = true,
+  defaultMode = "full",
   onSubmitAction,
+  onQuickSubmitAction,
   className = "",
 }: AnalysisFormProps) {
+  const [formMode, setFormMode] = useState<"full" | "quick">(defaultMode);
   const [step, setStep] = useState(0);
   const [completedSteps, setCompleted] = useState<Set<number>>(new Set());
   const [isPending, startTransition] = useTransition();
@@ -569,43 +1450,54 @@ export default function AnalysisForm({
     reset,
     formState: { errors },
     trigger,
-  } = useForm<AnalysisInput>({
-    resolver: zodResolver(AnalysisSchema),
+  } = useForm<FormInput>({
+    resolver: zodResolver(FormSchema),
     defaultValues: {
       botField: "",
+      serviceArea: "",
       sector: "",
       otherSector: "",
-      goal: "",
-      otherGoal: "",
-      phone: "",
+      budget: "",
+      hasWebsite: "",
       website: "",
+      adAccess: [],
+      socialPlatforms: [],
+      hasSocialAccounts: "",
+      hasExistingBrand: "",
+      currentTools: "",
+      socialHandles: "",
+      opsGoals: [],
+      fullName: "",
+      company: "",
+      email: "",
+      phone: "",
+      message: "",
     },
     mode: "onTouched",
   });
 
+  const serviceArea = watch("serviceArea") as ServiceArea;
   const sector = watch("sector");
-  const goal = watch("goal");
-  const otherGoal = watch("otherGoal") ?? "";
-
-  useEffect(() => {
-    setValue("goal", "");
-    setValue("otherGoal", "");
-  }, [sector, setValue]);
 
   const markCompleted = (i: number) =>
     setCompleted((prev) => new Set([...prev, i]));
 
   const nextStep = async () => {
     if (step === 0) {
-      const ok = await trigger(["sector", "otherSector"]);
+      const ok = await trigger(["serviceArea"]);
       if (!ok) return;
       markCompleted(0);
       setStep(1);
     } else if (step === 1) {
-      const ok = await trigger(["goal", "otherGoal"]);
+      const ok = await trigger(["sector", "otherSector"]);
       if (!ok) return;
       markCompleted(1);
       setStep(2);
+    } else if (step === 2) {
+      const ok = await trigger([]);
+      if (!ok) return;
+      markCompleted(2);
+      setStep(3);
     }
   };
 
@@ -613,12 +1505,23 @@ export default function AnalysisForm({
     if (i < step || completedSteps.has(i)) setStep(i);
   };
 
-  const onSubmit = (data: AnalysisInput) => {
+  const onSubmit = (data: FormInput) => {
     setServerError(null);
     startTransition(async () => {
-      await new Promise((r) => setTimeout(r, 1200));
+      if (onSubmitAction) {
+        const result = await onSubmitAction({
+          ...data,
+          formStartTime: startTime,
+        });
+        if (result?.error) {
+          setServerError(result.error);
+          return;
+        }
+      } else {
+        await new Promise((r) => setTimeout(r, 1200));
+      }
       setIsSuccess(true);
-      markCompleted(2);
+      markCompleted(3);
       reset();
     });
   };
@@ -631,23 +1534,66 @@ export default function AnalysisForm({
       <div ref={topRef} className="scroll-mt-28" />
 
       {showHeading && (
-        <div className="mb-10 text-center md:mb-14">
+        <div className="mb-8 text-center md:mb-10">
           <h2 className="text-3xl font-bold uppercase tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
-            Dijital{" "}
+            Ön{" "}
             <span className="bg-gradient-to-r from-[#be29ec] to-[#0000c8] bg-clip-text text-transparent">
-              Analiz
+              Başvuru
             </span>
           </h2>
-          <p className="mt-3 text-sm text-white/35 sm:text-base">
-            3 adımda büyüme fırsatlarınızı keşfedelim.
-          </p>
+
+          {/* Mod seçici — iki kart */}
+          <div className="mt-8 grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setFormMode("quick")}
+              className={`cursor-pointer rounded-2xl border p-4 text-left transition-all duration-200 active:scale-[0.98] ${
+                formMode === "quick"
+                  ? "border-[#be29ec] bg-[#be29ec]/10"
+                  : "border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
+              }`}
+            >
+              <div className={`text-lg mb-1 ${formMode === "quick" ? "" : ""}`}>
+                ⚡
+              </div>
+              <div
+                className={`text-[11px] font-black uppercase tracking-[0.2em] mb-1 ${formMode === "quick" ? "text-white" : "text-white/60"}`}
+              >
+                Hızlı Temas
+              </div>
+              <div className="text-[10px] text-white/30">~30 saniye</div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setFormMode("full")}
+              className={`cursor-pointer rounded-2xl border p-4 text-left transition-all duration-200 active:scale-[0.98] ${
+                formMode === "full"
+                  ? "border-[#0000c8] bg-[#0000c8]/10"
+                  : "border-white/10 bg-white/[0.02] hover:border-white/20 hover:bg-white/[0.04]"
+              }`}
+            >
+              <div className="text-lg mb-1">📋</div>
+              <div
+                className={`text-[11px] font-black uppercase tracking-[0.2em] mb-1 ${formMode === "full" ? "text-white" : "text-white/60"}`}
+              >
+                Detaylı Başvuru
+              </div>
+              <div className="text-[10px] text-white/30">~2 dakika</div>
+            </button>
+          </div>
         </div>
       )}
 
       <div className="relative overflow-hidden rounded-[2rem] border border-white/8 bg-[#0c0c0c] p-5 shadow-2xl sm:rounded-[2.5rem] sm:p-8 md:p-10">
         <div className="relative z-10">
           <AnimatePresence mode="wait">
-            {isSuccess ? (
+            {formMode === "quick" ? (
+              <QuickForm
+                key="quick"
+                onSubmitAction={onQuickSubmitAction as any}
+                onSwitchFull={() => setFormMode("full")}
+              />
+            ) : isSuccess ? (
               <SuccessScreen
                 key="success"
                 onReset={() => {
@@ -667,7 +1613,7 @@ export default function AnalysisForm({
 
                 <ProgressBar
                   current={step}
-                  total={3}
+                  total={4}
                   onStepClick={handleStepClick}
                   completedSteps={completedSteps}
                 />
@@ -681,6 +1627,15 @@ export default function AnalysisForm({
                     transition={{ duration: 0.28 }}
                   >
                     {step === 0 && (
+                      <StepService
+                        value={serviceArea}
+                        onChange={(v) =>
+                          setValue("serviceArea", v, { shouldValidate: true })
+                        }
+                        error={errors.serviceArea?.message}
+                      />
+                    )}
+                    {step === 1 && (
                       <StepSector
                         value={sector}
                         onChange={(v) => {
@@ -695,52 +1650,55 @@ export default function AnalysisForm({
                         otherSectorError={errors.otherSector?.message}
                       />
                     )}
-                    {step === 1 && (
-                      <StepGoal
-                        sector={sector}
-                        value={goal}
-                        onChange={(v) => {
-                          setValue("goal", v, { shouldValidate: true });
-                          setValue("otherGoal", "");
-                        }}
-                        error={errors.goal?.message}
-                        otherValue={otherGoal}
-                        onOtherChange={(v) =>
-                          setValue("otherGoal", v, { shouldValidate: true })
-                        }
-                        otherError={errors.otherGoal?.message}
+                    {step === 2 && (
+                      <StepDetails
+                        serviceArea={serviceArea}
+                        watch={watch}
+                        setValue={setValue}
+                        errors={errors}
                       />
                     )}
-                    {step === 2 && (
+                    {step === 3 && (
                       <StepContact
                         register={register}
                         errors={errors}
                         setValue={setValue}
+                        watch={watch}
                       />
                     )}
                   </motion.div>
                 </AnimatePresence>
+
+                {serverError && (
+                  <div className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+                    {serverError}
+                  </div>
+                )}
 
                 <div className="mt-6 flex items-center gap-3 md:mt-8">
                   {step > 0 && (
                     <button
                       type="button"
                       onClick={() => setStep((s) => s - 1)}
-                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition hover:bg-white/10 hover:text-white"
+                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/50 transition cursor-pointer hover:bg-white/10 hover:text-white"
                     >
                       <ArrowLeft size={16} strokeWidth={1.5} />
                     </button>
                   )}
-
                   <button
                     type="button"
-                    onClick={step < 2 ? nextStep : handleSubmit(onSubmit)}
-                    className="flex-1 py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white transition-all hover:scale-[1.01] active:scale-[0.98] shadow-[0_0_24px_rgba(190,41,236,0.3)]"
+                    onClick={step < 3 ? nextStep : handleSubmit(onSubmit)}
+                    disabled={isPending}
+                    className="flex-1 py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-white transition-all cursor-pointer hover:scale-[1.01] active:scale-[0.98] shadow-[0_0_24px_rgba(190,41,236,0.3)] disabled:opacity-60 disabled:cursor-not-allowed"
                     style={{
                       background: "linear-gradient(90deg,#be29ec,#0000c8)",
                     }}
                   >
-                    {step < 2 ? "İlerle →" : "Analiz Talebini Gönder →"}
+                    {isPending
+                      ? "Gönderiliyor..."
+                      : step < 3
+                        ? "İlerle →"
+                        : "Başvuruyu Gönder →"}
                   </button>
                 </div>
               </motion.div>

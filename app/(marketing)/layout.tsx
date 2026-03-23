@@ -48,7 +48,7 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
       {/* <WhatsAppCTA /> */}
       <WhatsAppCTAGlass />
 
-      <main id="content" className="relative z-10 pt-20">
+      <main id="content" className="relative z-10 ">
         {children}
       </main>
 
