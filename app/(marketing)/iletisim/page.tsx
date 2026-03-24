@@ -1,11 +1,11 @@
 // app/(marketing)/iletisim/page.tsx
 import type { Metadata } from "next";
 import Link from "next/link";
-import AnalysisForm from "@/components/sections/AnalysisForm";
+import AnalysisForm from "@/components/forms/AnalysisForm";
 import {
   submitAnalysisAction,
   submitQuickContactAction,
-} from "@/app/(marketing)/_actions/analysis";
+} from "@/app/forms/analysis/action";
 
 export const metadata: Metadata = {
   title: "Ücretsiz Dijital Analiz | Premium Dijital",
