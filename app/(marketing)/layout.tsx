@@ -53,7 +53,46 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
       </main>
 
       {/* FOOTER */}
-
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            name: "Premium Dijital Reklam Ajansı ve Pazarlama",
+            url: "https://premiumdijital.com",
+            logo: "https://premiumdijital.com/img/brand/premiumdijital-logo-500px.webp",
+            image: "https://premiumdijital.com/img/brand/premiumdijital-logo-500px.webp",
+            telephone: "+902129825724",
+            email: "info@premiumdijital.com",
+            address: {
+              "@type": "PostalAddress",
+              streetAddress:
+                "Ziya Gökalp Mah. Süleyman Demirel Bulv. Mall Of İstanbul The Office No:7E D:136",
+              addressLocality: "Başakşehir",
+              addressRegion: "İstanbul",
+              postalCode: "34490",
+              addressCountry: "TR",
+            },
+            geo: {
+              "@type": "GeoCoordinates",
+              latitude: 41.0766,
+              longitude: 28.8097,
+            },
+            openingHoursSpecification: {
+              "@type": "OpeningHoursSpecification",
+              dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+              opens: "09:00",
+              closes: "18:00",
+            },
+            sameAs: [
+              "https://www.instagram.com/premiumdijital",
+              "https://www.linkedin.com/company/premiumdijital/",
+              "https://www.facebook.com/premiumdijital",
+            ],
+          }),
+        }}
+      />
       <Footer />
     </div>
   );

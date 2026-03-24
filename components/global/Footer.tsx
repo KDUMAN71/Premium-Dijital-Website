@@ -1,16 +1,14 @@
-"use client";
-
 import Link from "next/link";
 import Image from "next/image";
-import { motion } from "framer-motion";
 import {
   Mail,
-  MessageCircle,
   ArrowUpRight,
   Linkedin,
   Instagram,
   ShieldCheck,
   Zap,
+  MapPin,
+  Phone,
 } from "lucide-react";
 
 export default function Footer() {
@@ -32,12 +30,11 @@ export default function Footer() {
           {/* LOGO VE MARKA BLOĞU (Col 1-5) */}
           <div className="lg:col-span-5 flex flex-col items-start">
             <Link href="/" className="group inline-block">
-              {/* Logo 4 Kat Büyütüldü (Görsel ağırlık artırıldı) */}
               <div className="relative h-24 w-auto md:h-32">
                 <Image
                   src="/img/brand/premiumdijital-logo-500px.webp"
                   alt="Premium Dijital Reklam Ajansı"
-                  width={600} // Yüksek çözünürlük desteği
+                  width={600}
                   height={200}
                   className="h-full w-auto object-contain brightness-100 transition-all group-hover:drop-shadow-[0_0_20px_rgba(190,41,236,0.2)]"
                   priority
@@ -58,12 +55,23 @@ export default function Footer() {
             {/* Sosyal Medya & İletişim Köprüsü */}
             <div className="mt-10 flex flex-wrap gap-4">
               <SocialIcon
-                href="https://linkedin.com/company/premiumdijital"
+                href="https://www.linkedin.com/company/premiumdijital/"
                 icon={<Linkedin size={18} />}
+                label="LinkedIn"
               />
               <SocialIcon
-                href="https://instagram.com/premiumdijital"
+                href="https://www.instagram.com/premiumdijital"
                 icon={<Instagram size={18} />}
+                label="Instagram"
+              />
+              <SocialIcon
+                href="https://www.facebook.com/premiumdijital"
+                icon={
+                  <svg viewBox="0 0 24 24" fill="currentColor" className="h-[18px] w-[18px]">
+                    <path d="M22 12a10 10 0 10-11.63 9.87v-6.99H7.9V12h2.47V9.79c0-2.43 1.45-3.77 3.66-3.77 1.06 0 2.17.19 2.17.19v2.39h-1.22c-1.2 0-1.58.74-1.58 1.5V12h2.69l-.43 2.88h-2.26v6.99A10 10 0 0022 12z" />
+                  </svg>
+                }
+                label="Facebook"
               />
               <a
                 href="mailto:info@premiumdijital.com"
@@ -72,11 +80,35 @@ export default function Footer() {
                 <Mail size={16} className="text-brand-purple" /> İLETİŞİME GEÇ
               </a>
             </div>
+
+            {/* NAP — Local SEO */}
+            <address className="mt-10 not-italic space-y-3 border-t border-white/5 pt-8 w-full">
+              <div className="flex items-start gap-3 text-[13px] text-white/35 leading-relaxed">
+                <MapPin size={15} className="text-brand-purple mt-0.5 shrink-0" />
+                <span>
+                  Ziya Gökalp Mah. Süleyman Demirel Bulv.<br />
+                  Mall Of İstanbul The Office No:7E D:136<br />
+                  34490 Başakşehir / İstanbul
+                </span>
+              </div>
+              <div className="flex items-center gap-3 text-[13px] text-white/35">
+                <Phone size={15} className="text-brand-purple shrink-0" />
+                <a href="tel:+902129825724" className="hover:text-white transition-colors">
+                  (0212) 982 57 24
+                </a>
+              </div>
+              <div className="flex items-center gap-3 text-[13px] text-white/35">
+                <Mail size={15} className="text-brand-purple shrink-0" />
+                <a href="mailto:info@premiumdijital.com" className="hover:text-white transition-colors">
+                  info@premiumdijital.com
+                </a>
+              </div>
+            </address>
           </div>
 
           {/* MENÜLER (Col 6-12) */}
           <div className="lg:col-span-7 grid grid-cols-2 md:grid-cols-3 gap-12">
-            {/* Sütun: Çözümler */}
+            {/* Sütun: Uzmanlıklar */}
             <div className="flex flex-col gap-8">
               <FooterHeader>Uzmanlıklar</FooterHeader>
               <ul className="space-y-4">
@@ -84,10 +116,10 @@ export default function Footer() {
                   PPC & Performans
                 </FooterLink>
                 <FooterLink href="/hizmetler/dijital-mimari">
-                  Web & SEO Mimari
+                  Dijital Mimari
                 </FooterLink>
                 <FooterLink href="/hizmetler/marka-stratejisi">
-                  Marka İletişimi
+                  Marka & Strateji
                 </FooterLink>
                 <FooterLink href="/hizmetler/dijital-operasyon">
                   Dijital Operasyon
@@ -114,12 +146,12 @@ export default function Footer() {
               </ul>
             </div>
 
-            {/* Sütun: Dönüşüm & Güven */}
+            {/* Sütun: Analiz */}
             <div className="flex flex-col gap-8">
               <FooterHeader>Analiz</FooterHeader>
               <div className="space-y-6">
                 <Link
-                  href="#analiz"
+                  href="/ucretsiz-analiz"
                   className="group relative flex items-center justify-center overflow-hidden rounded-2xl bg-white px-6 py-4 text-center"
                 >
                   <span className="relative z-10 text-[11px] font-black uppercase tracking-widest text-black group-hover:text-white transition-colors duration-300">
@@ -149,10 +181,7 @@ export default function Footer() {
         <div className="mt-24 flex flex-col items-center justify-between gap-8 border-t border-white/5 pt-12 md:flex-row">
           <div className="flex flex-col gap-2 items-center md:items-start">
             <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white/10">
-              © {currentYear} PREMIUM DIJITAL REKLAM AJANSI
-            </p>
-            <p className="text-[9px] font-bold text-white/5 uppercase tracking-widest">
-              Next.js & Cloud Modernization Infrastructure
+              © {currentYear} Premium Dijital Reklam Ajansı ve Pazarlama
             </p>
           </div>
 
@@ -203,12 +232,21 @@ function FooterLink({
   );
 }
 
-function SocialIcon({ href, icon }: { href: string; icon: React.ReactNode }) {
+function SocialIcon({
+  href,
+  icon,
+  label,
+}: {
+  href: string;
+  icon: React.ReactNode;
+  label: string;
+}) {
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      aria-label={label}
       className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/5 bg-white/[0.03] text-white/30 transition-all hover:border-brand-purple/50 hover:bg-brand-purple/10 hover:text-white"
     >
       {icon}

@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 const socials = [
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com",
+    href: "https://www.linkedin.com/company/premiumdijital/",
     border: "#0A66C2",
     glow: "rgba(10,102,194,0.45)",
     icon: (
@@ -14,7 +14,7 @@ const socials = [
   },
   {
     label: "Instagram",
-    href: "https://www.instagram.com",
+    href: "https://www.instagram.com/premiumdijital",
     border: "#E1306C",
     glow: "rgba(225,48,108,0.45)",
     icon: (
@@ -25,7 +25,7 @@ const socials = [
   },
   {
     label: "Facebook",
-    href: "https://www.facebook.com",
+    href: "https://www.facebook.com/premiumdijital",
     border: "#1877F2",
     glow: "rgba(24,119,242,0.45)",
     icon: (
@@ -36,7 +36,7 @@ const socials = [
   },
   {
     label: "X",
-    href: "https://x.com",
+    href: "https://x.com/premiumdijital",
     border: "#ffffff",
     glow: "rgba(255,255,255,0.35)",
     icon: (
