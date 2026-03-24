@@ -7,7 +7,7 @@ import {
   ArrowUpRight,
   Globe,
   Palette,
-  Cloud,
+  Workflow,
   Target,
   ChevronRight,
 } from "lucide-react";
@@ -33,7 +33,7 @@ const serviceSchema = {
         "@type": "Offer",
         itemOffered: {
           "@type": "Service",
-          name: "Performans & Büyüme",
+          name: "PPC & Performans Pazarlama",
         },
       },
       {
@@ -48,7 +48,7 @@ const serviceSchema = {
         "@type": "Offer",
         itemOffered: {
           "@type": "Service",
-          name: "Bulut ve Altyapı Modernizasyonu",
+          name: "Dijital Operasyon",
         },
       },
     ],
@@ -60,7 +60,7 @@ const serviceSchema = {
  */
 const services = [
   {
-    title: "Performans & Büyüme",
+    title: "PPC & Performans Pazarlama",
     slug: "performans-pazarlama",
     desc: "Google Ads ve Meta Ads yönetiminde ROI odaklı, veri madenciliği ile desteklenen yüksek performanslı reklam stratejileri.",
     icon: <Target className="text-brand-blue" size={26} />,
@@ -99,15 +99,15 @@ const services = [
     color: "blue",
   },
   {
-    title: "Bulut ve Altyapı Modernizasyonu",
-    slug: "bulut-ve-altyapi",
-    desc: "İşletmenizi güvenli ve ölçeklenebilir bulut mimarilerine taşıyarak dijital operasyonlarınızı modernize ediyoruz.",
-    icon: <Cloud className="text-brand-purple" size={26} />,
+    title: "Dijital Operasyon",
+    slug: "dijital-operasyon",
+    desc: "CRM, otomasyon ve AI iş akışlarıyla operasyonunuzu sistemleştiriyor, dijital entropiyi düzene dönüştürüyoruz.",
+    icon: <Workflow className="text-brand-purple" size={26} />,
     items: [
-      "Cloud Geçişi",
-      "Veri Güvenliği",
-      "İş Akış Otomasyonu",
-      "BT Danışmanlığı",
+      "CRM Kurulumu",
+      "İş Akışı Otomasyonu",
+      "AI Entegrasyonu",
+      "Veri Zekası",
     ],
     color: "purple",
   },

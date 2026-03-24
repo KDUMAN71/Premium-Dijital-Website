@@ -82,7 +82,7 @@ export interface CaseStudy {
 
   // Liste sayfası filtresi için ana hizmet alanı
   serviceArea?:
-    | "Performans & Büyüme"
+    | "PPC & Performans Pazarlama"
     | "Dijital Mimari"
     | "Marka & Strateji"
     | "Dijital Operasyon";
@@ -97,7 +97,7 @@ export const allCaseStudies: CaseStudy[] = [
     slug: "saglik-turizmi-hasta-edinimi",
     sector: "Sağlık & Medikal",
     timeframeDays: 90,
-    serviceArea: "Performans & Büyüme",
+    serviceArea: "PPC & Performans Pazarlama",
     heroImage: "/img/basari-hikayeleri/saglik-medikal.webp",
     serviceTags: ["Google Ads", "Meta Ads", "Funnel Otomasyonu"],
     title:
@@ -336,7 +336,7 @@ export const allCaseStudies: CaseStudy[] = [
     slug: "e-ticaret-roas-olcekleme",
     sector: "E-Ticaret / Moda",
     timeframeDays: 45,
-    serviceArea: "Performans & Büyüme",
+    serviceArea: "PPC & Performans Pazarlama",
     serviceTags: ["Meta Ads", "CRO", "Checkout Optimizasyonu"],
     title: "E-Ticarette ROAS Bariyerini Aşmak: Kârlı Ölçekleme Stratejisi",
     tag: "E-Com / ROI",

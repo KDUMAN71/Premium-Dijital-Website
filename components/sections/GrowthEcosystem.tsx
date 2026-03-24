@@ -11,7 +11,7 @@ const PILLARS = [
   {
     id: "ppc",
     index: "01",
-    title: "Performans & Büyüme",
+    title: "PPC & Performans Pazarlama",
     shortTitle: "Performans",
     keyword: "Google Ads & Meta Ads Yönetimi",
     desc: "Daha fazla nitelikli trafik, daha düşük edinim maliyeti. Google Ads ve Meta Ads kampanyalarını dönüşüm odaklı kurgular ve sürekli optimizasyonla yönetiyoruz.",

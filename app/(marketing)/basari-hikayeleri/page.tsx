@@ -8,7 +8,7 @@ import { allCaseStudies } from "@/components/sections/case-studies/case-study-da
 
 const SERVICE_AREAS = [
   "Tümü",
-  "Performans & Büyüme",
+  "PPC & Performans Pazarlama",
   "Dijital Mimari",
   "Marka & Strateji",
   "Dijital Operasyon",
@@ -25,7 +25,7 @@ const ALL_SECTORS = [
 ];
 
 const SERVICE_ICONS: Record<string, string> = {
-  "Performans & Büyüme": "⚡",
+  "PPC & Performans Pazarlama": "⚡",
   "Dijital Mimari": "🏗",
   "Marka & Strateji": "✦",
   "Dijital Operasyon": "⚙",
