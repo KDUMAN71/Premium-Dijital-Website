@@ -11,7 +11,10 @@ export const DetailedFormSchema = z.object({
   sector: z.enum(["HEALTH", "TOURISM", "ECOMM", "SERVICE", "BEAUTY", "OTHER"]),
   otherSector: z.string().max(100).optional(),
   budget: z.string().max(100).optional(),
-  hasWebsite: z.enum(["YES", "NO"]).optional(),
+  hasWebsite: z.preprocess(
+    (v) => (v === "" || v === null ? undefined : v),
+    z.enum(["YES", "NO"]).optional(),
+  ),
   website: z.string().max(200).optional(),
   adAccess: z
     .array(z.enum(["google_ads", "ga4", "search_console", "meta_ads"]))
@@ -32,7 +35,10 @@ export const DetailedFormSchema = z.object({
     (v) => (v === "" || v === null ? undefined : v),
     z.enum(["YES", "NO"]).optional(),
   ),
-  hasExistingBrand: z.enum(["YES", "NO", "PARTIAL"]).optional(),
+  hasExistingBrand: z.preprocess(
+    (v) => (v === "" || v === null ? undefined : v),
+    z.enum(["YES", "NO", "PARTIAL"]).optional(),
+  ),
   currentTools: z.string().max(500).optional(),
   socialHandles: z.string().max(300).optional(),
   opsGoals: z
