@@ -669,6 +669,76 @@ function StepDetails({
             ))}
           </div>
         </div>
+
+        {/* Sosyal medya hesapları */}
+        <div className="space-y-3">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+            Sosyal medya hesabınız var mı?
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            <SelectCard
+              selected={hasSocialAccounts === "YES"}
+              onClick={() => setValue("hasSocialAccounts", "YES")}
+            >
+              Evet, var
+            </SelectCard>
+            <SelectCard
+              selected={hasSocialAccounts === "NO"}
+              onClick={() => setValue("hasSocialAccounts", "NO")}
+            >
+              Hayır, yok
+            </SelectCard>
+          </div>
+        </div>
+
+        <AnimatePresence>
+          {hasSocialAccounts === "YES" && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+                    Hangi platformlar?{" "}
+                    <span className="text-white/20 font-medium normal-case tracking-normal">
+                      (birden fazla seçebilirsiniz)
+                    </span>
+                  </label>
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                    {SOCIAL_PLATFORMS.map((p) => (
+                      <MultiToggle
+                        key={p.value}
+                        id={p.value}
+                        label={p.label}
+                        checked={socialPlatforms.includes(p.value)}
+                        onToggle={() => toggleArray("socialPlatforms", p.value)}
+                        accent="purple"
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+                    Hesap kullanıcı adları{" "}
+                    <span className="text-white/20 font-medium normal-case tracking-normal">
+                      (opsiyonel — inceleme için)
+                    </span>
+                  </label>
+                  <textarea
+                    value={watch("socialHandles") ?? ""}
+                    onChange={(e) => setValue("socialHandles", e.target.value)}
+                    placeholder="@instagram_hesabiniz, facebook.com/sayfaniz, linkedin.com/company/sirketiniz"
+                    rows={3}
+                    className="w-full resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
+                  />
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     );
   }
@@ -770,6 +840,76 @@ function StepDetails({
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Sosyal medya hesapları */}
+        <div className="space-y-3">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+            Sosyal medya hesabınız var mı?
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            <SelectCard
+              selected={hasSocialAccounts === "YES"}
+              onClick={() => setValue("hasSocialAccounts", "YES")}
+            >
+              Evet, var
+            </SelectCard>
+            <SelectCard
+              selected={hasSocialAccounts === "NO"}
+              onClick={() => setValue("hasSocialAccounts", "NO")}
+            >
+              Hayır, yok
+            </SelectCard>
+          </div>
+        </div>
+
+        <AnimatePresence>
+          {hasSocialAccounts === "YES" && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+                    Hangi platformlar?{" "}
+                    <span className="text-white/20 font-medium normal-case tracking-normal">
+                      (birden fazla seçebilirsiniz)
+                    </span>
+                  </label>
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                    {SOCIAL_PLATFORMS.map((p) => (
+                      <MultiToggle
+                        key={p.value}
+                        id={p.value}
+                        label={p.label}
+                        checked={socialPlatforms.includes(p.value)}
+                        onToggle={() => toggleArray("socialPlatforms", p.value)}
+                        accent="purple"
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+                    Hesap kullanıcı adları{" "}
+                    <span className="text-white/20 font-medium normal-case tracking-normal">
+                      (opsiyonel — inceleme için)
+                    </span>
+                  </label>
+                  <textarea
+                    value={watch("socialHandles") ?? ""}
+                    onChange={(e) => setValue("socialHandles", e.target.value)}
+                    placeholder="@instagram_hesabiniz, facebook.com/sayfaniz, linkedin.com/company/sirketiniz"
+                    rows={3}
+                    className="w-full resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
+                  />
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     );
   }
@@ -822,6 +962,76 @@ function StepDetails({
             className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
           />
         </div>
+
+        {/* Sosyal medya hesapları */}
+        <div className="space-y-3">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+            Sosyal medya hesabınız var mı?
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            <SelectCard
+              selected={hasSocialAccounts === "YES"}
+              onClick={() => setValue("hasSocialAccounts", "YES")}
+            >
+              Evet, var
+            </SelectCard>
+            <SelectCard
+              selected={hasSocialAccounts === "NO"}
+              onClick={() => setValue("hasSocialAccounts", "NO")}
+            >
+              Hayır, yok
+            </SelectCard>
+          </div>
+        </div>
+
+        <AnimatePresence>
+          {hasSocialAccounts === "YES" && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+                    Hangi platformlar?{" "}
+                    <span className="text-white/20 font-medium normal-case tracking-normal">
+                      (birden fazla seçebilirsiniz)
+                    </span>
+                  </label>
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                    {SOCIAL_PLATFORMS.map((p) => (
+                      <MultiToggle
+                        key={p.value}
+                        id={p.value}
+                        label={p.label}
+                        checked={socialPlatforms.includes(p.value)}
+                        onToggle={() => toggleArray("socialPlatforms", p.value)}
+                        accent="purple"
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+                    Hesap kullanıcı adları{" "}
+                    <span className="text-white/20 font-medium normal-case tracking-normal">
+                      (opsiyonel — inceleme için)
+                    </span>
+                  </label>
+                  <textarea
+                    value={watch("socialHandles") ?? ""}
+                    onChange={(e) => setValue("socialHandles", e.target.value)}
+                    placeholder="@instagram_hesabiniz, facebook.com/sayfaniz, linkedin.com/company/sirketiniz"
+                    rows={3}
+                    className="w-full resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
+                  />
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     );
   }
@@ -992,6 +1202,76 @@ function StepDetails({
             />
           </div>
         </div>
+
+        {/* Sosyal medya hesapları */}
+        <div className="space-y-3">
+          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+            Sosyal medya hesabınız var mı?
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            <SelectCard
+              selected={hasSocialAccounts === "YES"}
+              onClick={() => setValue("hasSocialAccounts", "YES")}
+            >
+              Evet, var
+            </SelectCard>
+            <SelectCard
+              selected={hasSocialAccounts === "NO"}
+              onClick={() => setValue("hasSocialAccounts", "NO")}
+            >
+              Hayır, yok
+            </SelectCard>
+          </div>
+        </div>
+
+        <AnimatePresence>
+          {hasSocialAccounts === "YES" && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+                    Hangi platformlar?{" "}
+                    <span className="text-white/20 font-medium normal-case tracking-normal">
+                      (birden fazla seçebilirsiniz)
+                    </span>
+                  </label>
+                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                    {SOCIAL_PLATFORMS.map((p) => (
+                      <MultiToggle
+                        key={p.value}
+                        id={p.value}
+                        label={p.label}
+                        checked={socialPlatforms.includes(p.value)}
+                        onToggle={() => toggleArray("socialPlatforms", p.value)}
+                        accent="purple"
+                      />
+                    ))}
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+                    Hesap kullanıcı adları{" "}
+                    <span className="text-white/20 font-medium normal-case tracking-normal">
+                      (opsiyonel — inceleme için)
+                    </span>
+                  </label>
+                  <textarea
+                    value={watch("socialHandles") ?? ""}
+                    onChange={(e) => setValue("socialHandles", e.target.value)}
+                    placeholder="@instagram_hesabiniz, facebook.com/sayfaniz, linkedin.com/company/sirketiniz"
+                    rows={3}
+                    className="w-full resize-none rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white outline-none transition-all focus:border-[#be29ec] placeholder:text-white/15"
+                  />
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     );
   }

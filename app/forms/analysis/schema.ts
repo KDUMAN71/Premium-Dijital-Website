@@ -28,7 +28,10 @@ export const DetailedFormSchema = z.object({
       ]),
     )
     .optional(),
-  hasSocialAccounts: z.enum(["YES", "NO"]).optional(),
+  hasSocialAccounts: z.preprocess(
+    (v) => (v === "" || v === null ? undefined : v),
+    z.enum(["YES", "NO"]).optional(),
+  ),
   hasExistingBrand: z.enum(["YES", "NO", "PARTIAL"]).optional(),
   currentTools: z.string().max(500).optional(),
   socialHandles: z.string().max(300).optional(),
