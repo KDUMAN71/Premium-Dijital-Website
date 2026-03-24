@@ -6,11 +6,11 @@ Font.register({
   family: "Inter",
   fonts: [
     {
-      src: path.join(process.cwd(), "public/fonts/Inter-Regular.ttf"),
+      src: "/fonts/Inter-Regular.ttf", // Public klasöründen URL olarak
       fontWeight: 400,
     },
     {
-      src: path.join(process.cwd(), "public/fonts/Inter-Bold.ttf"),
+      src: "/fonts/Inter-Bold.ttf",
       fontWeight: 700,
     },
   ],

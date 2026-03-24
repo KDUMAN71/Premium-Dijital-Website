@@ -1,22 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
+import React, { useState } from "react";
 import type { AnalysisData } from "@/types/analysis";
-import ClientReport from "@/components/pdf/ClientReport";
-import InternalReport from "@/components/pdf/InternalReport";
-
-const PDFViewer = dynamic(
-  () => import("@react-pdf/renderer").then((mod) => mod.PDFViewer),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="flex h-full items-center justify-center text-white/40 font-mono text-xs uppercase tracking-widest">
-        PDF Yükleniyor...
-      </div>
-    ),
-  },
-);
 
 /* ─── Mock Data ─────────────────────────────── */
 const mockData: AnalysisData = {
@@ -157,103 +142,177 @@ const mockData: AnalysisData = {
   },
 };
 
+/* ─── Yardımcı: PDF indir ─────────────────── */
+async function downloadPdf(type: "client" | "internal") {
+  const res = await fetch("/api/generate-report", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ data: mockData, type }),
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: "Bilinmeyen hata" }));
+    throw new Error(err.detail ?? err.error ?? "PDF oluşturulamadı");
+  }
+
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+
+  const disposition = res.headers.get("Content-Disposition") ?? "";
+  const match = disposition.match(/filename="([^"]+)"/);
+  a.download = match?.[1] ?? `rapor-${type}.pdf`;
+
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 /* ─── Sayfa ─────────────────────────────────── */
 type ReportType = "client" | "internal";
 
-export default function TestPdfPage() {
-  const [mounted, setMounted] = useState(false);
-  const [active, setActive] = useState<ReportType>("client");
+type LoadState = "idle" | "loading" | "error";
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+export default function TestPdfPage() {
+  const [state, setState] = useState<Record<ReportType, LoadState>>({
+    client: "idle",
+    internal: "idle",
+  });
+  const [errors, setErrors] = useState<Record<ReportType, string>>({
+    client: "",
+    internal: "",
+  });
+
+  async function handleDownload(type: ReportType) {
+    setState((s) => ({ ...s, [type]: "loading" }));
+    setErrors((e) => ({ ...e, [type]: "" }));
+    try {
+      await downloadPdf(type);
+      setState((s) => ({ ...s, [type]: "idle" }));
+    } catch (err) {
+      setState((s) => ({ ...s, [type]: "error" }));
+      setErrors((e) => ({ ...e, [type]: String(err) }));
+    }
+  }
+
+  const btnConfig: { type: ReportType; label: string; color: string; loadLabel: string }[] = [
+    {
+      type: "client",
+      label: "Müşteri Raporu İndir",
+      color: "#0000C8",
+      loadLabel: "Oluşturuluyor...",
+    },
+    {
+      type: "internal",
+      label: "İç Rapor İndir",
+      color: "#C0392B",
+      loadLabel: "Oluşturuluyor...",
+    },
+  ];
 
   return (
     <div
       style={{
         width: "100vw",
-        height: "100vh",
+        minHeight: "100vh",
         backgroundColor: "#020204",
         display: "flex",
         flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        fontFamily: "monospace",
       }}
     >
-      {/* Kontrol Şeridi */}
-      <div
+      {/* Başlık */}
+      <p
         style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 12,
-          padding: "10px 20px",
-          backgroundColor: "#0a0a12",
-          borderBottom: "1px solid rgba(255,255,255,0.06)",
-          flexShrink: 0,
+          fontSize: 10,
+          color: "rgba(255,255,255,0.25)",
+          textTransform: "uppercase",
+          letterSpacing: "0.3em",
+          marginBottom: 8,
         }}
       >
-        <span
-          style={{
-            fontSize: 10,
-            fontFamily: "monospace",
-            color: "rgba(255,255,255,0.3)",
-            textTransform: "uppercase",
-            letterSpacing: "0.2em",
-            marginRight: 8,
-          }}
-        >
-          PDF Test
-        </span>
-        {(["client", "internal"] as ReportType[]).map((type) => (
-          <button
-            key={type}
-            onClick={() => setActive(type)}
-            style={{
-              padding: "6px 18px",
-              borderRadius: 6,
-              border: "none",
-              cursor: "pointer",
-              fontFamily: "monospace",
-              fontSize: 11,
-              fontWeight: 700,
-              textTransform: "uppercase",
-              letterSpacing: "0.1em",
-              transition: "all 0.2s",
-              backgroundColor:
-                active === type
-                  ? type === "internal"
-                    ? "#C0392B"
-                    : "#0000C8"
-                  : "rgba(255,255,255,0.06)",
-              color:
-                active === type ? "#fff" : "rgba(255,255,255,0.4)",
-            }}
-          >
-            {type === "client" ? "Müşteri Raporu" : "İç Rapor"}
-          </button>
+        PDF Test — Puppeteer
+      </p>
+      <p
+        style={{
+          fontSize: 14,
+          color: "rgba(255,255,255,0.7)",
+          marginBottom: 6,
+        }}
+      >
+        {mockData.clientName}
+      </p>
+      <p
+        style={{
+          fontSize: 11,
+          color: "rgba(255,255,255,0.3)",
+          marginBottom: 48,
+        }}
+      >
+        {mockData.reportDate} · Skor: {mockData.overallScore}/100
+      </p>
+
+      {/* Butonlar */}
+      <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
+        {btnConfig.map(({ type, label, color, loadLabel }) => (
+          <div key={type} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+            <button
+              onClick={() => handleDownload(type)}
+              disabled={state[type] === "loading"}
+              style={{
+                padding: "14px 32px",
+                borderRadius: 8,
+                border: "none",
+                cursor: state[type] === "loading" ? "wait" : "pointer",
+                fontFamily: "monospace",
+                fontSize: 12,
+                fontWeight: 700,
+                textTransform: "uppercase",
+                letterSpacing: "0.1em",
+                backgroundColor: state[type] === "loading" ? "rgba(255,255,255,0.1)" : color,
+                color: state[type] === "loading" ? "rgba(255,255,255,0.4)" : "#fff",
+                transition: "all 0.2s",
+                minWidth: 200,
+              }}
+            >
+              {state[type] === "loading" ? loadLabel : label}
+            </button>
+            {state[type] === "error" && (
+              <p
+                style={{
+                  fontSize: 10,
+                  color: "#e74c3c",
+                  maxWidth: 220,
+                  textAlign: "center",
+                  lineHeight: 1.4,
+                }}
+              >
+                {errors[type]}
+              </p>
+            )}
+          </div>
         ))}
-        <span
-          style={{
-            marginLeft: "auto",
-            fontSize: 10,
-            fontFamily: "monospace",
-            color: "rgba(255,255,255,0.2)",
-          }}
-        >
-          {mockData.clientName} · {mockData.reportDate}
-        </span>
       </div>
 
-      {/* PDF Viewer */}
-      <div style={{ flex: 1, minHeight: 0 }}>
-        {mounted && (
-          <PDFViewer style={{ width: "100%", height: "100%", border: "none" }}>
-            {active === "client" ? (
-              <ClientReport data={mockData} />
-            ) : (
-              <InternalReport data={mockData} />
-            )}
-          </PDFViewer>
-        )}
-      </div>
+      {/* Bilgi */}
+      <p
+        style={{
+          marginTop: 56,
+          fontSize: 10,
+          color: "rgba(255,255,255,0.15)",
+          textAlign: "center",
+          lineHeight: 1.6,
+          maxWidth: 400,
+        }}
+      >
+        POST /api/generate-report → Puppeteer → A4 PDF
+        <br />
+        Local: sistem Chrome · Vercel: @sparticuz/chromium
+      </p>
     </div>
   );
 }
