@@ -2006,6 +2006,8 @@ function SistemSkoru() {
   const [company, setCompany] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [website, setWebsite] = useState("");
+  const [socialMedia, setSocialMedia] = useState("");
   const [emailError, setEmailError] = useState("");
   const [formError, setFormError] = useState("");
   const [score, setScore] = useState(0);
@@ -2149,6 +2151,8 @@ function SistemSkoru() {
         company: company.trim(),
         phone: phone.trim(),
         email: email.trim(),
+        website: website.trim() ? `https://${website.trim().replace(/^https?:\/\//, "")}` : "",
+        socialMedia: socialMedia.trim(),
         score,
         scoreLabel: scoreInfo.label,
         leaks: getLeaks(score),
@@ -2459,6 +2463,29 @@ function SistemSkoru() {
                   placeholder="Şirket / Marka Adı *"
                   className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-base text-white placeholder:text-white/25 outline-none focus:border-brand-purple/50 focus:bg-white/8 transition-all"
                 />
+                {/* Website */}
+                <div className="relative">
+                  <div className="absolute left-5 top-1/2 -translate-y-1/2 text-white/30 text-sm font-mono select-none pointer-events-none">
+                    https://
+                  </div>
+                  <input
+                    type="text"
+                    value={website}
+                    onChange={(e) => setWebsite(e.target.value)}
+                    placeholder="siteniz.com (opsiyonel)"
+                    className="w-full rounded-2xl border border-white/10 bg-white/5 pl-[72px] pr-5 py-4 text-base text-white placeholder:text-white/25 outline-none focus:border-brand-purple/50 focus:bg-white/8 transition-all"
+                  />
+                </div>
+
+                {/* Sosyal medya */}
+                <textarea
+                  value={socialMedia}
+                  onChange={(e) => setSocialMedia(e.target.value)}
+                  placeholder={"Sosyal medya hesaplarınız (opsiyonel)\nÖrn: Instagram: @hesap / LinkedIn: linkedin.com/in/profil"}
+                  rows={2}
+                  className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-base text-white placeholder:text-white/25 outline-none focus:border-brand-purple/50 focus:bg-white/8 transition-all resize-none"
+                />
+
                 {/* E-posta + Telefon yan yana */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <input
@@ -2566,7 +2593,7 @@ function SistemSkoru() {
                   Hızlıca görüşmek ister misiniz?
                 </p>
                 <a
-                  href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "905425658010"}?text=${encodeURIComponent(`Merhaba, dijital operasyon analiz formunu doldurdum. Entropi skoruma (%${score}) ilişkin bilgi almak istiyorum. İsim: ${name} / Şirket: ${company}`)}`}
+                  href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "905425658010"}?text=${encodeURIComponent(`Merhaba, dijital operasyon analiz formunu doldurdum. Entropi skoruma (%${score}) ilişkin bilgi almak istiyorum. İsim: ${name} / Şirket: ${company}${website.trim() ? ` / Website: https://${website.trim().replace(/^https?:\/\//, "")}` : ""}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-3 rounded-full px-7 py-4 text-sm font-black uppercase tracking-[0.16em] text-white transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(37,211,102,0.3)]"

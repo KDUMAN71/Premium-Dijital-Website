@@ -5,7 +5,7 @@ import { addToAudience } from "@/app/forms/_shared/audience";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, company, phone, email, score, scoreLabel, leaks, answers } =
+    const { name, company, phone, email, score, scoreLabel, leaks, answers, website, socialMedia } =
       body;
 
     /* ── Validasyon ─────────────────────────────────────────────────── */
@@ -83,6 +83,26 @@ export async function POST(req: NextRequest) {
               <td style="padding:8px 12px;font-size:13px;border-bottom:1px solid #1f2937">
                 <a href="tel:${phone}" style="color:#a78bfa">${phone}</a>
               </td>
+            </tr>`
+                : ""
+            }
+            ${
+              website
+                ? `
+            <tr>
+              <td style="padding:8px 12px;color:#9ca3af;font-size:13px;border-bottom:1px solid #1f2937">Website</td>
+              <td style="padding:8px 12px;font-size:13px;border-bottom:1px solid #1f2937">
+                <a href="${website}" style="color:#a78bfa">${website}</a>
+              </td>
+            </tr>`
+                : ""
+            }
+            ${
+              socialMedia
+                ? `
+            <tr>
+              <td style="padding:8px 12px;color:#9ca3af;font-size:13px;border-bottom:1px solid #1f2937">Sosyal Medya</td>
+              <td style="padding:8px 12px;color:#f3f4f6;font-size:13px;border-bottom:1px solid #1f2937">${socialMedia}</td>
             </tr>`
                 : ""
             }
@@ -172,6 +192,8 @@ export async function POST(req: NextRequest) {
           company,
           phone: phone || "",
           email,
+          website: website ?? "",
+          socialMedia: socialMedia ?? "",
           score,
           scoreLabel,
           leaks,
