@@ -22,6 +22,8 @@ type ServicePageTemplateProps = {
     label: string;
   }[];
   heroVisual?: React.ReactNode;
+  heroExtra?: React.ReactNode;
+  customNav?: React.ReactNode;
   children?: React.ReactNode;
 };
 
@@ -37,6 +39,8 @@ export default function ServicePageTemplate({
   trustItems,
   navItems,
   heroVisual,
+  heroExtra,
+  customNav,
   children,
 }: ServicePageTemplateProps) {
   return (
@@ -81,6 +85,8 @@ export default function ServicePageTemplate({
                     {secondaryCtaLabel}
                   </Link>
                 </div>
+
+                {heroExtra && <div>{heroExtra}</div>}
               </div>
 
               {/* Sağ: görsel — tam pointer-events, overflow visible */}
@@ -124,7 +130,7 @@ export default function ServicePageTemplate({
       </section>
 
       {trustItems?.length ? <ServiceHeroTrustStrip items={trustItems} /> : null}
-      {navItems?.length ? <ServicePageStickyNav items={navItems} /> : null}
+      {customNav ?? (navItems?.length ? <ServicePageStickyNav items={navItems} /> : null)}
 
       {children}
 

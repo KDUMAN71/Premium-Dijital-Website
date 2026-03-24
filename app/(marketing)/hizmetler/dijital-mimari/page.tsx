@@ -1,4 +1,5 @@
 import ServicePageTemplate from "@/components/templates/ServicePageTemplate";
+import DijitalMimariStickyNav from "@/components/templates/DijitalMimariStickyNav";
 import {
   Activity,
   BarChart3,
@@ -12,6 +13,13 @@ import {
   ShieldCheck,
   Workflow,
   Blocks,
+  Monitor,
+  TrendingUp,
+  Share2,
+  Calendar,
+  MessageCircle,
+  Users,
+  LayoutGrid,
 } from "lucide-react";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import {
@@ -33,9 +41,9 @@ import ContactCTA from "@/components/sections/ContactCTA";
 /* ─── Metadata ────────────────────────────────────────────────────────────── */
 
 export const metadata = {
-  title: "SEO Uyumlu ve Dönüşüm Odaklı Web Sitesi Tasarımı | Premium Dijital",
+  title: "Web Tasarım, SEO ve Sosyal Medya Yönetimi | Premium Dijital",
   description:
-    "Kurumsal web sitesi tasarımı, teknik SEO, Core Web Vitals optimizasyonu, GA4-GTM ölçümleme ve dönüşüm odaklı altyapı yaklaşımı ile işletmeniz için güçlü dijital temeller kuruyoruz.",
+    "Web tasarım, teknik SEO ve sosyal medya yönetimini tek stratejik çatı altında birleştiriyoruz. Kurumsal web sitesi, organik büyüme ve platform yönetimi için bütünleşik dijital altyapı.",
 };
 
 /* ─── Schema ──────────────────────────────────────────────────────────────── */
@@ -45,10 +53,10 @@ const pageUrl = "https://premiumdijital.com/hizmetler/dijital-mimari";
 const webPageSchema = {
   "@context": "https://schema.org",
   "@type": "WebPage",
-  name: "Dijital Mimari",
+  name: "Dijital Mimari — Web, SEO & Sosyal Medya",
   url: pageUrl,
   description:
-    "Kurumsal web sitesi tasarımı, teknik SEO, Core Web Vitals optimizasyonu, GA4-GTM ölçümleme ve dönüşüm odaklı web altyapıları.",
+    "Web tasarım, teknik SEO ve sosyal medya yönetimini tek stratejik çatı altında birleştiren bütünleşik dijital altyapı hizmeti.",
   inLanguage: "tr-TR",
   isPartOf: {
     "@type": "WebSite",
@@ -69,36 +77,27 @@ const serviceSchema = {
   },
   areaServed: "TR",
   description:
-    "Kurumsal web sitesi tasarımı, teknik SEO, site performans optimizasyonu, GA4-GTM ölçümleme ve dönüşüm odaklı dijital altyapı hizmeti.",
+    "Web tasarım, teknik SEO ve sosyal medya yönetimini tek stratejik çatı altında birleştiren bütünleşik dijital altyapı hizmeti.",
   url: pageUrl,
   hasOfferCatalog: {
     "@type": "OfferCatalog",
-    name: "Web Sitesi ve SEO Altyapı Hizmetleri",
+    name: "Web, SEO ve Sosyal Medya Hizmetleri",
     itemListElement: [
       {
         "@type": "Offer",
-        itemOffered: {
-          "@type": "Service",
-          name: "Kurumsal Web Sitesi Tasarımı",
-        },
+        itemOffered: { "@type": "Service", name: "Kurumsal Web Sitesi Tasarımı" },
       },
       {
         "@type": "Offer",
-        itemOffered: { "@type": "Service", name: "Landing Page Altyapısı" },
+        itemOffered: { "@type": "Service", name: "Teknik SEO ve Site Yapılandırması" },
       },
       {
         "@type": "Offer",
-        itemOffered: {
-          "@type": "Service",
-          name: "Teknik SEO ve Site Yapılandırması",
-        },
+        itemOffered: { "@type": "Service", name: "Sosyal Medya Yönetimi" },
       },
       {
         "@type": "Offer",
-        itemOffered: {
-          "@type": "Service",
-          name: "GA4 ve GTM Ölçümleme Kurulumu",
-        },
+        itemOffered: { "@type": "Service", name: "GA4 ve GTM Ölçümleme Kurulumu" },
       },
     ],
   },
@@ -129,25 +128,57 @@ const breadcrumbSchema = {
   ],
 };
 
-/* ─── Sayfa verisi ────────────────────────────────────────────────────────── */
+/* ─── Hero çipleri ────────────────────────────────────────────────────────── */
 
-const navItems = [
-  { id: "genel-bakis", label: "Genel Bakış" },
-  { id: "kapsam", label: "Hizmet Kapsamı" },
-  { id: "surec", label: "Süreç" },
-  { id: "fiyat", label: "Yatırım" },
-  { id: "sonuclar", label: "Başarılar" },
-  { id: "sss", label: "SSS" },
-  { id: "iletisim", label: "İletişim" },
+const heroChips = (
+  <div className="flex flex-wrap gap-3 mt-8">
+    {[
+      { label: "Web Tasarım & Geliştirme", Icon: Monitor, href: "#web" },
+      { label: "SEO & Organik Büyüme", Icon: TrendingUp, href: "#seo" },
+      { label: "Sosyal Medya Yönetimi", Icon: Share2, href: "#sosyal-medya" },
+    ].map((chip) => (
+      <a
+        key={chip.label}
+        href={chip.href}
+        className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-bold text-white/70 transition-all hover:border-brand-purple/40 hover:bg-brand-purple/10 hover:text-white"
+      >
+        <chip.Icon className="h-4 w-4" />
+        {chip.label}
+      </a>
+    ))}
+  </div>
+);
+
+/* ─── Sosyal Medya bölümü verisi ──────────────────────────────────────────── */
+
+const SOSYAL_HIZMETLER = [
+  {
+    title: "Platform Yönetimi",
+    desc: "Instagram, LinkedIn, Facebook, TikTok — her platformun kendi dilinde, tutarlı marka sesiyle yönetim.",
+    platforms: ["Instagram", "LinkedIn", "Facebook", "TikTok"],
+    Icon: LayoutGrid,
+  },
+  {
+    title: "İçerik Üretimi & Yayın Takvimi",
+    desc: "Görsel tasarım, metin yazarlığı ve yayın planlaması. Aylık içerik takvimi + performans raporu.",
+    platforms: [],
+    Icon: Calendar,
+  },
+  {
+    title: "Topluluk Yönetimi & Etkileşim",
+    desc: "Yorum yanıtları, DM yönetimi, kriz iletişimi. Takipçiyle canlı ve samimi bir bağ.",
+    platforms: [],
+    Icon: MessageCircle,
+  },
+  {
+    title: "Influencer & İş Birlikleri",
+    desc: "Sektöre uygun influencer eşleştirmesi, brief hazırlığı, kampanya takibi ve raporlama.",
+    platforms: [],
+    Icon: Users,
+  },
 ];
 
-const heroTrustStrip = [
-  "Kurumsal Web Sitesi",
-  "Teknik SEO",
-  "Core Web Vitals",
-  "GA4 & GTM",
-  "Dönüşüm Altyapısı",
-];
+/* ─── Sonuç metrikleri ────────────────────────────────────────────────────── */
 
 const resultMetrics = [
   {
@@ -196,19 +227,20 @@ export default function WebSitesiSeoVeDonusumAltyapisiPage() {
 
       <ServicePageTemplate
         eyebrow="Hizmetler"
-        title="Web Sitesi, SEO ve"
-        accent="Dönüşüm Altyapısı"
-        description="Kurumsal web sitesi tasarımını yalnızca görsel bir çıktı olarak değil; teknik SEO, hız, ölçümleme ve dönüşüm odaklı büyüme altyapısı olarak ele alıyoruz."
+        title="Dijital Varlığınızı"
+        accent="Baştan İnşa Ediyoruz."
+        description="Web tasarım, SEO ve sosyal medya yönetimini tek stratejik çatı altında birleştiriyoruz."
         primaryCtaHref="/iletisim#analiz"
         primaryCtaLabel="Projenizi Değerlendirelim"
         secondaryCtaHref="/hizmetler"
         secondaryCtaLabel="Tüm Hizmetleri Gör"
-        navItems={navItems}
         heroVisual={<IcebergVisual />}
+        heroExtra={heroChips}
+        customNav={<DijitalMimariStickyNav />}
       >
-        {/* ── 1) HERO CONCEPT — WebsiteCheckup lead magnet ─────────────────── */}
+        {/* ── 1) WEB TASARIM — WebsiteCheckup lead magnet ──────────────────── */}
         <ScrollReveal y={18}>
-          <section className="border-y border-white/10 bg-black/30">
+          <section id="web" className="border-y border-white/10 bg-black/30">
             <div className="mx-auto max-w-7xl px-4 py-10 sm:px-5 md:px-6 md:py-12">
               <div className="mb-8 grid gap-6 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-end">
                 <div>
@@ -238,7 +270,13 @@ export default function WebSitesiSeoVeDonusumAltyapisiPage() {
           <section className="border-b border-white/10 bg-black/20">
             <div className="mx-auto max-w-6xl px-4 py-6 sm:px-5 md:px-6">
               <div className="flex flex-wrap justify-center gap-3">
-                {heroTrustStrip.map((item) => (
+                {[
+                  "Kurumsal Web Sitesi",
+                  "Teknik SEO",
+                  "Core Web Vitals",
+                  "GA4 & GTM",
+                  "Dönüşüm Altyapısı",
+                ].map((item) => (
                   <div
                     key={item}
                     className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.16em] text-white/60"
@@ -251,13 +289,12 @@ export default function WebSitesiSeoVeDonusumAltyapisiPage() {
           </section>
         </ScrollReveal>
 
-        {/* ── 2) PROBLEM / TEMELSİZ YAPI ───────────────────────────────────── */}
+        {/* ── 2) SEO — Problem / Temelsiz Yapı ─────────────────────────────── */}
         <ScrollReveal y={24}>
           <section
-            id="genel-bakis"
+            id="seo"
             className="mx-auto max-w-7xl px-4 py-16 sm:px-5 sm:py-20 md:px-6 md:py-24"
           >
-            {/* EsteticManifesto kendi grid'ini getiriyor */}
             <EsteticManifesto />
           </section>
         </ScrollReveal>
@@ -359,14 +396,8 @@ export default function WebSitesiSeoVeDonusumAltyapisiPage() {
                                 gradientUnits="userSpaceOnUse"
                               >
                                 <stop stopColor="rgba(255,255,255,0.05)" />
-                                <stop
-                                  offset="0.5"
-                                  stopColor="rgba(0,102,255,0.85)"
-                                />
-                                <stop
-                                  offset="1"
-                                  stopColor="rgba(255,255,255,0.08)"
-                                />
+                                <stop offset="0.5" stopColor="rgba(0,102,255,0.85)" />
+                                <stop offset="1" stopColor="rgba(255,255,255,0.08)" />
                               </linearGradient>
                             </defs>
                           </svg>
@@ -380,7 +411,69 @@ export default function WebSitesiSeoVeDonusumAltyapisiPage() {
           </section>
         </ScrollReveal>
 
-        {/* ── 7) SSS ───────────────────────────────────────────────────────── */}
+        {/* ── 7) SOSYAL MEDYA YÖNETİMİ ─────────────────────────────────────── */}
+        <ScrollReveal y={24}>
+          <section
+            id="sosyal-medya"
+            className="border-t border-white/10 bg-[linear-gradient(180deg,rgba(0,0,0,0.4)_0%,rgba(0,0,0,0.2)_100%)]"
+          >
+            <div className="mx-auto max-w-7xl px-4 py-20 sm:px-5 md:px-6 md:py-24">
+              {/* Header */}
+              <div className="mb-14 text-center">
+                <div className="inline-flex rounded-full border border-[#22c55e]/25 bg-[#22c55e]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[#22c55e]">
+                  Sosyal Medya Yönetimi
+                </div>
+                <h2 className="mt-5 text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+                  Platformlar Farklı,{" "}
+                  <span className="text-[#22c55e]">Strateji Tek</span>
+                </h2>
+                <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-gray-400 sm:text-base">
+                  Her platformun kendi dilinde, tutarlı marka sesiyle içerik
+                  üretiminden topluluk yönetimine — tüm süreçleri üstleniyoruz.
+                </p>
+              </div>
+
+              {/* Kartlar 2×2 */}
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                {SOSYAL_HIZMETLER.map((item) => (
+                  <div
+                    key={item.title}
+                    className="group relative rounded-2xl border border-white/8 bg-white/[0.03] p-7 transition-all duration-300 hover:border-[#22c55e]/25 hover:bg-[#22c55e]/[0.04] hover:shadow-[0_0_40px_rgba(34,197,94,0.08)]"
+                  >
+                    <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#22c55e]/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-[#22c55e] transition-all duration-300 group-hover:border-[#22c55e]/30 group-hover:bg-[#22c55e]/10">
+                      <item.Icon className="h-5 w-5" strokeWidth={1.5} />
+                    </div>
+
+                    <h3 className="mt-5 text-lg font-bold text-white transition-colors duration-300 group-hover:text-[#22c55e]">
+                      {item.title}
+                    </h3>
+
+                    <p className="mt-3 text-sm leading-relaxed text-white/55">
+                      {item.desc}
+                    </p>
+
+                    {item.platforms.length > 0 && (
+                      <div className="mt-5 flex flex-wrap gap-2">
+                        {item.platforms.map((p) => (
+                          <span
+                            key={p}
+                            className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white/50"
+                          >
+                            {p}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </ScrollReveal>
+
+        {/* ── 8) SSS ───────────────────────────────────────────────────────── */}
         <FAQSection
           id="sss"
           title="Teknik Sorularınız"
@@ -390,7 +483,7 @@ export default function WebSitesiSeoVeDonusumAltyapisiPage() {
           items={webSeoFaqs}
         />
 
-        {/* ── 8) FİNAL CTA — ContactCTA bileşeni ──────────────────────────── */}
+        {/* ── 9) FİNAL CTA ─────────────────────────────────────────────────── */}
         <ContactCTA context="web-seo" id="iletisim" />
       </ServicePageTemplate>
     </>

@@ -14,7 +14,7 @@ import { cn } from "@/utils/cn";
 const SERVICES = [
   {
     href: "/hizmetler/performans-pazarlama",
-    label: "Performans & Büyüme",
+    label: "PPC & Performans Pazarlama",
     desc: "Google Ads, Meta Ads, ölçülebilir ROAS",
     icon: Crosshair,
   },
