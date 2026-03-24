@@ -5,7 +5,7 @@ import FAQSection from "@/components/sections/faq/FAQSection";
 import { homeFaqs } from "@/components/sections/faq/faq-data";
 import CaseStudiesSection from "@/components/sections/case-studies/CaseStudiesSection";
 import { homeCaseStudies } from "@/components/sections/case-studies/case-study-data";
-import AnalysisForm from "@/components/sections/AnalysisForm";
+import AnalysisForm from "@/components/forms/AnalysisForm";
 import ProcessRoadmap from "@/components/sections/ProcessRoadmap";
 import Reveal from "@/components/ui/Reveal";
 import GrowthEcosystem from "@/components/sections/GrowthEcosystem";

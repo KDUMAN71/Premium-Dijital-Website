@@ -21,9 +21,7 @@ import {
 import Link from "next/link";
 import IcebergVisual from "@/components/sections/IcebergVisual";
 import WebsiteCheckup from "@/components/sections/WebsiteCheckup";
-import EsteticManifesto, {
-  ProblemSignals,
-} from "@/components/sections/EsteticManifesto";
+import EsteticManifesto from "@/components/sections/EsteticManifesto";
 import ServiceProfileSelector from "@/components/sections/ServiceProfileSelector";
 import DesignShowcase from "@/components/sections/DesignShowcase";
 import ProcessTimeline from "@/components/sections/Processtimeline";

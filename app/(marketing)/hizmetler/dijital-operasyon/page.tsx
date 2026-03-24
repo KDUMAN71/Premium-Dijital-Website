@@ -1,68 +1,121 @@
-import Link from "next/link";
+import type { Metadata } from "next";
+import DijitalOperasyonClient from "./DijitalOperasyonClient";
 
-export default function DijitalOperasyonSistemiPage() {
+/* ─── Metadata ─────────────────────────────────────────────────────────────── */
+
+export const metadata: Metadata = {
+  title: "Dijital Operasyon & AI Destekli İş Süreçleri | Premium Dijital",
+  description:
+    "Make.com, HubSpot, Zoho, AI Agents, Google Workspace ve daha fazlasıyla iş süreçlerinizi otomatize edin. Satış, operasyon, müşteri iletişimi ve veri zekasını tek bir dijital sistem altında birleştiriyoruz.",
+};
+
+/* ─── JSON-LD Schemas ───────────────────────────────────────────────────────── */
+
+const pageUrl = "https://premiumdijital.com/hizmetler/dijital-operasyon";
+
+const webPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: "Dijital Operasyon & AI Destekli İş Süreçleri",
+  url: pageUrl,
+  description:
+    "İş süreçlerini otomatize eden, satış hattını güçlendiren ve veri zekasını etkinleştiren dijital operasyon sistemi.",
+  inLanguage: "tr-TR",
+  isPartOf: {
+    "@type": "WebSite",
+    name: "Premium Dijital",
+    url: "https://premiumdijital.com",
+  },
+};
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: "Dijital Operasyon & AI Destekli İş Süreçleri",
+  serviceType: "Dijital Operasyon Danışmanlığı",
+  provider: {
+    "@type": "Organization",
+    name: "Premium Dijital",
+    url: "https://premiumdijital.com",
+  },
+  areaServed: "TR",
+  description:
+    "Make.com, HubSpot, Zoho, AI Agents, Google Workspace entegrasyonu ile iş süreçleri otomasyonu, satış hattı kurulumu ve veri zekası sistemi.",
+  url: pageUrl,
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Dijital Operasyon Yetenek Paketleri",
+    itemListElement: [
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: "Satış Makinesi" },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: "Kurumsal Hafıza" },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "Service",
+          name: "Kesintisiz Müşteri Deneyimi",
+        },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: "Veri Zekası" },
+      },
+      {
+        "@type": "Offer",
+        itemOffered: { "@type": "Service", name: "Dijital İş Gücü" },
+      },
+    ],
+  },
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Anasayfa",
+      item: "https://premiumdijital.com",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Hizmetler",
+      item: "https://premiumdijital.com/hizmetler",
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: "Dijital Operasyon",
+      item: pageUrl,
+    },
+  ],
+};
+
+/* ─── Sayfa ─────────────────────────────────────────────────────────────────── */
+
+export default function DijitalOperasyonPage() {
   return (
-    <main className="relative bg-brand-dark text-white">
-      <section className="relative mx-auto max-w-6xl px-4 py-20 sm:px-5 sm:py-24 md:px-6 md:py-32">
-        <div className="inline-flex items-center rounded-full border border-brand-blue/20 bg-white/5 px-4 py-2">
-          <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/85 sm:text-xs sm:tracking-[0.28em]">
-            Hizmetler
-          </span>
-        </div>
-
-        <h1 className="mt-5 text-4xl font-bold tracking-tighter uppercase text-white sm:text-5xl md:text-7xl">
-          Dijital <span className="text-brand-blue">Operasyon Sistemi</span>
-        </h1>
-
-        <p className="mt-6 max-w-3xl text-base leading-relaxed text-gray-300 sm:text-lg md:text-xl">
-          CRM kurulumu, pazarlama otomasyonu ve AI destekli iş akışlarıyla
-          operasyonlarınızı sistemleştiriyor, ölçeklenebilir bir dijital altyapı
-          kuruyoruz.
-        </p>
-
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            "CRM Kurulumu & Entegrasyonu",
-            "Pazarlama Otomasyonu",
-            "AI Destekli İş Akışları",
-            "Raporlama & Analitik Altyapısı",
-          ].map((item) => (
-            <div
-              key={item}
-              className="rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm text-white/80"
-            >
-              {item}
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-12 rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-2xl sm:p-8 md:p-10">
-          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            Sayfa Hazırlanıyor
-          </h2>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-gray-300 sm:text-base">
-            Bu sayfayı; CRM süreçleri, otomasyon senaryoları, AI iş akışı
-            örnekleri, entegrasyon haritası ve operasyon ROI metrikleriyle
-            detaylandıracağız.
-          </p>
-
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Link
-              href="/iletisim#analiz"
-              className="inline-flex items-center justify-center rounded-full bg-brand-blue px-6 py-4 text-sm font-bold text-white transition hover:shadow-[0_0_28px_rgba(0,0,200,0.22)]"
-            >
-              Ücretsiz Analiz Al
-            </Link>
-
-            <Link
-              href="/"
-              className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 py-4 text-sm font-semibold text-white/85 transition hover:bg-white/10 hover:text-white"
-            >
-              Anasayfaya Dön
-            </Link>
-          </div>
-        </div>
-      </section>
-    </main>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <DijitalOperasyonClient />
+    </>
   );
 }
