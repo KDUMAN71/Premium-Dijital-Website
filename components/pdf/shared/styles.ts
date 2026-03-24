@@ -1,15 +1,16 @@
 import { Font } from "@react-pdf/renderer";
+import path from "path";
 
-// Türkçe karakter desteği için WOFF format (v12 — test edilmiş çalışıyor)
+// TTF — Türkçe karakter tam desteği (İ Ğ Ş Ü Ö Ç ı ğ ş ü ö ç ₺)
 Font.register({
   family: "Inter",
   fonts: [
     {
-      src: "https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff",
+      src: path.join(process.cwd(), "public/fonts/Inter-Regular.ttf"),
       fontWeight: 400,
     },
     {
-      src: "https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuI6fAZ9hjp-Ek-_EeA.woff",
+      src: path.join(process.cwd(), "public/fonts/Inter-Bold.ttf"),
       fontWeight: 700,
     },
   ],
@@ -19,8 +20,10 @@ export const COLORS = {
   blue: "#0000C8",
   purple: "#BE29EC",
   dark: "#1A1A1A",
+  black: "#111111",
   gray: "#666666",
   lightGray: "#F5F5F5",
+  midGray: "#DDDDDD",
   border: "#E5E5E5",
   white: "#FFFFFF",
   success: "#1A7A3F",
@@ -31,17 +34,16 @@ export const COLORS = {
   dangerBg: "#FDEDEB",
   blueBg: "#EEF0FF",
   purpleBg: "#F9EEFF",
+  // Kapak gradient simülasyonu
+  grad1: "#BE29EC",
+  grad2: "#8A1ECC",
+  grad3: "#5512AA",
+  grad4: "#2A08C8",
+  grad5: "#0000C8",
 };
 
-// Skor rengini döndür
 export function scoreColor(score: number): string {
   if (score >= 75) return COLORS.success;
   if (score >= 50) return COLORS.warning;
   return COLORS.danger;
-}
-
-export function scoreLabel(score: number): string {
-  if (score >= 75) return "İyi";
-  if (score >= 50) return "Gelişim";
-  return "Kritik";
 }

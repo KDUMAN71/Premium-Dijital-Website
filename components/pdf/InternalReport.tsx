@@ -11,222 +11,113 @@ import { COLORS, scoreColor } from "@/components/pdf/shared/styles";
 import type { AnalysisData } from "@/types/analysis";
 
 /* ─────────────────────────────────────────────
-   STILLER (InternalReport'a özgü)
+   STİLLER (InternalReport'a özgü)
 ───────────────────────────────────────────── */
 const S = StyleSheet.create({
-  page: {
+  coverPage: {
     backgroundColor: COLORS.white,
     fontFamily: "Inter",
-    color: COLORS.dark,
-    fontSize: 10,
-    paddingBottom: 64,
+    flexDirection: "row",
+    height: "100%",
   },
-  topAccent: {
-    height: 8,
-    backgroundColor: COLORS.blue,
-    width: "100%",
+  coverSidebar: {
+    width: 72,
+    flexDirection: "column",
   },
-  topAccentInternal: {
-    height: 8,
-    backgroundColor: COLORS.danger,
-    width: "100%",
+  coverSidebarTop: {
+    backgroundColor: "#7A0000",
+    paddingVertical: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: 90,
   },
-  container: {
-    paddingHorizontal: 52,
-    paddingTop: 32,
+  coverSidebarLabel: {
+    fontSize: 7,
+    fontWeight: 700,
+    color: COLORS.white,
+    letterSpacing: 2,
+    textTransform: "uppercase",
+    textAlign: "center",
+  },
+  gradBlock1: { flex: 1, backgroundColor: COLORS.grad1 },
+  gradBlock2: { flex: 1, backgroundColor: COLORS.grad2 },
+  gradBlock3: { flex: 1, backgroundColor: COLORS.grad3 },
+  gradBlock4: { flex: 1, backgroundColor: COLORS.grad4 },
+  gradBlock5: { flex: 1, backgroundColor: COLORS.grad5 },
+
+  coverContent: {
     flex: 1,
-  },
-
-  pageFooter: {
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 48,
-    paddingHorizontal: 52,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: "column",
     justifyContent: "space-between",
-    borderTopWidth: 0.5,
-    borderTopColor: COLORS.border,
+    padding: "52 44",
   },
-  pageFooterText: {
-    fontSize: 7,
-    color: "#AAAAAA",
-    letterSpacing: 0.8,
+  coverMainTitle: {
+    fontSize: 30,
+    fontWeight: 700,
+    color: COLORS.dark,
+    lineHeight: 1.15,
+    letterSpacing: -0.5,
   },
-  pageNumber: {
-    fontSize: 7,
-    color: "#AAAAAA",
+  coverDivider: {
+    height: 2,
+    backgroundColor: COLORS.dark,
+    marginTop: 22,
+    marginBottom: 30,
   },
-
-  pageHeader: {
+  coverClientLabel: {
+    fontSize: 8,
+    color: "#999999",
+    textTransform: "uppercase",
+    letterSpacing: 2.5,
+    marginBottom: 6,
+  },
+  coverClientName: {
+    fontSize: 22,
+    fontWeight: 700,
+    color: COLORS.dark,
+    marginBottom: 20,
+  },
+  coverMetaRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 28,
+    gap: 24,
+    marginTop: 8,
   },
-  pageHeaderBrand: {
-    fontSize: 11,
+  coverMetaItem: {
+    fontSize: 9,
+    color: COLORS.gray,
+    lineHeight: 1.8,
+  },
+  coverMetaValue: {
+    fontSize: 9,
+    fontWeight: 700,
+    color: COLORS.dark,
+  },
+  coverFooterBrand: {
+    fontSize: 13,
     fontWeight: 700,
     color: COLORS.blue,
     letterSpacing: 0.5,
   },
-  pageHeaderBadge: {
+  coverFooterTagline: {
     fontSize: 7,
-    fontWeight: 700,
-    color: COLORS.danger,
-    textTransform: "uppercase",
-    letterSpacing: 1.5,
-    borderWidth: 0.5,
-    borderColor: COLORS.danger,
-    paddingVertical: 3,
-    paddingHorizontal: 8,
-    borderRadius: 3,
-  },
-
-  sectionLabel: {
-    fontSize: 8,
-    fontWeight: 700,
     color: COLORS.purple,
-    letterSpacing: 3,
+    letterSpacing: 2,
     textTransform: "uppercase",
-    marginBottom: 6,
+    marginTop: 3,
   },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: 700,
-    color: COLORS.dark,
-    marginBottom: 20,
-    lineHeight: 1.2,
-  },
-  divider: {
-    height: 0.5,
-    backgroundColor: COLORS.border,
-    marginVertical: 12,
-  },
-
-  /* ── Kapak ── */
-  coverHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: 48,
-  },
-  coverBrand: {
-    fontSize: 18,
-    fontWeight: 700,
-    color: COLORS.blue,
-    letterSpacing: 1,
-  },
-  coverTagline: {
-    fontSize: 7,
-    textTransform: "uppercase",
-    letterSpacing: 3,
-    color: COLORS.purple,
-    marginTop: 4,
-  },
-  coverReportMeta: {
+  coverFooterMeta: {
     fontSize: 8,
     color: "#CCCCCC",
-    textAlign: "right",
-    lineHeight: 1.6,
+    marginTop: 10,
   },
-  coverPreTitle: {
-    fontSize: 9,
-    fontWeight: 700,
-    color: COLORS.purple,
-    letterSpacing: 4,
-    textTransform: "uppercase",
-    marginBottom: 12,
-  },
-  coverMainTitle: {
-    fontSize: 38,
-    fontWeight: 700,
-    color: COLORS.dark,
-    lineHeight: 1.1,
-    letterSpacing: -0.5,
-  },
-  clientBox: {
-    marginTop: 40,
-    paddingLeft: 20,
-    borderLeftWidth: 4,
-    borderLeftColor: COLORS.blue,
-  },
-  clientBoxLabel: {
-    fontSize: 8,
-    color: COLORS.gray,
-    textTransform: "uppercase",
-    letterSpacing: 2,
-    marginBottom: 6,
-  },
-  clientBoxName: {
-    fontSize: 24,
-    fontWeight: 700,
-    color: COLORS.dark,
-    marginBottom: 10,
-  },
-  badgeRow: {
-    flexDirection: "row",
-    gap: 8,
-  },
-  badge: {
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    borderRadius: 4,
-    alignSelf: "flex-start",
-  },
-  badgeText: {
-    fontSize: 8,
-    fontWeight: 700,
-    textTransform: "uppercase",
-    letterSpacing: 1,
-  },
-  scoreBox: {
-    marginTop: 32,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 20,
-    padding: 16,
-    backgroundColor: COLORS.lightGray,
-    borderRadius: 6,
-  },
-  scoreCircle: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  scoreCircleValue: {
-    fontSize: 20,
-    fontWeight: 700,
-    color: COLORS.white,
-    lineHeight: 1,
-  },
-  scoreBoxLabel: {
-    fontSize: 8,
-    color: COLORS.gray,
-    textTransform: "uppercase",
-    letterSpacing: 1.5,
-    marginBottom: 4,
-  },
-  scoreBoxTitle: {
-    fontSize: 16,
-    fontWeight: 700,
-    color: COLORS.dark,
-  },
-
-  /* ── Gizli Damga ── */
   internalStamp: {
-    position: "absolute",
-    bottom: 80,
-    right: 52,
-    borderWidth: 2,
+    marginTop: 14,
+    borderWidth: 1.5,
     borderColor: COLORS.danger,
     paddingVertical: 6,
     paddingHorizontal: 14,
-    borderRadius: 2,
+    borderRadius: 3,
+    alignSelf: "flex-start",
   },
   internalStampText: {
     fontSize: 9,
@@ -236,11 +127,123 @@ const S = StyleSheet.create({
     letterSpacing: 2,
   },
 
-  /* ── İç Not Kutusu (Her sayfada) ── */
-  internalNote: {
+  /* ── İÇ SAYFA ── */
+  innerPage: {
+    backgroundColor: COLORS.white,
+    fontFamily: "Inter",
+    color: COLORS.dark,
+    fontSize: 10,
+    paddingBottom: 72,
+  },
+
+  /* ── HEADER ── */
+  pageHeaderWrap: { marginBottom: 0 },
+  pageHeaderTop: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 40,
+    paddingVertical: 8,
+    borderBottomWidth: 0.5,
+    borderBottomColor: COLORS.border,
+  },
+  pageHeaderBrand: {
+    fontSize: 8,
+    fontWeight: 700,
+    color: COLORS.blue,
+    letterSpacing: 1.5,
+  },
+  pageHeaderBadge: {
+    fontSize: 7,
+    fontWeight: 700,
+    color: COLORS.danger,
+    textTransform: "uppercase",
+    letterSpacing: 1.5,
+    borderWidth: 0.5,
+    borderColor: COLORS.danger,
+    paddingVertical: 2,
+    paddingHorizontal: 7,
+    borderRadius: 3,
+  },
+  // Kırmızı ton iç rapor başlık şeridi
+  pageHeaderBand: {
+    backgroundColor: "#1A0000",
+    paddingHorizontal: 40,
+    paddingVertical: 11,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  pageHeaderBandLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 16,
+  },
+  pageHeaderBandNum: {
+    fontSize: 8,
+    color: "rgba(255,255,255,0.4)",
+    letterSpacing: 2,
+    fontWeight: 700,
+  },
+  pageHeaderBandCategory: {
+    fontSize: 10,
+    fontWeight: 700,
+    color: COLORS.white,
+    letterSpacing: 2.5,
+    textTransform: "uppercase",
+  },
+  pageHeaderBandPageNum: {
+    fontSize: 20,
+    fontWeight: 700,
+    color: "rgba(255,255,255,0.12)",
+  },
+  pageContentHeader: {
+    paddingHorizontal: 40,
+    paddingTop: 22,
+  },
+  sectionBigTitle: {
+    fontSize: 20,
+    fontWeight: 700,
+    color: COLORS.dark,
+    marginBottom: 4,
+    lineHeight: 1.2,
+  },
+  sectionDivider: {
+    height: 0.5,
+    backgroundColor: COLORS.border,
     marginTop: 14,
-    padding: "10 14",
-    backgroundColor: "#F8F8F8",
+    marginBottom: 18,
+  },
+
+  /* ── BODY ── */
+  body: {
+    paddingHorizontal: 40,
+  },
+
+  /* ── FOOTER ── */
+  pageFooter: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "#1A0000",
+    paddingVertical: 10,
+    paddingHorizontal: 40,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  footerColLeft: { flex: 1 },
+  footerColCenter: { flex: 2, alignItems: "center" },
+  footerColRight: { flex: 1, alignItems: "flex-end" },
+  footerText: { fontSize: 6.5, color: "rgba(255,255,255,0.45)", lineHeight: 1.7 },
+  footerTextAccent: { fontSize: 6.5, color: COLORS.danger, lineHeight: 1.7 },
+
+  /* ── İÇ NOT ── */
+  internalNote: {
+    marginTop: 12,
+    padding: "9 14",
+    backgroundColor: "#FFF5F5",
     borderRadius: 4,
     borderLeftWidth: 3,
     borderLeftColor: COLORS.danger,
@@ -255,21 +258,121 @@ const S = StyleSheet.create({
   },
   internalNoteText: {
     fontSize: 8.5,
-    color: "#444444",
+    color: "#444",
     lineHeight: 1.6,
   },
 
-  /* ── Yönetici Özeti ── */
+  /* ── METRİK ── */
+  metricsRow: {
+    flexDirection: "row",
+    gap: 10,
+    marginBottom: 16,
+  },
+  metricBox: {
+    flex: 1,
+    padding: "11 10",
+    backgroundColor: COLORS.lightGray,
+    borderRadius: 4,
+    alignItems: "center",
+  },
+  metricValue: {
+    fontSize: 18,
+    fontWeight: 700,
+    color: COLORS.blue,
+    marginBottom: 3,
+    lineHeight: 1,
+  },
+  metricLabel: {
+    fontSize: 7,
+    color: COLORS.gray,
+    textTransform: "uppercase",
+    letterSpacing: 0.8,
+    textAlign: "center",
+  },
+  scoreCircle: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    alignItems: "center",
+    justifyContent: "center",
+    flexShrink: 0,
+    marginRight: 16,
+  },
+  scoreCircleVal: {
+    fontSize: 24,
+    fontWeight: 700,
+    color: COLORS.white,
+    lineHeight: 1,
+  },
+  scoreCircleSub: {
+    fontSize: 7,
+    color: "rgba(255,255,255,0.75)",
+    letterSpacing: 0.8,
+    marginTop: 2,
+  },
+
+  /* ── LİSTELER ── */
+  listTitle: {
+    fontSize: 8,
+    fontWeight: 700,
+    color: COLORS.dark,
+    textTransform: "uppercase",
+    letterSpacing: 1.5,
+    marginBottom: 7,
+  },
+  listRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    marginBottom: 5,
+    gap: 8,
+  },
+  listBulletDanger: {
+    fontSize: 9,
+    color: COLORS.danger,
+    width: 12,
+    flexShrink: 0,
+    lineHeight: 1.5,
+  },
+  listBulletBlue: {
+    fontSize: 9,
+    color: COLORS.blue,
+    width: 12,
+    flexShrink: 0,
+    lineHeight: 1.5,
+  },
+  listText: {
+    fontSize: 9,
+    color: COLORS.dark,
+    lineHeight: 1.55,
+    flex: 1,
+  },
+
+  gainBox: {
+    marginTop: 12,
+    padding: "10 14",
+    backgroundColor: COLORS.blue,
+    borderRadius: 4,
+  },
+  gainLabel: {
+    fontSize: 7,
+    fontWeight: 700,
+    color: "rgba(255,255,255,0.6)",
+    textTransform: "uppercase",
+    letterSpacing: 2,
+    marginBottom: 4,
+  },
+  gainText: {
+    fontSize: 9,
+    color: COLORS.white,
+    lineHeight: 1.6,
+  },
+
+  /* ── YÖNETİCİ ÖZETİ ── */
   summaryText: {
     fontSize: 10,
     color: COLORS.gray,
-    lineHeight: 1.7,
+    lineHeight: 1.75,
     marginBottom: 16,
-  },
-  issueTable: {
-    marginTop: 4,
-    borderRadius: 4,
-    overflow: "hidden",
   },
   issueTableHeader: {
     flexDirection: "row",
@@ -294,17 +397,9 @@ const S = StyleSheet.create({
     borderLeftWidth: 3,
     borderLeftColor: COLORS.blue,
   },
-  issueRowAlt: {
-    backgroundColor: COLORS.lightGray,
-  },
-  issueCell: {
-    fontSize: 9,
-    color: COLORS.dark,
-    flex: 1,
-    lineHeight: 1.5,
-    paddingRight: 8,
-  },
-  issueCellRed: {
+  issueRowAlt: { backgroundColor: COLORS.lightGray },
+  issueCell: { fontSize: 9, color: COLORS.dark, flex: 1, lineHeight: 1.5, paddingRight: 8 },
+  issueCellDanger: {
     fontSize: 9,
     color: COLORS.danger,
     flex: 1,
@@ -312,206 +407,40 @@ const S = StyleSheet.create({
     lineHeight: 1.5,
     paddingRight: 8,
   },
-  categoryGrid: {
-    flexDirection: "row",
-    marginTop: 16,
-    gap: 10,
-  },
+  categoryGrid: { flexDirection: "row", marginTop: 16, gap: 10 },
   categoryCard: {
     flex: 1,
-    padding: 12,
+    padding: "12 10",
     backgroundColor: COLORS.lightGray,
     borderRadius: 4,
     alignItems: "center",
   },
-  categoryScore: {
-    fontSize: 22,
-    fontWeight: 700,
-    marginBottom: 4,
-  },
-  categoryName: {
-    fontSize: 7,
-    color: COLORS.gray,
-    textTransform: "uppercase",
-    letterSpacing: 1,
-    textAlign: "center",
-  },
-
-  /* ── Analiz Sayfası ── */
-  analysisTop: {
-    flexDirection: "row",
-    gap: 16,
-    marginBottom: 14,
-  },
-  analysisBigScore: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    alignItems: "center",
-    justifyContent: "center",
-    flexShrink: 0,
-  },
-  analysisBigScoreVal: {
-    fontSize: 24,
-    fontWeight: 700,
-    color: COLORS.white,
-    lineHeight: 1,
-  },
-  analysisBigScoreLabel: {
-    fontSize: 7,
-    color: "rgba(255,255,255,0.8)",
-    textTransform: "uppercase",
-    letterSpacing: 1,
-    marginTop: 2,
-  },
-  metricsRow: {
-    flex: 1,
-    flexDirection: "row",
-    gap: 10,
-  },
-  metricBox: {
-    flex: 1,
-    padding: 10,
-    backgroundColor: COLORS.lightGray,
-    borderRadius: 4,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  metricValue: {
-    fontSize: 16,
-    fontWeight: 700,
-    color: COLORS.blue,
-    marginBottom: 3,
-  },
-  metricLabel: {
+  categoryScoreVal: { fontSize: 22, fontWeight: 700, marginBottom: 4, lineHeight: 1 },
+  categoryScoreName: {
     fontSize: 7,
     color: COLORS.gray,
     textTransform: "uppercase",
     letterSpacing: 0.8,
     textAlign: "center",
   },
-  findingsTitle: {
-    fontSize: 8,
-    fontWeight: 700,
-    color: COLORS.dark,
-    textTransform: "uppercase",
-    letterSpacing: 1.5,
-    marginBottom: 6,
-  },
-  findingRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    marginBottom: 5,
-    gap: 8,
-  },
-  findingBullet: {
-    fontSize: 9,
-    color: COLORS.danger,
-    lineHeight: 1.4,
-    width: 10,
-    flexShrink: 0,
-  },
-  findingText: {
-    fontSize: 9,
-    color: COLORS.dark,
-    lineHeight: 1.5,
-    flex: 1,
-  },
-  recBullet: {
-    fontSize: 9,
-    color: COLORS.blue,
-    lineHeight: 1.4,
-    width: 10,
-    flexShrink: 0,
-  },
-  recText: {
-    fontSize: 9,
-    color: COLORS.dark,
-    lineHeight: 1.5,
-    flex: 1,
-  },
-  gainBox: {
-    marginTop: 10,
-    padding: "10 14",
-    backgroundColor: COLORS.blue,
-    borderRadius: 4,
-  },
-  gainLabel: {
-    fontSize: 7,
-    fontWeight: 700,
-    color: "rgba(255,255,255,0.7)",
-    textTransform: "uppercase",
-    letterSpacing: 2,
-    marginBottom: 3,
-  },
-  gainText: {
-    fontSize: 9,
-    color: COLORS.white,
-    lineHeight: 1.6,
-  },
-  techStackRow: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 6,
-    marginBottom: 10,
-  },
-  techBadge: {
-    paddingVertical: 3,
-    paddingHorizontal: 8,
-    backgroundColor: "#EEF0FF",
-    borderRadius: 4,
-  },
-  techBadgeText: {
-    fontSize: 8,
-    color: COLORS.blue,
-    fontWeight: 700,
-  },
-  ctaBox: {
-    marginTop: 20,
-    padding: 24,
-    backgroundColor: COLORS.blue,
-    borderRadius: 6,
-  },
-  ctaTitle: {
-    fontSize: 18,
-    fontWeight: 700,
-    color: COLORS.white,
-    lineHeight: 1.2,
-    marginBottom: 8,
-  },
-  ctaMeta: {
-    fontSize: 9,
-    color: "rgba(255,255,255,0.75)",
-    lineHeight: 1.8,
-  },
-  ctaDivider: {
-    height: 0.5,
-    backgroundColor: "rgba(255,255,255,0.2)",
-    marginVertical: 12,
-  },
-  ctaContact: {
-    flexDirection: "row",
-    gap: 20,
-    flexWrap: "wrap",
-  },
-  ctaContactItem: {
-    fontSize: 9,
-    fontWeight: 700,
-    color: COLORS.white,
-    letterSpacing: 0.5,
-  },
 
-  /* ── Aksiyon Planı (Sayfa 7) ── */
-  actionTable: {
-    marginTop: 8,
-  },
+  /* ── OPERASYON ── */
+  techRow: { flexDirection: "row", flexWrap: "wrap", gap: 6, marginBottom: 10 },
+  techBadge: { paddingVertical: 4, paddingHorizontal: 10, backgroundColor: COLORS.blueBg, borderRadius: 4 },
+  techBadgeText: { fontSize: 8, color: COLORS.blue, fontWeight: 700 },
+  ctaBox: { marginTop: 18, padding: "22 26", backgroundColor: COLORS.blue, borderRadius: 6 },
+  ctaTitle: { fontSize: 17, fontWeight: 700, color: COLORS.white, lineHeight: 1.2, marginBottom: 8 },
+  ctaSubtext: { fontSize: 9, color: "rgba(255,255,255,0.7)", lineHeight: 1.8, marginBottom: 12 },
+  ctaDivider: { height: 0.5, backgroundColor: "rgba(255,255,255,0.2)", marginBottom: 10 },
+  ctaContactRow: { flexDirection: "row", gap: 20, flexWrap: "wrap" },
+  ctaContactItem: { fontSize: 9, fontWeight: 700, color: COLORS.white },
+
+  /* ── AKSİYON TABLOSU ── */
   actionTableHeader: {
     flexDirection: "row",
-    backgroundColor: COLORS.dark,
+    backgroundColor: "#1A0000",
     paddingVertical: 8,
     paddingHorizontal: 12,
-    borderRadius: 4,
-    marginBottom: 2,
   },
   actionTableHeaderCell: {
     fontSize: 7,
@@ -530,9 +459,11 @@ const S = StyleSheet.create({
   },
   priorityBadge: {
     paddingVertical: 3,
-    paddingHorizontal: 8,
+    paddingHorizontal: 7,
     borderRadius: 3,
     alignSelf: "flex-start",
+    width: 50,
+    alignItems: "center",
   },
   priorityText: {
     fontSize: 7,
@@ -540,23 +471,12 @@ const S = StyleSheet.create({
     textTransform: "uppercase",
     letterSpacing: 0.8,
   },
-  actionTask: {
-    fontSize: 9,
-    color: COLORS.dark,
-    lineHeight: 1.5,
-    flex: 1,
-    paddingHorizontal: 10,
-  },
-  actionMeta: {
-    fontSize: 8,
-    color: COLORS.gray,
-    width: 70,
-    textAlign: "center",
-  },
+  actionTask: { fontSize: 9, color: COLORS.dark, lineHeight: 1.5, flex: 1, paddingHorizontal: 10 },
+  actionMeta: { fontSize: 8, color: COLORS.gray, width: 70, textAlign: "center" },
 
-  /* ── Satış Notu (Sayfa 8) ── */
+  /* ── SATIŞ NOTU ── */
   salesBox: {
-    padding: "16 20",
+    padding: "14 18",
     backgroundColor: COLORS.lightGray,
     borderRadius: 4,
     marginTop: 8,
@@ -571,15 +491,11 @@ const S = StyleSheet.create({
     letterSpacing: 2,
     marginBottom: 6,
   },
-  salesText: {
-    fontSize: 10,
-    color: COLORS.dark,
-    lineHeight: 1.7,
-  },
+  salesText: { fontSize: 10, color: COLORS.dark, lineHeight: 1.7 },
   budgetBox: {
-    marginTop: 16,
+    marginTop: 14,
     padding: "12 16",
-    backgroundColor: "#1A7A3F",
+    backgroundColor: COLORS.success,
     borderRadius: 4,
   },
   budgetLabel: {
@@ -590,67 +506,107 @@ const S = StyleSheet.create({
     letterSpacing: 2,
     marginBottom: 4,
   },
-  budgetValue: {
-    fontSize: 22,
-    fontWeight: 700,
-    color: COLORS.white,
-  },
+  budgetValue: { fontSize: 22, fontWeight: 700, color: COLORS.white },
 });
 
 /* ─────────────────────────────────────────────
-   PAYLAŞILAN ALT BİLEŞENLER
+   ALT BİLEŞENLER
 ───────────────────────────────────────────── */
-function PageFooter() {
+function Footer() {
   return (
     <View style={S.pageFooter} fixed>
-      <Text style={S.pageFooterText}>
-        © {new Date().getFullYear()} PREMIUM DIJITAL · GİZLİ — SADECE İÇ KULLANIM
-      </Text>
-      <Text
-        style={S.pageNumber}
-        render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`}
-      />
+      <View style={S.footerColLeft}>
+        <Text style={S.footerText}>0 212 982 57 24</Text>
+        <Text style={S.footerText}>info@premiumdijital.com</Text>
+      </View>
+      <View style={S.footerColCenter}>
+        <Text style={[S.footerText, { textAlign: "center" }]}>
+          Premium Dijital Reklam Ajansi — Dahili Kullanim
+        </Text>
+        <Text style={[S.footerText, { textAlign: "center" }]}>
+          Ziya Gokalp Mah. Mall Of Istanbul The Office No:7E D:136, Baskasehir/Istanbul
+        </Text>
+      </View>
+      <View style={S.footerColRight}>
+        <Text style={S.footerTextAccent}>IC RAPOR</Text>
+        <Text
+          style={S.footerText}
+          render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`}
+        />
+      </View>
     </View>
   );
 }
 
-function PageHeader({ clientName }: { clientName: string }) {
+function PageHeader({
+  pageNum,
+  category,
+  clientName,
+  title,
+}: {
+  pageNum: string;
+  category: string;
+  clientName: string;
+  title: string;
+}) {
   return (
-    <View style={S.pageHeader}>
-      <Text style={S.pageHeaderBrand}>PREMIUM DIJITAL</Text>
-      <Text style={S.pageHeaderBadge}>GİZLİ — İÇ KULLANIM</Text>
+    <View style={S.pageHeaderWrap} fixed>
+      <View style={S.pageHeaderTop}>
+        <Text style={S.pageHeaderBrand}>PREMIUM DIJITAL</Text>
+        <Text style={S.pageHeaderBadge}>GIZLI — IC KULLANIM</Text>
+      </View>
+      <View style={S.pageHeaderBand}>
+        <View style={S.pageHeaderBandLeft}>
+          <Text style={S.pageHeaderBandNum}>{pageNum}</Text>
+          <Text style={S.pageHeaderBandCategory}>{category}</Text>
+        </View>
+        <Text
+          style={S.pageHeaderBandPageNum}
+          render={({ pageNumber }) => String(pageNumber).padStart(2, "0")}
+        />
+      </View>
+      <View style={S.pageContentHeader}>
+        <Text style={S.sectionBigTitle}>{title}</Text>
+        <View style={S.sectionDivider} />
+      </View>
     </View>
   );
 }
 
-function SectionHeader({ label, title }: { label: string; title: string }) {
-  return (
-    <View style={{ marginBottom: 14 }}>
-      <Text style={S.sectionLabel}>{label}</Text>
-      <Text style={S.sectionTitle}>{title}</Text>
-      <View style={S.divider} />
-    </View>
-  );
-}
-
-function ScoreCircle({ score }: { score: number }) {
+function ScoreAndMetrics({
+  score,
+  metrics,
+}: {
+  score: number;
+  metrics: { value: string | number; label: string; color?: string }[];
+}) {
   const color = scoreColor(score);
   return (
-    <View style={[S.analysisBigScore, { backgroundColor: color }]}>
-      <Text style={S.analysisBigScoreVal}>{score}</Text>
-      <Text style={S.analysisBigScoreLabel}>/ 100</Text>
+    <View style={S.metricsRow}>
+      <View style={[S.scoreCircle, { backgroundColor: color }]}>
+        <Text style={S.scoreCircleVal}>{score}</Text>
+        <Text style={S.scoreCircleSub}>/ 100</Text>
+      </View>
+      {metrics.map((m, i) => (
+        <View key={i} style={S.metricBox}>
+          <Text style={[S.metricValue, m.color ? { color: m.color } : {}]}>
+            {m.value}
+          </Text>
+          <Text style={S.metricLabel}>{m.label}</Text>
+        </View>
+      ))}
     </View>
   );
 }
 
 function Findings({ items }: { items: string[] }) {
   return (
-    <View style={{ marginBottom: 10 }}>
-      <Text style={S.findingsTitle}>Bulgular</Text>
+    <View style={{ marginBottom: 12 }}>
+      <Text style={S.listTitle}>Tespit Bulgulari</Text>
       {items.map((f, i) => (
-        <View key={i} style={S.findingRow}>
-          <Text style={S.findingBullet}>✕</Text>
-          <Text style={S.findingText}>{f}</Text>
+        <View key={i} style={S.listRow}>
+          <Text style={S.listBulletDanger}>\u25B6</Text>
+          <Text style={S.listText}>{f}</Text>
         </View>
       ))}
     </View>
@@ -659,12 +615,12 @@ function Findings({ items }: { items: string[] }) {
 
 function Recommendations({ items }: { items: string[] }) {
   return (
-    <View style={{ marginBottom: 10 }}>
-      <Text style={S.findingsTitle}>Öneriler</Text>
+    <View style={{ marginBottom: 12 }}>
+      <Text style={S.listTitle}>Oneriler</Text>
       {items.map((r, i) => (
-        <View key={i} style={S.findingRow}>
-          <Text style={S.recBullet}>→</Text>
-          <Text style={S.recText}>{r}</Text>
+        <View key={i} style={S.listRow}>
+          <Text style={S.listBulletBlue}>\u2192</Text>
+          <Text style={S.listText}>{r}</Text>
         </View>
       ))}
     </View>
@@ -674,7 +630,7 @@ function Recommendations({ items }: { items: string[] }) {
 function InternalNote({ text }: { text: string }) {
   return (
     <View style={S.internalNote}>
-      <Text style={S.internalNoteLabel}>İç Not</Text>
+      <Text style={S.internalNoteLabel}>IC NOT</Text>
       <Text style={S.internalNoteText}>{text}</Text>
     </View>
   );
@@ -682,14 +638,14 @@ function InternalNote({ text }: { text: string }) {
 
 function PriorityBadge({ priority }: { priority: "HIGH" | "MEDIUM" | "LOW" }) {
   const map = {
-    HIGH: { bg: "#FDEDEB", text: COLORS.danger, label: "● YÜK" },
-    MEDIUM: { bg: "#FDF4E3", text: COLORS.warning, label: "● ORT" },
-    LOW: { bg: "#E8F5EE", text: COLORS.success, label: "● DÜŞ" },
+    HIGH: { bg: COLORS.dangerBg, color: COLORS.danger, label: "YUKSEK" },
+    MEDIUM: { bg: COLORS.warningBg, color: COLORS.warning, label: "ORTA" },
+    LOW: { bg: COLORS.successBg, color: COLORS.success, label: "DUSUK" },
   };
-  const { bg, text, label } = map[priority];
+  const { bg, color, label } = map[priority];
   return (
-    <View style={[S.priorityBadge, { backgroundColor: bg, width: 48 }]}>
-      <Text style={[S.priorityText, { color: text }]}>{label}</Text>
+    <View style={[S.priorityBadge, { backgroundColor: bg }]}>
+      <Text style={[S.priorityText, { color }]}>{label}</Text>
     </View>
   );
 }
@@ -700,63 +656,99 @@ function PriorityBadge({ priority }: { priority: "HIGH" | "MEDIUM" | "LOW" }) {
 function CoverPage({ data }: { data: AnalysisData }) {
   const color = scoreColor(data.overallScore);
   return (
-    <Page size="A4" style={S.page}>
-      <View style={S.topAccentInternal} />
-      <View style={S.container}>
-        <View style={S.coverHeader}>
-          <View>
-            <Text style={S.coverBrand}>PREMIUM DIJITAL</Text>
-            <Text style={S.coverTagline}>DİJİTAL BÜYÜME MİMARLIĞI — İÇ RAPOR</Text>
+    <Page size="A4" style={S.coverPage}>
+      {/* Sol kırmızı tonlu sidebar — iç raporu müşteriden ayırır */}
+      <View style={S.coverSidebar}>
+        <View style={S.coverSidebarTop}>
+          <Text style={S.coverSidebarLabel}>{"I\nC\n \nR\nA\nP\nO\nR"}</Text>
+        </View>
+        <View style={S.gradBlock1} />
+        <View style={S.gradBlock2} />
+        <View style={S.gradBlock3} />
+        <View style={S.gradBlock4} />
+        <View style={S.gradBlock5} />
+      </View>
+
+      <View style={S.coverContent}>
+        <View>
+          <Text style={S.coverMainTitle}>DIJITAL VARLIK VE</Text>
+          <Text style={S.coverMainTitle}>KONUMLANDIRMA</Text>
+          <Text style={S.coverMainTitle}>ANALIZI — DAHILI</Text>
+          <View style={S.coverDivider} />
+
+          <Text style={S.coverClientLabel}>Hazirlanan Kurum</Text>
+          <Text style={S.coverClientName}>{data.clientName}</Text>
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 14,
+              padding: "14 16",
+              backgroundColor: COLORS.lightGray,
+              borderRadius: 4,
+              marginBottom: 18,
+            }}
+          >
+            <View
+              style={{
+                width: 52,
+                height: 52,
+                borderRadius: 26,
+                backgroundColor: color,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Text style={{ fontSize: 18, fontWeight: 700, color: COLORS.white, lineHeight: 1 }}>
+                {data.overallScore}
+              </Text>
+            </View>
+            <View>
+              <Text style={{ fontSize: 7, color: COLORS.gray, letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 3 }}>
+                Genel Dijital Skor
+              </Text>
+              <Text style={{ fontSize: 15, fontWeight: 700, color }}>
+                {data.scoreLabel}
+              </Text>
+            </View>
           </View>
-          <View>
-            <Text style={S.coverReportMeta}>DOSYA NO: {data.reportId}</Text>
-            <Text style={S.coverReportMeta}>{data.reportDate}</Text>
-            <Text style={S.coverReportMeta}>HAZIRLAYAN: {data.preparedBy}</Text>
+
+          <View style={S.coverMetaRow}>
+            <View>
+              <Text style={S.coverMetaItem}>SEKTOR</Text>
+              <Text style={S.coverMetaValue}>{data.sector}</Text>
+            </View>
+            <View>
+              <Text style={S.coverMetaItem}>SEGMENT</Text>
+              <Text style={S.coverMetaValue}>{data.segment}</Text>
+            </View>
+            <View>
+              <Text style={S.coverMetaItem}>TARIH</Text>
+              <Text style={S.coverMetaValue}>{data.reportDate}</Text>
+            </View>
+          </View>
+
+          <View style={[S.internalStamp, { marginTop: 20 }]}>
+            <Text style={S.internalStampText}>GIZLI — SADECE IC KULLANIM</Text>
           </View>
         </View>
 
-        <Text style={S.coverPreTitle}>Stratejik Teşhis Belgesi — Dahili</Text>
-        <Text style={S.coverMainTitle}>DİJİTAL VARLIK VE</Text>
-        <Text style={S.coverMainTitle}>KONUMLANDIRMA ANALİZİ</Text>
-
-        <View style={S.clientBox}>
-          <Text style={S.clientBoxLabel}>Hazırlanan Kurum</Text>
-          <Text style={S.clientBoxName}>{data.clientName}</Text>
-          <View style={S.badgeRow}>
-            <View style={[S.badge, { backgroundColor: "#EEF0FF" }]}>
-              <Text style={[S.badgeText, { color: COLORS.blue }]}>{data.sector}</Text>
-            </View>
-            <View style={[S.badge, { backgroundColor: "#F9EEFF" }]}>
-              <Text style={[S.badgeText, { color: COLORS.purple }]}>{data.segment}</Text>
-            </View>
-            <View style={[S.badge, { backgroundColor: "#FDEDEB" }]}>
-              <Text style={[S.badgeText, { color: COLORS.danger }]}>GİZLİ</Text>
-            </View>
-          </View>
-        </View>
-
-        <View style={S.scoreBox}>
-          <View style={[S.scoreCircle, { backgroundColor: color }]}>
-            <Text style={S.scoreCircleValue}>{data.overallScore}</Text>
-          </View>
-          <View>
-            <Text style={S.scoreBoxLabel}>Genel Dijital Skor</Text>
-            <Text style={[S.scoreBoxTitle, { color }]}>{data.scoreLabel}</Text>
-          </View>
-        </View>
-
-        {/* Gizli Damga */}
-        <View style={S.internalStamp}>
-          <Text style={S.internalStampText}>GİZLİ — SADECE İÇ KULLANIM</Text>
+        <View>
+          <View style={{ height: 0.5, backgroundColor: COLORS.border, marginBottom: 16 }} />
+          <Text style={S.coverFooterBrand}>PREMIUM DIJITAL</Text>
+          <Text style={S.coverFooterTagline}>DIJITAL BUYUME MIMARLIGI</Text>
+          <Text style={S.coverFooterMeta}>
+            DOSYA NO: {data.reportId} · GIZLI — IC RAPOR
+          </Text>
         </View>
       </View>
-      <PageFooter />
     </Page>
   );
 }
 
 /* ─────────────────────────────────────────────
-   SAYFA 2 — YÖNETİCİ ÖZETİ (İÇ)
+   SAYFA 2 — YÖNETİCİ ÖZETİ
 ───────────────────────────────────────────── */
 function ExecutiveSummaryPage({ data }: { data: AnalysisData }) {
   const categories = [
@@ -766,219 +758,175 @@ function ExecutiveSummaryPage({ data }: { data: AnalysisData }) {
     { name: "Operasyon", score: data.operations.score },
   ];
   return (
-    <Page size="A4" style={S.page}>
-      <View style={S.topAccent} />
-      <View style={S.container}>
-        <PageHeader clientName={data.clientName} />
-        <SectionHeader label="02 — Yönetici Özeti" title="Pazar Duruşu & Risk Analizi" />
+    <Page size="A4" style={S.innerPage}>
+      <PageHeader pageNum="02" category="YONETICI OZETI" clientName={data.clientName} title="Pazar Durusu ve Risk Analizi" />
+      <View style={S.body}>
         <Text style={S.summaryText}>{data.executiveSummary}</Text>
-        <View style={S.issueTable}>
+        <View style={{ borderRadius: 4, overflow: "hidden", marginBottom: 16 }}>
           <View style={S.issueTableHeader}>
             <Text style={S.issueTableHeaderCell}>Tespit Edilen Sorun</Text>
             <Text style={S.issueTableHeaderCell}>Risk</Text>
-            <Text style={S.issueTableHeaderCell}>Tahmini Kayıp</Text>
+            <Text style={S.issueTableHeaderCell}>Tahmini Kayip</Text>
           </View>
           {data.topIssues.map((item, i) => (
             <View key={i} style={[S.issueRow, i % 2 === 1 ? S.issueRowAlt : {}]}>
               <Text style={S.issueCell}>{item.issue}</Text>
-              <Text style={S.issueCellRed}>{item.risk}</Text>
+              <Text style={S.issueCellDanger}>{item.risk}</Text>
               <Text style={S.issueCell}>{item.estimatedLoss}</Text>
             </View>
           ))}
         </View>
-        <View style={{ marginTop: 16 }}>
-          <Text style={S.findingsTitle}>Kategori Bazlı Skor</Text>
-          <View style={S.categoryGrid}>
-            {categories.map((cat) => {
-              const c = scoreColor(cat.score);
-              return (
-                <View key={cat.name} style={S.categoryCard}>
-                  <Text style={[S.categoryScore, { color: c }]}>{cat.score}</Text>
-                  <Text style={S.categoryName}>{cat.name}</Text>
-                </View>
-              );
-            })}
-          </View>
+        <Text style={S.listTitle}>Kategori Bazli Degerler</Text>
+        <View style={S.categoryGrid}>
+          {categories.map((cat) => {
+            const c = scoreColor(cat.score);
+            return (
+              <View key={cat.name} style={S.categoryCard}>
+                <Text style={[S.categoryScoreVal, { color: c }]}>{cat.score}</Text>
+                <Text style={S.categoryScoreName}>{cat.name}</Text>
+              </View>
+            );
+          })}
         </View>
         {data.internal?.salesNotes && (
-          <InternalNote text={`Satış notu: ${data.internal.salesNotes}`} />
+          <InternalNote text={`Satis notu: ${data.internal.salesNotes}`} />
         )}
       </View>
-      <PageFooter />
+      <Footer />
     </Page>
   );
 }
 
 /* ─────────────────────────────────────────────
-   SAYFA 3 — SEO (İÇ)
+   SAYFA 3 — SEO
 ───────────────────────────────────────────── */
 function SeoPage({ data }: { data: AnalysisData }) {
   const { seo } = data;
   return (
-    <Page size="A4" style={S.page}>
-      <View style={S.topAccent} />
-      <View style={S.container}>
-        <PageHeader clientName={data.clientName} />
-        <SectionHeader label="03 — SEO & Web Mimarisi" title="Teknik Altyapı & Görünürlük Analizi" />
-        <View style={S.analysisTop}>
-          <ScoreCircle score={seo.score} />
-          <View style={S.metricsRow}>
-            <View style={S.metricBox}>
-              <Text style={S.metricValue}>{(seo.pageSpeed / 1000).toFixed(1)}s</Text>
-              <Text style={S.metricLabel}>Sayfa Hızı</Text>
-            </View>
-            <View style={S.metricBox}>
-              <Text style={S.metricValue}>{seo.mobileScore}</Text>
-              <Text style={S.metricLabel}>Mobil Skoru</Text>
-            </View>
-            <View style={S.metricBox}>
-              <Text style={[S.metricValue, { color: COLORS.danger }]}>{seo.technicalErrors}</Text>
-              <Text style={S.metricLabel}>Teknik Hata</Text>
-            </View>
-          </View>
-        </View>
-        <View style={S.divider} />
+    <Page size="A4" style={S.innerPage}>
+      <PageHeader pageNum="03" category="SEO & WEB MIMARISI" clientName={data.clientName} title="Teknik Altyapi ve Gorunurluk Analizi" />
+      <View style={S.body}>
+        <ScoreAndMetrics score={seo.score} metrics={[
+          { value: `${(seo.pageSpeed / 1000).toFixed(1)}s`, label: "Sayfa Hizi" },
+          { value: seo.mobileScore, label: "Mobil Skoru" },
+          { value: seo.technicalErrors, label: "Teknik Hata", color: COLORS.danger },
+        ]} />
         <Findings items={seo.findings} />
         <Recommendations items={seo.recommendations} />
         <View style={S.gainBox}>
-          <Text style={S.gainLabel}>Tahmini Kazanım</Text>
+          <Text style={S.gainLabel}>Tahmini Kazanim</Text>
           <Text style={S.gainText}>{seo.gain}</Text>
         </View>
-        <InternalNote text="Ham teknik veri: Core Web Vitals, Lighthouse skoru, GSC hata raporu audit paketine eklendi." />
+        <InternalNote text="Ham teknik veri: Core Web Vitals, Lighthouse skoru ve GSC hata raporu audit paketine eklendi." />
       </View>
-      <PageFooter />
+      <Footer />
     </Page>
   );
 }
 
 /* ─────────────────────────────────────────────
-   SAYFA 4 — PPC (İÇ)
+   SAYFA 4 — PPC
 ───────────────────────────────────────────── */
 function PpcPage({ data }: { data: AnalysisData }) {
   const { ppc } = data;
   return (
-    <Page size="A4" style={S.page}>
-      <View style={S.topAccent} />
-      <View style={S.container}>
-        <PageHeader clientName={data.clientName} />
-        <SectionHeader label="04 — PPC & Reklam Performansı" title="Reklam Harcaması & Dönüşüm Analizi" />
-        <View style={S.analysisTop}>
-          <ScoreCircle score={ppc.score} />
-          <View style={S.metricsRow}>
-            <View style={S.metricBox}>
-              <Text style={S.metricValue}>{ppc.qualityScore}<Text style={{ fontSize: 9 }}>/10</Text></Text>
-              <Text style={S.metricLabel}>Kalite Skoru</Text>
-            </View>
-            <View style={S.metricBox}>
-              <Text style={[S.metricValue, { fontSize: 12 }]}>{ppc.competitorSpend}</Text>
-              <Text style={S.metricLabel}>Rakip Harcama</Text>
-            </View>
-          </View>
-        </View>
-        <View style={S.divider} />
+    <Page size="A4" style={S.innerPage}>
+      <PageHeader pageNum="04" category="PPC & REKLAM PERFORMANSI" clientName={data.clientName} title="Reklam Harcamasi ve Donusum Analizi" />
+      <View style={S.body}>
+        <ScoreAndMetrics score={ppc.score} metrics={[
+          { value: `${ppc.qualityScore}/10`, label: "Kalite Skoru", color: ppc.qualityScore < 5 ? COLORS.danger : COLORS.success },
+          { value: ppc.competitorSpend, label: "Rakip Harcama" },
+        ]} />
         <Findings items={ppc.findings} />
         <Recommendations items={ppc.recommendations} />
         <View style={S.gainBox}>
-          <Text style={S.gainLabel}>Tahmini Kazanım</Text>
+          <Text style={S.gainLabel}>Tahmini Kazanim</Text>
           <Text style={S.gainText}>{ppc.gain}</Text>
         </View>
-        <InternalNote text="Rakip analizi: Auction Insights raporu ve SimilarWeb verisi ekte mevcuttur." />
+        <InternalNote text="Auction Insights ve SimilarWeb rakip harcama verileri ekte mevcuttur." />
       </View>
-      <PageFooter />
+      <Footer />
     </Page>
   );
 }
 
 /* ─────────────────────────────────────────────
-   SAYFA 5 — SOSYAL (İÇ)
+   SAYFA 5 — SOSYAL
 ───────────────────────────────────────────── */
 function SocialPage({ data }: { data: AnalysisData }) {
   const { social } = data;
   return (
-    <Page size="A4" style={S.page}>
-      <View style={[S.topAccent, { backgroundColor: COLORS.purple }]} />
-      <View style={S.container}>
-        <PageHeader clientName={data.clientName} />
-        <SectionHeader label="05 — Sosyal Medya & İçerik" title="Marka Tutarlılığı & Etkileşim Analizi" />
-        <View style={S.analysisTop}>
-          <ScoreCircle score={social.score} />
-          <View style={S.metricsRow}>
-            <View style={S.metricBox}>
-              <Text style={[S.metricValue, { color: COLORS.purple }]}>{social.engagementRate}</Text>
-              <Text style={S.metricLabel}>Etkileşim Oranı</Text>
-            </View>
-            <View style={S.metricBox}>
-              <Text style={[S.metricValue, { color: COLORS.purple }]}>{social.consistencyScore}</Text>
-              <Text style={S.metricLabel}>Tutarlılık Skoru</Text>
-            </View>
-          </View>
-        </View>
-        <View style={S.divider} />
+    <Page size="A4" style={S.innerPage}>
+      <PageHeader pageNum="05" category="SOSYAL MEDYA & ICERIK" clientName={data.clientName} title="Marka Tutarliligi ve Etkilesim Analizi" />
+      <View style={S.body}>
+        <ScoreAndMetrics score={social.score} metrics={[
+          { value: social.engagementRate, label: "Etkilesim Orani", color: COLORS.purple },
+          { value: social.consistencyScore, label: "Tutarlilik Skoru", color: COLORS.purple },
+        ]} />
         <Findings items={social.findings} />
         <Recommendations items={social.recommendations} />
         <View style={[S.gainBox, { backgroundColor: COLORS.purple }]}>
-          <Text style={S.gainLabel}>Tahmini Kazanım</Text>
+          <Text style={S.gainLabel}>Tahmini Kazanim</Text>
           <Text style={S.gainText}>{social.gain}</Text>
         </View>
-        <InternalNote text="Instagram/Facebook analitikleri ve Meta Business Suite ekran görüntüleri kayıt altına alındı." />
+        <InternalNote text="Instagram/Facebook analitikleri ve Meta Business Suite ekran goruntuleri kayit altina alindi." />
       </View>
-      <PageFooter />
+      <Footer />
     </Page>
   );
 }
 
 /* ─────────────────────────────────────────────
-   SAYFA 6 — OPERASYON + CTA (İÇ)
+   SAYFA 6 — OPERASYON + CTA
 ───────────────────────────────────────────── */
 function OperationsPage({ data }: { data: AnalysisData }) {
   const { operations } = data;
   return (
-    <Page size="A4" style={S.page}>
-      <View style={S.topAccent} />
-      <View style={S.container}>
-        <PageHeader clientName={data.clientName} />
-        <SectionHeader label="06 — Dijital Operasyon" title="Sistem Olgunluğu & Otomasyon Boşlukları" />
-        <View style={S.analysisTop}>
-          <ScoreCircle score={operations.score} />
+    <Page size="A4" style={S.innerPage}>
+      <PageHeader pageNum="06" category="DIJITAL OPERASYON" clientName={data.clientName} title="Sistem Olgunlugu ve Otomasyon Bosluklar" />
+      <View style={S.body}>
+        <View style={{ flexDirection: "row", gap: 16, marginBottom: 16 }}>
+          <View style={[S.scoreCircle, { backgroundColor: scoreColor(operations.score) }]}>
+            <Text style={S.scoreCircleVal}>{operations.score}</Text>
+            <Text style={S.scoreCircleSub}>/ 100</Text>
+          </View>
           <View style={{ flex: 1 }}>
-            <Text style={[S.findingsTitle, { marginBottom: 5 }]}>Mevcut Tech Stack</Text>
-            <View style={S.techStackRow}>
+            <Text style={[S.listTitle, { marginBottom: 5 }]}>Tech Stack</Text>
+            <View style={S.techRow}>
               {operations.techStack.map((t, i) => (
                 <View key={i} style={S.techBadge}>
                   <Text style={S.techBadgeText}>{t}</Text>
                 </View>
               ))}
             </View>
-            <Text style={[S.findingsTitle, { marginBottom: 5, marginTop: 6 }]}>Otomasyon Boşlukları</Text>
+            <Text style={[S.listTitle, { marginBottom: 5, marginTop: 6 }]}>Otomasyon Bosluklari</Text>
             {operations.automationGaps.map((g, i) => (
-              <View key={i} style={S.findingRow}>
-                <Text style={S.findingBullet}>✕</Text>
-                <Text style={S.findingText}>{g}</Text>
+              <View key={i} style={S.listRow}>
+                <Text style={S.listBulletDanger}>\u25B6</Text>
+                <Text style={S.listText}>{g}</Text>
               </View>
             ))}
           </View>
         </View>
-        <View style={S.divider} />
+        <View style={{ height: 0.5, backgroundColor: COLORS.border, marginBottom: 12 }} />
         <Findings items={operations.findings} />
         <Recommendations items={operations.recommendations} />
         <View style={S.gainBox}>
-          <Text style={S.gainLabel}>Tahmini Kazanım</Text>
+          <Text style={S.gainLabel}>Tahmini Kazanim</Text>
           <Text style={S.gainText}>{operations.gain}</Text>
         </View>
         <View style={S.ctaBox}>
-          <Text style={S.ctaTitle}>Sisteminizi Birlikte Kurgulayalım.</Text>
-          <Text style={S.ctaMeta}>
-            Bu raporda tespit edilen eksiklikler için özel bir büyüme planı hazırlamaya hazırız.
-          </Text>
+          <Text style={S.ctaTitle}>Sisteminizi Birlikte Kurgulayalim.</Text>
+          <Text style={S.ctaSubtext}>Ilk strateji gorusmesi ucretsiz ve baglayici degildir.</Text>
           <View style={S.ctaDivider} />
-          <View style={S.ctaContact}>
+          <View style={S.ctaContactRow}>
             <Text style={S.ctaContactItem}>premiumdijital.com</Text>
             <Text style={S.ctaContactItem}>info@premiumdijital.com</Text>
             <Text style={S.ctaContactItem}>(0212) 982 57 24</Text>
           </View>
         </View>
       </View>
-      <PageFooter />
+      <Footer />
     </Page>
   );
 }
@@ -989,17 +937,15 @@ function OperationsPage({ data }: { data: AnalysisData }) {
 function ActionPlanPage({ data }: { data: AnalysisData }) {
   const actions = data.internal?.actionItems ?? [];
   return (
-    <Page size="A4" style={S.page}>
-      <View style={S.topAccentInternal} />
-      <View style={S.container}>
-        <PageHeader clientName={data.clientName} />
-        <SectionHeader label="07 — Aksiyon Planı" title="Öncelikli Görev Listesi" />
-        <View style={S.actionTable}>
+    <Page size="A4" style={S.innerPage}>
+      <PageHeader pageNum="07" category="AKSIYON PLANI" clientName={data.clientName} title="Oncelikli Gorev Listesi" />
+      <View style={S.body}>
+        <View style={{ borderRadius: 4, overflow: "hidden" }}>
           <View style={S.actionTableHeader}>
-            <Text style={[S.actionTableHeaderCell, { width: 52 }]}>Öncelik</Text>
-            <Text style={[S.actionTableHeaderCell, { flex: 1, paddingLeft: 10 }]}>Görev</Text>
-            <Text style={[S.actionTableHeaderCell, { width: 70, textAlign: "center" }]}>Sorumlu</Text>
-            <Text style={[S.actionTableHeaderCell, { width: 70, textAlign: "center" }]}>Süre</Text>
+            <Text style={[S.actionTableHeaderCell, { width: 56 }]}>Oncelik</Text>
+            <Text style={[S.actionTableHeaderCell, { flex: 1, paddingLeft: 10 }]}>Gorev</Text>
+            <Text style={[S.actionTableHeaderCell, { width: 72, textAlign: "center" }]}>Sorumlu</Text>
+            <Text style={[S.actionTableHeaderCell, { width: 72, textAlign: "center" }]}>Sure</Text>
           </View>
           {actions.map((action, i) => (
             <View key={i} style={[S.actionRow, i % 2 === 1 ? { backgroundColor: COLORS.lightGray } : {}]}>
@@ -1012,11 +958,11 @@ function ActionPlanPage({ data }: { data: AnalysisData }) {
         </View>
         {actions.length === 0 && (
           <Text style={{ fontSize: 9, color: COLORS.gray, marginTop: 12 }}>
-            Aksiyon kaydı bulunamadı.
+            Aksiyon kaydi bulunamadi.
           </Text>
         )}
       </View>
-      <PageFooter />
+      <Footer />
     </Page>
   );
 }
@@ -1027,46 +973,39 @@ function ActionPlanPage({ data }: { data: AnalysisData }) {
 function SalesNotePage({ data }: { data: AnalysisData }) {
   const internal = data.internal;
   return (
-    <Page size="A4" style={S.page}>
-      <View style={S.topAccentInternal} />
-      <View style={S.container}>
-        <PageHeader clientName={data.clientName} />
-        <SectionHeader label="08 — Satış Notu" title="Müşteri Değerlendirmesi & Bütçe Tahmini" />
-
+    <Page size="A4" style={S.innerPage}>
+      <PageHeader pageNum="08" category="SATIS NOTU" clientName={data.clientName} title="Musteri Degerlendirmesi ve Butce Tahmini" />
+      <View style={S.body}>
         {internal?.estimatedBudget && (
           <View style={S.budgetBox}>
-            <Text style={S.budgetLabel}>Tahmini Aylık Bütçe</Text>
+            <Text style={S.budgetLabel}>Tahmini Aylik Butce</Text>
             <Text style={S.budgetValue}>{internal.estimatedBudget}</Text>
           </View>
         )}
-
         {internal?.salesNotes && (
-          <View style={[S.salesBox, { marginTop: 16 }]}>
-            <Text style={S.salesLabel}>Satış Notları</Text>
+          <View style={[S.salesBox, { marginTop: 14 }]}>
+            <Text style={S.salesLabel}>Satis Notlari</Text>
             <Text style={S.salesText}>{internal.salesNotes}</Text>
           </View>
         )}
-
-        <View style={{ marginTop: 20 }}>
-          <Text style={S.findingsTitle}>Sonraki Adım Önerileri</Text>
+        <View style={{ marginTop: 18 }}>
+          <Text style={S.listTitle}>Sonraki Adim Onerileri</Text>
           {[
-            "Ücretsiz strateji görüşmesi planla (1 hafta içinde)",
-            "Teknik SEO audit raporunu hazırla",
-            "Paket önerisi ile teklif dokümanını gönder",
+            "Ucretsiz strateji gorusmesi planla (1 hafta icinde)",
+            "Teknik SEO audit raporunu hazirla",
+            "Paket onerisi ile teklif dokumani gonder",
           ].map((step, i) => (
-            <View key={i} style={S.findingRow}>
-              <Text style={[S.recBullet, { color: COLORS.success }]}>→</Text>
-              <Text style={S.recText}>{step}</Text>
+            <View key={i} style={S.listRow}>
+              <Text style={[S.listBulletBlue, { color: COLORS.success }]}>\u2192</Text>
+              <Text style={S.listText}>{step}</Text>
             </View>
           ))}
         </View>
-
-        {/* Son damga */}
-        <View style={S.internalStamp}>
-          <Text style={S.internalStampText}>GİZLİ — SADECE İÇ KULLANIM</Text>
+        <View style={[S.internalStamp, { marginTop: 24 }]}>
+          <Text style={S.internalStampText}>GIZLI — SADECE IC KULLANIM</Text>
         </View>
       </View>
-      <PageFooter />
+      <Footer />
     </Page>
   );
 }
@@ -1077,7 +1016,7 @@ function SalesNotePage({ data }: { data: AnalysisData }) {
 export default function InternalReport({ data }: { data: AnalysisData }) {
   return (
     <Document
-      title={`İç Rapor — ${data.clientName}`}
+      title={`IC Rapor — ${data.clientName}`}
       author="Premium Dijital"
       subject="Dijital Analiz — Dahili Rapor"
     >
