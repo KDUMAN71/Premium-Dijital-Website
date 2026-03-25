@@ -1,23 +1,3 @@
-import { headers } from "next/headers";
-import { rateLimit, analysisLimiter } from "@/lib/rate-limit";
-
-export function getClientIpSafe(): string {
-  try {
-    const h: any = headers();
-    if (h && typeof h.get === "function") {
-      const raw = (
-        h.get("x-forwarded-for") ||
-        h.get("x-real-ip") ||
-        ""
-      ).toString();
-      return raw.split(",")[0]?.trim() || "anonymous";
-    }
-    return "anonymous";
-  } catch {
-    return "anonymous";
-  }
-}
-
 export async function checkCommonGuards(
   botField: string | undefined,
   formStartTime: string | undefined,
@@ -29,16 +9,6 @@ export async function checkCommonGuards(
     !process.env.RESEND_FROM
   ) {
     return { error: "Mail servisi yapılandırılmadı." };
-  }
-  /* Rate limit */
-  const ip = getClientIpSafe();
-  const limiter = await rateLimit(analysisLimiter);
-  const isAllowed = await limiter.check(ip);
-  if (!isAllowed.success) {
-    return {
-      error:
-        "Çok fazla deneme yaptınız. Lütfen bir dakika sonra tekrar deneyin.",
-    };
   }
   /* Honeypot */
   if (botField && botField.trim().length > 0) {

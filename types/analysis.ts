@@ -9,6 +9,10 @@ export interface AnalysisData {
   clientUrl: string;
   sector: string;
   segment: string;
+  budget?: string;
+  adAccess?: string[];
+  socialPlatforms?: string[];
+  socialHandles?: string;
 
   // Genel Skor
   overallScore: number;
@@ -102,6 +106,28 @@ export interface AnalysisData {
     percentage: number;
     color: string;
   }>;
+
+  // Gerçek zamanlı analiz verileri
+  ga4Data?: {
+    sessions: number;
+    bounceRate: number;
+    avgSessionDuration: number;
+    topSources: Array<{ source: string; sessions: number }>;
+  };
+
+  searchConsoleData?: {
+    totalClicks: number;
+    totalImpressions: number;
+    avgCtr: number;
+    avgPosition: number;
+    topKeywords: Array<{
+      keyword: string;
+      clicks: number;
+      impressions: number;
+      ctr: number;
+      position: number;
+    }>;
+  };
 
   // Sadece iç rapor için
   internal?: {

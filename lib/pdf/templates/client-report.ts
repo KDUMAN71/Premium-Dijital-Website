@@ -606,6 +606,51 @@ tr:nth-child(even) td { background: #FAFAFA; }
         ${data.executiveSummary}
       </div>
 
+      ${data.ga4Data ? `
+      <div style="margin-top:12px;padding:14px 18px;background:#F0F4FF;border-left:3px solid #0000C8;border-radius:4px;">
+        <div style="font-size:8px;font-weight:800;color:#0000C8;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">SİTE TRAFİĞİ — SON 30 GÜN</div>
+        <div style="display:flex;gap:28px;">
+          <div>
+            <div style="font-size:18px;font-weight:800;color:#1A1A1A;">${data.ga4Data.sessions.toLocaleString("tr-TR")}</div>
+            <div style="font-size:8px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-top:2px;">Oturum</div>
+          </div>
+          <div>
+            <div style="font-size:18px;font-weight:800;color:#1A1A1A;">%${data.ga4Data.bounceRate.toFixed(1)}</div>
+            <div style="font-size:8px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-top:2px;">Hemen Çıkma</div>
+          </div>
+          <div>
+            <div style="font-size:18px;font-weight:800;color:#1A1A1A;">${Math.floor(data.ga4Data.avgSessionDuration / 60)}dk ${Math.round(data.ga4Data.avgSessionDuration % 60)}sn</div>
+            <div style="font-size:8px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-top:2px;">Ort. Oturum Süresi</div>
+          </div>
+        </div>
+      </div>` : ""}
+
+      ${data.searchConsoleData ? `
+      <div style="margin-top:10px;padding:14px 18px;background:#F0FFF4;border-left:3px solid #27AE60;border-radius:4px;">
+        <div style="font-size:8px;font-weight:800;color:#27AE60;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">ORGANİK ARAMA — SON 90 GÜN</div>
+        <div style="display:flex;gap:28px;margin-bottom:${data.searchConsoleData.topKeywords?.length ? "12px" : "0"};">
+          <div>
+            <div style="font-size:18px;font-weight:800;color:#1A1A1A;">${data.searchConsoleData.totalClicks.toLocaleString("tr-TR")}</div>
+            <div style="font-size:8px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-top:2px;">Tıklama</div>
+          </div>
+          <div>
+            <div style="font-size:18px;font-weight:800;color:#1A1A1A;">${data.searchConsoleData.totalImpressions.toLocaleString("tr-TR")}</div>
+            <div style="font-size:8px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-top:2px;">Gösterim</div>
+          </div>
+          <div>
+            <div style="font-size:18px;font-weight:800;color:#1A1A1A;">#${data.searchConsoleData.avgPosition.toFixed(1)}</div>
+            <div style="font-size:8px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-top:2px;">Ort. Pozisyon</div>
+          </div>
+        </div>
+        ${data.searchConsoleData.topKeywords?.length > 0 ? `
+        <div style="font-size:8px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Öne Çıkan Aramalar</div>
+        ${data.searchConsoleData.topKeywords.slice(0, 4).map((kw) => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid #D4EDDA;font-size:9px;">
+          <span style="color:#333;font-weight:500;">${kw.keyword}</span>
+          <span style="color:#888;">${kw.clicks} tıklama · pos. ${Math.round(kw.position)}</span>
+        </div>`).join("")}` : ""}
+      </div>` : ""}
+
       <!-- Kategori skor özeti -->
       <div style="display:flex;gap:10px;flex-wrap:wrap;">
         ${[

@@ -525,14 +525,6 @@ function OAuthModal({
     };
 
     window.addEventListener("message", messageHandler);
-
-    const pollTimer = setInterval(() => {
-      if (authWindow?.closed) {
-        clearInterval(pollTimer);
-        window.removeEventListener("message", messageHandler);
-        if (status === "waiting") setStatus("idle");
-      }
-    }, 800);
   };
 
   const permissionItems: Record<string, string[]> = {

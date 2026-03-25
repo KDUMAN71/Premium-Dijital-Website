@@ -20,9 +20,10 @@ export async function GET(
     const payload = JSON.stringify({ type, tool: state ?? "", ...extra });
     return new NextResponse(
       `<!DOCTYPE html><html><body><script>
+        console.log('OAuth callback loaded, tool: ${state ?? ""}, type: ' + ${JSON.stringify(type)});
         try {
           window.opener?.postMessage(${payload}, ${JSON.stringify(origin)});
-        } catch(e) {}
+        } catch(e) { console.error('postMessage failed:', e); }
         window.close();
       </script></body></html>`,
       { headers: { "Content-Type": "text/html" } },
