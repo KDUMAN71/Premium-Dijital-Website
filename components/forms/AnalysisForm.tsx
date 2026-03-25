@@ -22,6 +22,9 @@ import {
   ArrowLeft,
   Check,
   Monitor,
+  X,
+  ExternalLink,
+  Plus,
 } from "lucide-react";
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -82,11 +85,41 @@ const SOCIAL_PLATFORMS = [
 ];
 
 const ACCESS_TOOLS = [
-  { value: "google_ads", label: "Google Ads" },
-  { value: "ga4", label: "GA4" },
-  { value: "search_console", label: "Search Console" },
-  { value: "meta_ads", label: "Meta Ads" },
-];
+  {
+    value: "ga4",
+    label: "Google Analytics 4",
+    description: "Trafik, oturum, dönüşüm ve kullanıcı verileri",
+    scope: "https://www.googleapis.com/auth/analytics.readonly",
+    authUrl: "https://accounts.google.com/o/oauth2/v2/auth",
+    provider: "google" as const,
+  },
+  {
+    value: "search_console",
+    label: "Search Console",
+    description: "Organik arama, keyword ve tıklama verileri",
+    scope: "https://www.googleapis.com/auth/webmasters.readonly",
+    authUrl: "https://accounts.google.com/o/oauth2/v2/auth",
+    provider: "google" as const,
+  },
+  {
+    value: "google_ads",
+    label: "Google Ads",
+    description: "Kampanya harcaması, kalite skoru, reklam verisi",
+    scope: "https://www.googleapis.com/auth/adwords",
+    authUrl: "https://accounts.google.com/o/oauth2/v2/auth",
+    provider: "google" as const,
+  },
+  {
+    value: "meta_ads",
+    label: "Meta Ads",
+    description: "Facebook & Instagram reklam performansı",
+    scope: "ads_read",
+    authUrl: "https://www.facebook.com/v19.0/dialog/oauth",
+    provider: "meta" as const,
+  },
+] as const;
+
+type AccessToolValue = typeof ACCESS_TOOLS[number]["value"];
 
 // Dijital Operasyon — yetenek paketleri (MasterPlan v10)
 const OPS_CAPABILITIES = [
@@ -134,6 +167,8 @@ const FormSchema = z
     hasWebsite: z.string().optional(), // "YES" | "NO"
     website: z.string().optional(),
     adAccess: z.array(z.string()).optional(), // seçilen erişim araçları
+    competitors: z.array(z.string().max(100)).max(3).optional(),
+    oauthTokens: z.record(z.string(), z.string()).optional(),
     socialPlatforms: z.array(z.string()).optional(),
     hasSocialAccounts: z.string().optional(), // "YES" | "NO"
     hasExistingBrand: z.string().optional(), // "YES" | "NO"
@@ -435,6 +470,178 @@ function StepService({
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
+   OAUTH MODAL
+   ───────────────────────────────────────────────────────────────────────────── */
+
+function OAuthModal({
+  tool,
+  onClose,
+  onSuccess,
+}: {
+  tool: typeof ACCESS_TOOLS[number];
+  onClose: () => void;
+  onSuccess: (toolValue: string, token: string) => void;
+}) {
+  const [status, setStatus] = useState<"idle" | "waiting" | "success" | "error">("idle");
+
+  const handleConnect = () => {
+    setStatus("waiting");
+
+    const clientId =
+      tool.provider === "google"
+        ? process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? ""
+        : process.env.NEXT_PUBLIC_META_APP_ID ?? "";
+
+    const redirectUri = `${window.location.origin}/api/oauth/callback/${tool.provider}`;
+
+    const params = new URLSearchParams({
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      response_type: "code",
+      scope: tool.scope,
+      state: tool.value,
+      access_type: "offline",
+      ...(tool.provider === "google" ? { prompt: "consent" } : {}),
+    });
+
+    const authWindow = window.open(
+      `${tool.authUrl}?${params.toString()}`,
+      `oauth_${tool.value}`,
+      "width=500,height=650,scrollbars=yes,resizable=yes",
+    );
+
+    const messageHandler = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+      if (event.data?.type === "OAUTH_SUCCESS" && event.data?.tool === tool.value) {
+        window.removeEventListener("message", messageHandler);
+        setStatus("success");
+        onSuccess(tool.value, event.data.token ?? "connected");
+        setTimeout(onClose, 1200);
+      }
+      if (event.data?.type === "OAUTH_ERROR" && event.data?.tool === tool.value) {
+        window.removeEventListener("message", messageHandler);
+        setStatus("error");
+      }
+    };
+
+    window.addEventListener("message", messageHandler);
+
+    const pollTimer = setInterval(() => {
+      if (authWindow?.closed) {
+        clearInterval(pollTimer);
+        window.removeEventListener("message", messageHandler);
+        if (status === "waiting") setStatus("idle");
+      }
+    }, 800);
+  };
+
+  const permissionItems: Record<string, string[]> = {
+    ga4: ["Trafik ve kullanıcı verileri", "Oturum ve bounce rate", "Dönüşüm ve hedef verileri"],
+    search_console: ["Organik arama keyword'leri", "Tıklama ve impression verileri", "Ortalama sıralama pozisyonu"],
+    google_ads: ["Kampanya harcama verileri", "Reklam kalite skorları", "Kampanya performans metrikleri"],
+    meta_ads: ["Facebook & Instagram reklam verisi", "Kampanya CPM ve CPC metrikleri", "Hedef kitle erişim verileri"],
+  };
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+        onClick={(e) => e.target === e.currentTarget && onClose()}
+      >
+        <motion.div
+          initial={{ opacity: 0, scale: 0.92, y: 16 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.92, y: 16 }}
+          transition={{ duration: 0.22 }}
+          className="relative w-full max-w-sm rounded-[2rem] border border-white/10 bg-[#111] p-7 shadow-2xl"
+        >
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/40 hover:bg-white/10 hover:text-white transition cursor-pointer"
+          >
+            <X size={14} />
+          </button>
+
+          <div className="flex flex-col gap-5">
+            <div>
+              <div className="text-[9px] font-black uppercase tracking-[0.25em] text-white/30 mb-2">
+                Hesap Erişimi
+              </div>
+              <h3 className="text-xl font-bold text-white">{tool.label}</h3>
+              <p className="mt-1.5 text-sm text-white/40 leading-relaxed">
+                {tool.description}
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
+              <div className="text-[9px] font-black uppercase tracking-[0.2em] text-white/30 mb-3">
+                Sadece okuma erişimi istiyoruz
+              </div>
+              <ul className="space-y-2">
+                {(permissionItems[tool.value] ?? []).map((item) => (
+                  <li key={item} className="flex items-center gap-2 text-[11px] text-white/50">
+                    <Check size={10} className="text-green-400 shrink-0" strokeWidth={3} />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-3 text-[10px] text-white/20">
+                Şifreniz istenmez. İstediğiniz zaman erişimi iptal edebilirsiniz.
+              </p>
+            </div>
+
+            {status === "success" ? (
+              <div className="flex items-center justify-center gap-2 rounded-2xl bg-green-500/15 border border-green-500/30 py-4 text-sm font-bold text-green-400">
+                <CheckCircle2 size={16} strokeWidth={2} />
+                Bağlantı sağlandı
+              </div>
+            ) : status === "error" ? (
+              <div className="space-y-2">
+                <div className="flex items-center justify-center gap-2 rounded-2xl bg-red-500/10 border border-red-500/20 py-3 text-sm text-red-400">
+                  Bağlantı başarısız. Tekrar deneyin.
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setStatus("idle")}
+                  className="w-full py-3 rounded-2xl text-[11px] font-black uppercase tracking-[0.18em] text-white transition cursor-pointer"
+                  style={{ background: "linear-gradient(90deg,#be29ec,#0000c8)" }}
+                >
+                  Tekrar Dene
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={handleConnect}
+                disabled={status === "waiting"}
+                className="flex w-full items-center justify-center gap-2.5 py-4 rounded-2xl text-[11px] font-black uppercase tracking-[0.18em] text-white transition-all hover:scale-[1.01] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed shadow-[0_0_24px_rgba(190,41,236,0.3)]"
+                style={{ background: "linear-gradient(90deg,#be29ec,#0000c8)" }}
+              >
+                {status === "waiting" ? (
+                  <>
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                    Bağlantı bekleniyor...
+                  </>
+                ) : (
+                  <>
+                    <ExternalLink size={14} strokeWidth={2} />
+                    {tool.label} ile Bağlan
+                  </>
+                )}
+              </button>
+            )}
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
    ADIM 2 — Sektör
    ───────────────────────────────────────────────────────────────────────────── */
 
@@ -551,6 +758,33 @@ function StepDetails({
   const socialPlatforms = (watch("socialPlatforms") as string[]) ?? [];
   const hasSocialAccounts = watch("hasSocialAccounts") ?? "";
   const hasExistingBrand = watch("hasExistingBrand") ?? "";
+  const competitors = (watch("competitors") as string[]) ?? [];
+  const oauthTokens = (watch("oauthTokens") as Record<string, string>) ?? {};
+  const [activeOAuthTool, setActiveOAuthTool] = useState<typeof ACCESS_TOOLS[number] | null>(null);
+
+  const handleOAuthSuccess = (toolValue: string, token: string) => {
+    const current = (watch("oauthTokens") as Record<string, string>) ?? {};
+    setValue("oauthTokens", { ...current, [toolValue]: token });
+    const currentAccess = (watch("adAccess") as string[]) ?? [];
+    if (!currentAccess.includes(toolValue)) {
+      setValue("adAccess", [...currentAccess, toolValue]);
+    }
+    setActiveOAuthTool(null);
+  };
+
+  const addCompetitor = () => {
+    if (competitors.length < 3) setValue("competitors", [...competitors, ""]);
+  };
+
+  const removeCompetitor = (index: number) => {
+    setValue("competitors", competitors.filter((_, i) => i !== index));
+  };
+
+  const updateCompetitor = (index: number, value: string) => {
+    const next = [...competitors];
+    next[index] = value;
+    setValue("competitors", next);
+  };
 
   const toggleArray = (field: "adAccess" | "socialPlatforms", val: string) => {
     const current = (watch(field) as string[]) ?? [];
@@ -642,7 +876,63 @@ function StepDetails({
           )}
         </AnimatePresence>
 
-        {/* Erişim araçları */}
+        {/* Rakip URL'leri */}
+        <div className="space-y-3">
+          <div>
+            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+              Rakipleriniz{" "}
+              <span className="text-white/20 font-medium normal-case tracking-normal">
+                (opsiyonel — karşılaştırmalı analiz için)
+              </span>
+            </label>
+            <p className="mt-1 text-[11px] text-white/25">
+              Alan adı girin. Raporunuzda rakibinizle karşılaştırmalı konum gösterilecektir.
+            </p>
+          </div>
+          <div className="space-y-2">
+            {competitors.map((comp, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <div className="flex flex-1 overflow-hidden rounded-xl border border-white/10 bg-white/5 transition-all focus-within:border-[#be29ec]">
+                  <span className="flex items-center border-r border-white/10 bg-white/5 px-3 text-xs font-bold text-white/30 select-none whitespace-nowrap">
+                    rakip {index + 1}
+                  </span>
+                  <input
+                    value={comp.replace(/^https?:\/\//i, "")}
+                    onChange={(e) =>
+                      updateCompetitor(
+                        index,
+                        e.target.value
+                          ? `https://${e.target.value.replace(/^https?:\/\//i, "")}`
+                          : "",
+                      )
+                    }
+                    placeholder="ornekrakip.com"
+                    className="flex-1 bg-transparent px-4 py-3 text-sm font-medium text-white outline-none placeholder:text-white/15"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeCompetitor(index)}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white/30 hover:bg-white/10 hover:text-white transition cursor-pointer"
+                >
+                  <X size={14} strokeWidth={1.5} />
+                </button>
+              </div>
+            ))}
+            {competitors.length < 3 && (
+              <button
+                type="button"
+                onClick={addCompetitor}
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-2.5 text-[11px] font-bold text-white/40 hover:border-white/20 hover:text-white/60 transition cursor-pointer"
+              >
+                <Plus size={13} strokeWidth={2} />
+                Rakip Ekle
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Erişim araçları — OAuth kartları */}
         <div className="space-y-3 rounded-2xl border border-white/8 bg-white/[0.02] p-4">
           <div>
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
@@ -652,22 +942,63 @@ function StepDetails({
               </span>
             </label>
             <p className="mt-1 text-[11px] text-white/30 leading-relaxed">
-              Başvurunuz onaylanırsa hesabınıza okuma erişimi talep edeceğiz.
-              Şifre istemiyoruz — sizi adım adım yönlendireceğiz.
+              Hesabınıza güvenli OAuth ile bağlanıyoruz. Şifre istemiyoruz.
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-            {ACCESS_TOOLS.map((t) => (
-              <MultiToggle
-                key={t.value}
-                id={t.value}
-                label={t.label}
-                checked={adAccess.includes(t.value)}
-                onToggle={() => toggleArray("adAccess", t.value)}
-                accent="blue"
-              />
-            ))}
+          <div className="flex flex-col gap-2">
+            {ACCESS_TOOLS.map((tool) => {
+              const isConnected = !!oauthTokens[tool.value];
+              return (
+                <div
+                  key={tool.value}
+                  className="flex items-center justify-between rounded-xl border px-4 py-3 transition-all"
+                  style={
+                    isConnected
+                      ? { borderColor: "rgba(34,197,94,0.4)", backgroundColor: "rgba(34,197,94,0.06)" }
+                      : { borderColor: "rgba(255,255,255,0.08)", backgroundColor: "rgba(255,255,255,0.02)" }
+                  }
+                >
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border"
+                      style={
+                        isConnected
+                          ? { borderColor: "rgba(34,197,94,0.6)", backgroundColor: "rgba(34,197,94,0.2)" }
+                          : { borderColor: "rgba(255,255,255,0.15)" }
+                      }
+                    >
+                      {isConnected && <Check size={10} strokeWidth={3} color="#4ade80" />}
+                    </span>
+                    <div>
+                      <div className={`text-[11px] font-bold ${isConnected ? "text-green-400" : "text-white/60"}`}>
+                        {tool.label}
+                      </div>
+                      <div className="text-[10px] text-white/25">{tool.description}</div>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setActiveOAuthTool(tool)}
+                    className="shrink-0 rounded-lg border px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] transition-all cursor-pointer hover:scale-[1.02]"
+                    style={
+                      isConnected
+                        ? { borderColor: "rgba(34,197,94,0.3)", color: "rgba(74,222,128,0.8)", backgroundColor: "rgba(34,197,94,0.05)" }
+                        : { borderColor: "rgba(190,41,236,0.3)", color: "#be29ec", backgroundColor: "rgba(190,41,236,0.05)" }
+                    }
+                  >
+                    {isConnected ? "Yenile" : "Bağlan →"}
+                  </button>
+                </div>
+              );
+            })}
           </div>
+          {activeOAuthTool && (
+            <OAuthModal
+              tool={activeOAuthTool}
+              onClose={() => setActiveOAuthTool(null)}
+              onSuccess={handleOAuthSuccess}
+            />
+          )}
         </div>
 
         {/* Sosyal medya hesapları */}
@@ -808,7 +1139,7 @@ function StepDetails({
                     />
                   </div>
                 </div>
-                {/* Search Console erişimi */}
+                {/* Search Console & GA4 — OAuth kartları */}
                 <div className="space-y-2 rounded-2xl border border-white/8 bg-white/[0.02] p-4">
                   <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
                     SEO analizi erişim izinleri{" "}
@@ -817,29 +1148,125 @@ function StepDetails({
                     </span>
                   </label>
                   <p className="text-[11px] text-white/30">
-                    Başvurunuz onaylanırsa hesaplarınıza okuma erişimi talep
-                    edeceğiz.
+                    Hesabınıza güvenli OAuth ile bağlanıyoruz. Şifre istemiyoruz.
                   </p>
-                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      { value: "search_console", label: "Search Console" },
-                      { value: "ga4", label: "GA4" },
-                    ].map((t) => (
-                      <MultiToggle
-                        key={t.value}
-                        id={t.value}
-                        label={t.label}
-                        checked={adAccess.includes(t.value)}
-                        onToggle={() => toggleArray("adAccess", t.value)}
-                        accent="blue"
-                      />
-                    ))}
+                  <div className="flex flex-col gap-2 mt-2">
+                    {ACCESS_TOOLS.filter((t) =>
+                      ["search_console", "ga4"].includes(t.value),
+                    ).map((tool) => {
+                      const isConnected = !!oauthTokens[tool.value];
+                      return (
+                        <div
+                          key={tool.value}
+                          className="flex items-center justify-between rounded-xl border px-4 py-3 transition-all"
+                          style={
+                            isConnected
+                              ? { borderColor: "rgba(34,197,94,0.4)", backgroundColor: "rgba(34,197,94,0.06)" }
+                              : { borderColor: "rgba(255,255,255,0.08)", backgroundColor: "rgba(255,255,255,0.02)" }
+                          }
+                        >
+                          <div className="flex items-center gap-3">
+                            <span
+                              className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border"
+                              style={
+                                isConnected
+                                  ? { borderColor: "rgba(34,197,94,0.6)", backgroundColor: "rgba(34,197,94,0.2)" }
+                                  : { borderColor: "rgba(255,255,255,0.15)" }
+                              }
+                            >
+                              {isConnected && <Check size={10} strokeWidth={3} color="#4ade80" />}
+                            </span>
+                            <div>
+                              <div className={`text-[11px] font-bold ${isConnected ? "text-green-400" : "text-white/60"}`}>
+                                {tool.label}
+                              </div>
+                              <div className="text-[10px] text-white/25">{tool.description}</div>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setActiveOAuthTool(tool)}
+                            className="shrink-0 rounded-lg border px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] transition-all cursor-pointer hover:scale-[1.02]"
+                            style={
+                              isConnected
+                                ? { borderColor: "rgba(34,197,94,0.3)", color: "rgba(74,222,128,0.8)", backgroundColor: "rgba(34,197,94,0.05)" }
+                                : { borderColor: "rgba(190,41,236,0.3)", color: "#be29ec", backgroundColor: "rgba(190,41,236,0.05)" }
+                            }
+                          >
+                            {isConnected ? "Yenile" : "Bağlan →"}
+                          </button>
+                        </div>
+                      );
+                    })}
                   </div>
+                  {activeOAuthTool && (
+                    <OAuthModal
+                      tool={activeOAuthTool}
+                      onClose={() => setActiveOAuthTool(null)}
+                      onSuccess={handleOAuthSuccess}
+                    />
+                  )}
                 </div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
+
+        {/* Rakip URL'leri */}
+        <div className="space-y-3">
+          <div>
+            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+              Rakipleriniz{" "}
+              <span className="text-white/20 font-medium normal-case tracking-normal">
+                (opsiyonel — karşılaştırmalı analiz için)
+              </span>
+            </label>
+            <p className="mt-1 text-[11px] text-white/25">
+              Alan adı girin. Raporunuzda rakibinizle karşılaştırmalı konum gösterilecektir.
+            </p>
+          </div>
+          <div className="space-y-2">
+            {competitors.map((comp, index) => (
+              <div key={index} className="flex items-center gap-2">
+                <div className="flex flex-1 overflow-hidden rounded-xl border border-white/10 bg-white/5 transition-all focus-within:border-[#be29ec]">
+                  <span className="flex items-center border-r border-white/10 bg-white/5 px-3 text-xs font-bold text-white/30 select-none whitespace-nowrap">
+                    rakip {index + 1}
+                  </span>
+                  <input
+                    value={comp.replace(/^https?:\/\//i, "")}
+                    onChange={(e) =>
+                      updateCompetitor(
+                        index,
+                        e.target.value
+                          ? `https://${e.target.value.replace(/^https?:\/\//i, "")}`
+                          : "",
+                      )
+                    }
+                    placeholder="ornekrakip.com"
+                    className="flex-1 bg-transparent px-4 py-3 text-sm font-medium text-white outline-none placeholder:text-white/15"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => removeCompetitor(index)}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-white/30 hover:bg-white/10 hover:text-white transition cursor-pointer"
+                >
+                  <X size={14} strokeWidth={1.5} />
+                </button>
+              </div>
+            ))}
+            {competitors.length < 3 && (
+              <button
+                type="button"
+                onClick={addCompetitor}
+                className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-2.5 text-[11px] font-bold text-white/40 hover:border-white/20 hover:text-white/60 transition cursor-pointer"
+              >
+                <Plus size={13} strokeWidth={2} />
+                Rakip Ekle
+              </button>
+            )}
+          </div>
+        </div>
 
         {/* Sosyal medya hesapları */}
         <div className="space-y-3">
@@ -1785,6 +2212,8 @@ export default function AnalysisForm({
       hasWebsite: "",
       website: "",
       adAccess: [],
+      competitors: [],
+      oauthTokens: {},
       socialPlatforms: [],
       hasSocialAccounts: "",
       hasExistingBrand: "",

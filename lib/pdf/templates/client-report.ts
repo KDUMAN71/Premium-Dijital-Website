@@ -179,6 +179,32 @@ function categoryBarSvg(scores: { label: string; score: number; sectorAvg: numbe
 /* ═══════════════════════════════════════════
    ANA FONKSİYON
 ═══════════════════════════════════════════ */
+function proAnalysisCta(data: AnalysisData): string {
+  const hasProData = !!(data.competitors && data.competitors.length > 0);
+  if (hasProData) return "";
+  return `
+<div style="margin:24px 0;background:#1A1A1A;border-radius:12px;padding:24px 28px;border-left:4px solid #BE29EC;">
+  <div style="font-size:9px;font-weight:800;color:#BE29EC;letter-spacing:3px;text-transform:uppercase;margin-bottom:10px;">
+    PRO ANALİZ — Rakip İstihbaratı
+  </div>
+  <div style="font-size:13px;font-weight:800;color:white;margin-bottom:8px;">
+    Rakiplerinizin tam stratejisini görmek ister misiniz?
+  </div>
+  <div style="font-size:10px;color:rgba(255,255,255,0.55);line-height:1.7;margin-bottom:16px;">
+    Bu raporda sektör ortalamaları kullanıldı. Pro Analiz paketinde rakiplerinizin
+    gerçek reklam harcamaları, keyword stratejileri ve dijital yatırım verileri
+    kişisel olarak derlenir.
+  </div>
+  <div style="display:flex;gap:16px;align-items:center;">
+    <div style="font-size:18px;font-weight:800;color:#BE29EC;">2.500 TL</div>
+    <div style="font-size:10px;color:rgba(255,255,255,0.4);">tek seferlik · 3-5 is günü</div>
+  </div>
+  <div style="margin-top:14px;background:rgba(190,41,236,0.1);border:1px solid rgba(190,41,236,0.2);border-radius:8px;padding:10px 16px;font-size:10px;color:#BE29EC;font-weight:700;">
+    WhatsApp ile iletisime gecin: wa.me/905425658010
+  </div>
+</div>`;
+}
+
 export function generateClientReportHtml(data: AnalysisData): string {
   const overallColor = scoreColor(data.overallScore);
 
@@ -1163,6 +1189,8 @@ tr:nth-child(even) td { background: #FAFAFA; }
         <div style="font-size:9px;color:rgba(255,255,255,0.5);margin-bottom:4px;">Tavsiye Edilen Paket</div>
         <div style="font-size:13px;font-weight:700;color:white;">Mevcut durumunuza gore <span style="color:#BE29EC;">Buyume Paketi</span> onerilir</div>
       </div>
+
+      ${proAnalysisCta(data)}
     </div>
     ${pageFooter()}
   </div>
