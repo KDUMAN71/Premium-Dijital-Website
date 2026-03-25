@@ -102,6 +102,53 @@ const mockData: AnalysisData = {
     gain:
       "Otomasyon kurulumundan sonra haftalık 10-15 saat operasyonel tasarruf sağlanabilir.",
   },
+  competitors: [
+    { domain: "acibademhastaneleri.com", competitionLevel: "high", paidKeywords: 17, monthlySpend: "$8.200", paidSearchTraffic: 45 },
+    { domain: "memorial.com.tr", competitionLevel: "high", paidKeywords: 12, monthlySpend: "$6.500", paidSearchTraffic: 38 },
+    { domain: "medicanahealth.com", competitionLevel: "medium", paidKeywords: 8, monthlySpend: "$3.100", paidSearchTraffic: 22 },
+    { domain: "florencelighting.com", competitionLevel: "medium", paidKeywords: 5, monthlySpend: "$1.800", paidSearchTraffic: 14 },
+    { domain: "turkeyhealthtravel.com", competitionLevel: "low", paidKeywords: 4, monthlySpend: "$900", paidSearchTraffic: 8 },
+  ],
+
+  budgetScenarios: [
+    {
+      label: "Başlangıç",
+      dailyBudget: "₺1.500",
+      monthlyBudget: "₺45.000",
+      clicks: 380,
+      impressions: "7,2 B",
+      ctr: "%5.3",
+      avgCpc: "₺118",
+      avgPosition: "3.2",
+    },
+    {
+      label: "Büyüme",
+      dailyBudget: "₺3.000",
+      monthlyBudget: "₺90.000",
+      clicks: 820,
+      impressions: "22 B",
+      ctr: "%3.7",
+      avgCpc: "₺110",
+      avgPosition: "2.6",
+    },
+  ],
+
+  sampleKeywords: [
+    { keyword: "sağlık turizmi türkiye", matchType: "Geniş Eşleme", maxCpc: "₺45", clicks: 180, impressions: 2840, cost: "₺8.100", ctr: "%6.3", avgCpc: "₺45" },
+    { keyword: "hair transplant turkey", matchType: "Sıralı Eşleme", maxCpc: "₺120", clicks: 95, impressions: 1240, cost: "₺11.400", ctr: "%7.7", avgCpc: "₺120" },
+    { keyword: "istanbul health tourism", matchType: "Tam Eşleme", maxCpc: "₺85", clicks: 62, impressions: 890, cost: "₺5.270", ctr: "%7.0", avgCpc: "₺85" },
+    { keyword: "türkiye estetik ameliyat", matchType: "Geniş Eşleme", maxCpc: "₺55", clicks: 44, impressions: 720, cost: "₺2.420", ctr: "%6.1", avgCpc: "₺55" },
+  ],
+
+  geoTargets: [
+    { country: "Almanya", percentage: 28, color: "#0000C8" },
+    { country: "İngiltere", percentage: 22, color: "#BE29EC" },
+    { country: "S. Arabistan", percentage: 18, color: "#3498DB" },
+    { country: "Hollanda", percentage: 14, color: "#E74C3C" },
+    { country: "BAE", percentage: 10, color: "#27AE60" },
+    { country: "Diğer", percentage: 8, color: "#95A5A6" },
+  ],
+
   internal: {
     rawData: {},
     actionItems: [

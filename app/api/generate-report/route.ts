@@ -20,15 +20,19 @@ export async function POST(req: NextRequest) {
 
     const pdf = await generatePdf(html);
 
+    // ASCII-safe filename — Türkçe/özel karakter ByteString hatasına yol açar
+    const safeId = data.reportId.replace(/[^a-zA-Z0-9]/g, "-");
     const filename =
       type === "internal"
-        ? `ic-rapor-${data.reportId.replace(/\//g, "-")}.pdf`
-        : `analiz-raporu-${data.clientName.replace(/\s+/g, "-")}-${data.reportDate.replace(/\s+/g, "-")}.pdf`;
+        ? `ic-rapor-${safeId}.pdf`
+        : `analiz-raporu-${safeId}.pdf`;
 
     return new NextResponse(new Uint8Array(pdf), {
+      status: 200,
       headers: {
         "Content-Type": "application/pdf",
         "Content-Disposition": `attachment; filename="${filename}"`,
+        "Content-Length": pdf.length.toString(),
         "Cache-Control": "no-store",
       },
     });

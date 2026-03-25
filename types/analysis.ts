@@ -63,6 +63,46 @@ export interface AnalysisData {
     gain: string;
   };
 
+  // Rakip analizi
+  competitors?: Array<{
+    domain: string;
+    competitionLevel: "high" | "medium" | "low";
+    paidKeywords: number;
+    monthlySpend?: string;
+    paidSearchTraffic?: number;
+  }>;
+
+  // Bütçe senaryoları
+  budgetScenarios?: Array<{
+    label: string;
+    dailyBudget: string;
+    monthlyBudget: string;
+    clicks: number;
+    impressions: string;
+    ctr: string;
+    avgCpc: string;
+    avgPosition: string;
+  }>;
+
+  // Örnek anahtar kelimeler
+  sampleKeywords?: Array<{
+    keyword: string;
+    matchType: string;
+    maxCpc: string;
+    clicks: number;
+    impressions: number;
+    cost: string;
+    ctr: string;
+    avgCpc: string;
+  }>;
+
+  // Coğrafi hedefleme
+  geoTargets?: Array<{
+    country: string;
+    percentage: number;
+    color: string;
+  }>;
+
   // Sadece iç rapor için
   internal?: {
     rawData: Record<string, unknown>;

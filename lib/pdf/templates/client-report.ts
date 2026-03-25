@@ -1,17 +1,14 @@
 import type { AnalysisData } from "@/types/analysis";
 import { INTER_REGULAR_B64, INTER_BOLD_B64 } from "@/lib/pdf/font-data";
 
-/* ─── Yardımcı ──────────────────────────────── */
+/* ═══════════════════════════════════════════
+   YARDIMCI FONKSIYONLAR
+═══════════════════════════════════════════ */
+
 function scoreColor(score: number): string {
   if (score >= 75) return "#1A7A3F";
   if (score >= 50) return "#B7770D";
   return "#C0392B";
-}
-
-function scoreColorBg(score: number): string {
-  if (score >= 75) return "#E8F5EE";
-  if (score >= 50) return "#FDF4E3";
-  return "#FDEDEB";
 }
 
 function pageFooter(label = "MÜŞTERİ RAPORU"): string {
@@ -23,8 +20,8 @@ function pageFooter(label = "MÜŞTERİ RAPORU"): string {
       <div class="footer-text">premiumdijital.com</div>
     </div>
     <div class="footer-col footer-center">
-      <div class="footer-text">Premium Dijital Reklam Ajansı ve Pazarlama</div>
-      <div class="footer-text">Ziya Gökalp Mah. Mall Of İstanbul The Office No:7E D:136, 34490 Başakşehir/İstanbul</div>
+      <div class="footer-text">Premium Dijital Reklam Ajansi ve Pazarlama</div>
+      <div class="footer-text">Ziya Gokalp Mah. Mall Of Istanbul The Office No:7E D:136, 34490 Basaksehir/Istanbul</div>
     </div>
     <div class="footer-col footer-right">
       <div class="footer-accent">@premiumdijital</div>
@@ -37,7 +34,7 @@ function pageFooter(label = "MÜŞTERİ RAPORU"): string {
 function pageHeaderBand(pageNum: string, category: string, clientName: string): string {
   return `
   <div class="page-subheader">
-    <span class="sh-brand">PREMIUM DİJİTAL</span>
+    <span class="sh-brand">PREMIUM DIJITAL</span>
     <span class="sh-client">${clientName} — Dijital Analiz Raporu</span>
   </div>
   <div class="header-band">
@@ -49,82 +46,143 @@ function pageHeaderBand(pageNum: string, category: string, clientName: string): 
   </div>`;
 }
 
-function analysisList(items: string[], bulletClass: string): string {
+function analysisList(items: string[], bulletColor: string): string {
   return items
     .map(
       (item) =>
-        `<div class="list-row"><span class="${bulletClass}">▶</span><span class="list-text">${item}</span></div>`
+        `<div class="list-row"><span style="color:${bulletColor};font-size:8px;flex-shrink:0;margin-top:2px;">&#9658;</span><span class="list-text">${item}</span></div>`
     )
     .join("");
 }
 
-function analysisPage(opts: {
-  pageNum: string;
-  category: string;
-  title: string;
-  score: number;
-  metrics: { value: string; label: string }[];
-  findings: string[];
-  recommendations: string[];
-  gain: string;
-  clientName: string;
-  gainColor?: string;
-}): string {
-  const color = scoreColor(opts.score);
-  const gainBg = opts.gainColor ?? "#0000C8";
-  return `
-<div class="page inner-page">
-  ${pageHeaderBand(opts.pageNum, opts.category, opts.clientName)}
-  <div class="page-content">
-    <div class="section-title">${opts.title}</div>
-    <div class="section-divider"></div>
-
-    <div class="metrics-row">
-      <div class="score-circle" style="background:${color};">
-        <div class="score-val">${opts.score}</div>
-        <div class="score-sub">/ 100</div>
-      </div>
-      ${opts.metrics
-        .map(
-          (m) => `
-      <div class="metric-box">
-        <div class="metric-value" style="color:${color};">${m.value}</div>
-        <div class="metric-label">${m.label}</div>
-      </div>`
-        )
-        .join("")}
-    </div>
-
-    <div class="findings-section">
-      <div class="findings-label">TESPİT BULGULARI</div>
-      ${analysisList(opts.findings, "bullet-danger")}
-    </div>
-
-    <div class="findings-section">
-      <div class="findings-label">ÖNERİLER</div>
-      ${analysisList(opts.recommendations, "bullet-blue")}
-    </div>
-
-    <div class="gain-box" style="background:${gainBg};">
-      <div class="gain-label">TAHMİNİ KAZANIM</div>
-      <div class="gain-text">${opts.gain}</div>
-    </div>
-  </div>
-  ${pageFooter()}
-</div>`;
+function gainBox(gain: string, color = "#0000C8"): string {
+  return `<div class="gain-box" style="background:${color};">
+    <div class="gain-label">TAHMINI KAZANIM</div>
+    <div class="gain-text">${gain}</div>
+  </div>`;
 }
 
-/* ─── Ana Fonksiyon ─────────────────────────── */
+/* ═══════════════════════════════════════════
+   SVG CHART FONKSIYONLARI
+═══════════════════════════════════════════ */
+
+function competitorScatterSvg(competitors: AnalysisData["competitors"]): string {
+  const width = 460;
+  const height = 260;
+  const padLeft = 48;
+  const padBottom = 36;
+  const plotW = width - padLeft - 16;
+  const plotH = height - padBottom - 20;
+  const maxX = 20;
+  const maxY = 50;
+
+  const gridLinesY = [0, 10, 20, 30, 40, 50].map((v) => {
+    const y = (height - padBottom) - (v / maxY) * plotH;
+    return `<line x1="${padLeft}" y1="${y}" x2="${width - 16}" y2="${y}" stroke="#E8E8E8" stroke-width="1"/>
+            <text x="${padLeft - 5}" y="${y + 3}" text-anchor="end" font-size="8" fill="#AAAAAA" font-family="Arial">${v}</text>`;
+  }).join("");
+
+  const gridLinesX = [0, 5, 10, 15, 20].map((v) => {
+    const x = padLeft + (v / maxX) * plotW;
+    return `<line x1="${x}" y1="18" x2="${x}" y2="${height - padBottom}" stroke="#E8E8E8" stroke-width="1"/>
+            <text x="${x}" y="${height - padBottom + 12}" text-anchor="middle" font-size="8" fill="#AAAAAA" font-family="Arial">${v}</text>`;
+  }).join("");
+
+  const dots = (competitors ?? []).map((c) => {
+    const cx = padLeft + (Math.min(c.paidKeywords, maxX) / maxX) * plotW;
+    const cy = (height - padBottom) - (Math.min(c.paidSearchTraffic ?? 0, maxY) / maxY) * plotH;
+    const col = c.competitionLevel === "high" ? "#C0392B" : c.competitionLevel === "medium" ? "#E67E22" : "#27AE60";
+    const name = c.domain.split(".")[0];
+    return `<circle cx="${cx}" cy="${cy}" r="7" fill="${col}" opacity="0.85"/>
+            <text x="${cx}" y="${cy - 10}" text-anchor="middle" font-size="7" fill="#555555" font-family="Arial">${name}</text>`;
+  }).join("");
+
+  const clientCx = padLeft + (2 / maxX) * plotW;
+  const clientCy = (height - padBottom) - (5 / maxY) * plotH;
+
+  return `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+  <rect width="${width}" height="${height}" fill="#FAFAFA" rx="4"/>
+  ${gridLinesY}
+  ${gridLinesX}
+  <line x1="${padLeft}" y1="18" x2="${padLeft}" y2="${height - padBottom}" stroke="#CCCCCC" stroke-width="1"/>
+  <line x1="${padLeft}" y1="${height - padBottom}" x2="${width - 16}" y2="${height - padBottom}" stroke="#CCCCCC" stroke-width="1"/>
+  <text x="${width / 2}" y="${height - 2}" text-anchor="middle" font-size="8" fill="#888888" font-family="Arial">Ucretli Anahtar Kelime Sayisi</text>
+  <text x="10" y="${height / 2}" text-anchor="middle" font-size="8" fill="#888888" font-family="Arial" transform="rotate(-90,10,${height / 2})">Ucretli Trafik</text>
+  ${dots}
+  <circle cx="${clientCx}" cy="${clientCy}" r="9" fill="#0000C8" opacity="0.9"/>
+  <text x="${clientCx}" y="${clientCy - 12}" text-anchor="middle" font-size="8" fill="#0000C8" font-weight="bold" font-family="Arial">SIZ</text>
+</svg>`;
+}
+
+function geoDonutSvg(targets: AnalysisData["geoTargets"]): string {
+  const size = 180;
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = 68;
+  const innerR = 40;
+
+  const list = targets ?? [];
+  const total = list.reduce((s, t) => s + t.percentage, 0) || 1;
+  let cumAngle = -Math.PI / 2;
+
+  const slices = list.map((t) => {
+    const angle = (t.percentage / total) * 2 * Math.PI;
+    const x1 = cx + r * Math.cos(cumAngle);
+    const y1 = cy + r * Math.sin(cumAngle);
+    cumAngle += angle;
+    const x2 = cx + r * Math.cos(cumAngle);
+    const y2 = cy + r * Math.sin(cumAngle);
+    const ix1 = cx + innerR * Math.cos(cumAngle);
+    const iy1 = cy + innerR * Math.sin(cumAngle);
+    const ix2 = cx + innerR * Math.cos(cumAngle - angle);
+    const iy2 = cy + innerR * Math.sin(cumAngle - angle);
+    const large = angle > Math.PI ? 1 : 0;
+    return `<path d="M${x1.toFixed(2)},${y1.toFixed(2)} A${r},${r} 0 ${large},1 ${x2.toFixed(2)},${y2.toFixed(2)} L${ix1.toFixed(2)},${iy1.toFixed(2)} A${innerR},${innerR} 0 ${large},0 ${ix2.toFixed(2)},${iy2.toFixed(2)} Z" fill="${t.color}" opacity="0.9"/>`;
+  }).join("");
+
+  return `<svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
+  ${slices}
+  <circle cx="${cx}" cy="${cy}" r="${innerR}" fill="white"/>
+  <text x="${cx}" y="${cy + 3}" text-anchor="middle" font-size="10" font-weight="bold" fill="#1A1A1A" font-family="Arial">Hedef</text>
+  <text x="${cx}" y="${cy + 14}" text-anchor="middle" font-size="8" fill="#888888" font-family="Arial">Pazarlar</text>
+</svg>`;
+}
+
+function categoryBarSvg(scores: { label: string; score: number; sectorAvg: number }[]): string {
+  const width = 460;
+  const rowH = 46;
+  const height = scores.length * rowH + 32;
+  const labelW = 110;
+  const barMaxW = width - labelW - 70;
+
+  const rows = scores.map((s, i) => {
+    const y = 24 + i * rowH;
+    const barW = (s.score / 100) * barMaxW;
+    const avgW = (s.sectorAvg / 100) * barMaxW;
+    const col = s.score >= 70 ? "#27AE60" : s.score >= 45 ? "#E67E22" : "#C0392B";
+    return `
+      <text x="${labelW - 8}" y="${y + 12}" text-anchor="end" font-size="9" fill="#555555" font-family="Arial">${s.label}</text>
+      <rect x="${labelW}" y="${y + 2}" width="${avgW.toFixed(1)}" height="10" fill="#DDDDDD" rx="2"/>
+      <text x="${labelW + avgW + 5}" y="${y + 11}" font-size="8" fill="#AAAAAA" font-family="Arial">${s.sectorAvg}</text>
+      <rect x="${labelW}" y="${y + 16}" width="${barW.toFixed(1)}" height="10" fill="${col}" rx="2"/>
+      <text x="${labelW + barW + 5}" y="${y + 25}" font-size="9" font-weight="bold" fill="${col}" font-family="Arial">${s.score}</text>
+    `;
+  }).join("");
+
+  return `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+  <rect width="${width}" height="${height}" fill="#FAFAFA" rx="4"/>
+  <text x="${labelW}" y="14" font-size="8" fill="#AAAAAA" font-family="Arial">Gri: Sektor Ortalamasi   Renkli: Sizin Skorunuz</text>
+  ${rows}
+</svg>`;
+}
+
+/* ═══════════════════════════════════════════
+   ANA FONKSİYON
+═══════════════════════════════════════════ */
 export function generateClientReportHtml(data: AnalysisData): string {
   const overallColor = scoreColor(data.overallScore);
 
-  return `<!DOCTYPE html>
-<html lang="tr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-/* ── Türkçe TTF Font (base64 gömülü — network bağımsız) ── */
+  const css = `
 @font-face {
   font-family: 'Inter';
   font-weight: 400;
@@ -139,149 +197,144 @@ export function generateClientReportHtml(data: AnalysisData): string {
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', Arial, sans-serif;
+  font-size: 10px;
   color: #1A1A1A;
-  background: white;
-  font-size: 11px;
-  line-height: 1.5;
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
+  background: #fff;
 }
 
-/* ── SAYFA YAPISI ── */
+/* ── Sayfa yapısı ── */
 .page {
   width: 210mm;
   min-height: 297mm;
+  display: flex;
+  page-break-after: always;
   position: relative;
-  page-break-after: always;
   overflow: hidden;
-  padding-bottom: 52px; /* footer için yer */
-}
-.page:last-child { page-break-after: auto; }
-
-/* ── KAPAK ── */
-.cover {
-  display: flex;
-  flex-direction: row;
-  min-height: 297mm;
-  page-break-after: always;
 }
 
-.cover-sidebar {
-  width: 72px;
+.sidebar {
+  width: 14px;
   flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: linear-gradient(to bottom,
-    #111111 0px, #111111 80px,
-    #BE29EC 80px, #8A1ECC 33%,
-    #5512AA 55%, #2A08C8 78%, #0000C8 100%);
-  padding-top: 0;
+  background: linear-gradient(to bottom, #BE29EC, #8A1ECC, #5512AA, #2A08C8, #0000C8);
 }
 
-.cover-sidebar-top {
-  background: #111111;
-  width: 100%;
-  padding: 18px 0 12px;
-  text-align: center;
-}
-
-.cover-sidebar-label {
+.sidebar-label {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
-  font-size: 8px;
+  font-size: 6px;
   font-weight: 700;
-  letter-spacing: 4px;
-  color: rgba(255,255,255,0.75);
-  text-transform: uppercase;
-  margin-top: 20px;
-}
-
-.cover-sidebar-text {
-  font-size: 7px;
-  font-weight: 700;
+  color: rgba(255,255,255,0.5);
   letter-spacing: 3px;
-  color: white;
   text-transform: uppercase;
+  text-align: center;
+  width: 100%;
+  padding: 20px 0;
 }
 
-.cover-content {
+.page-inner {
   flex: 1;
-  padding: 52px 44px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  min-height: 297mm;
 }
 
-/* ── KAPAK: üst bilgi satırı ── */
-.cover-top-row {
+/* ── Header band ── */
+.page-subheader {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 48px;
+  align-items: center;
+  padding: 6px 20px;
+  background: #F8F8F8;
+  border-bottom: 1px solid #EEEEEE;
 }
-.cover-brand-name { font-size: 14px; font-weight: 700; color: #0000C8; letter-spacing: 1px; }
-.cover-brand-tag  { font-size: 8px; color: #BE29EC; letter-spacing: 3px; text-transform: uppercase; margin-top: 3px; }
-.cover-meta       { font-size: 8px; color: #CCCCCC; text-align: right; line-height: 1.8; }
+.sh-brand { font-size: 7px; font-weight: 700; color: #0000C8; letter-spacing: 2px; text-transform: uppercase; }
+.sh-client { font-size: 7px; color: #888888; }
 
-/* ── KAPAK: başlık ── */
-.cover-pretitle {
-  font-size: 9px;
-  font-weight: 700;
-  color: #BE29EC;
-  letter-spacing: 5px;
-  text-transform: uppercase;
-  margin-bottom: 14px;
+.header-band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 20px;
+  background: #0000C8;
+  color: white;
 }
-.cover-main-title {
-  font-size: 36px;
+.header-band-left { display: flex; align-items: center; gap: 12px; }
+.hb-num { font-size: 11px; font-weight: 700; opacity: 0.5; }
+.hb-cat { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+.hb-pagenum { font-size: 48px; font-weight: 700; color: rgba(255,255,255,0.08); line-height: 1; }
+
+/* ── İçerik alanı ── */
+.page-content {
+  flex: 1;
+  padding: 20px 22px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.section-title {
+  font-size: 15px;
   font-weight: 700;
   color: #1A1A1A;
-  line-height: 1.1;
+  letter-spacing: 0.5px;
+}
+.section-divider {
+  height: 2px;
+  background: linear-gradient(to right, #0000C8, #BE29EC, transparent);
+  margin-top: 4px;
+  margin-bottom: 4px;
 }
 
-/* ── Sol çizgili bilgi kutusu ── */
-.info-box {
-  border-left: 4px solid #0000C8;
-  padding: 14px 18px;
-  margin: 24px 0;
-  background: #F8F8FF;
-  border-radius: 0 4px 4px 0;
+/* ── Tablo ── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9px;
 }
-.info-box-label { font-size: 8px; color: #888; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
-.info-box-name  { font-size: 22px; font-weight: 700; color: #1A1A1A; margin-bottom: 8px; }
-.info-box-url   { font-size: 9px; color: #888; margin-bottom: 10px; }
+th {
+  background: #1A1A1A;
+  color: white;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 7px 8px;
+  text-align: left;
+}
+td {
+  padding: 7px 8px;
+  border-bottom: 1px solid #F0F0F0;
+  color: #333333;
+  font-size: 9px;
+}
+tr:nth-child(even) td { background: #FAFAFA; }
 
 /* ── Badge ── */
 .badge {
   display: inline-block;
-  padding: 3px 10px;
-  border-radius: 4px;
-  font-size: 9px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-size: 7px;
   font-weight: 700;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-right: 6px;
 }
-.badge-blue   { background: #EEF0FF; color: #0000C8; }
-.badge-purple { background: #F5EEFF; color: #BE29EC; }
-.badge-red    { background: #FFF0F0; color: #C0392B; }
-.badge-green  { background: #F0FFF4; color: #1A7A3F; }
+.badge-red { background: #FDEDEB; color: #C0392B; }
+.badge-yellow { background: #FDF4E3; color: #B7770D; }
+.badge-green { background: #E8F5EE; color: #1A7A3F; }
+.badge-blue { background: #EEF0FF; color: #0000C8; }
 
-/* ── Skor kutusu ── */
-.score-box {
-  background: #F5F5F5;
-  border-radius: 6px;
-  padding: 18px 20px;
+/* ── Metric row ── */
+.metrics-row {
   display: flex;
+  gap: 12px;
   align-items: center;
-  gap: 18px;
-  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 .score-circle {
-  width: 72px;
-  height: 72px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
   display: flex;
   flex-direction: column;
@@ -289,386 +342,973 @@ body {
   justify-content: center;
   flex-shrink: 0;
 }
-.score-val { font-size: 26px; font-weight: 700; color: white; line-height: 1; }
-.score-sub { font-size: 8px; color: rgba(255,255,255,0.7); margin-top: 2px; }
-.score-box-label { font-size: 8px; color: #888; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; }
-.score-box-value { font-size: 16px; font-weight: 700; }
-
-/* ── İÇ SAYFA HEADER ── */
-.page-subheader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 7px 44px;
-  border-bottom: 0.5px solid #EEEEEE;
-}
-.sh-brand  { font-size: 8px; font-weight: 700; color: #0000C8; letter-spacing: 1.5px; text-transform: uppercase; }
-.sh-client { font-size: 8px; color: #AAAAAA; }
-
-.header-band {
-  background: #0000C8;
-  padding: 10px 44px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.header-band-left { display: flex; align-items: center; gap: 16px; }
-.hb-num     { font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.4); letter-spacing: 2px; }
-.hb-cat     { font-size: 11px; font-weight: 700; color: white; letter-spacing: 3px; text-transform: uppercase; }
-.hb-pagenum { font-size: 30px; font-weight: 700; color: rgba(255,255,255,0.12); }
-
-/* ── Sayfa içerik alanı ── */
-.page-content { padding: 24px 44px 0; }
-
-/* ── Bölüm başlığı ── */
-.section-title   { font-size: 24px; font-weight: 700; color: #1A1A1A; line-height: 1.2; margin-bottom: 4px; }
-.section-divider { height: 1.5px; background: #1A1A1A; margin: 14px 0 20px; }
-
-/* ── Metrikler ── */
-.metrics-row {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 22px;
-  align-items: stretch;
-}
+.score-val { font-size: 22px; font-weight: 700; color: white; line-height: 1; }
+.score-sub { font-size: 8px; color: rgba(255,255,255,0.7); }
 .metric-box {
-  flex: 1;
   background: #F5F5F5;
   border-radius: 6px;
-  padding: 14px 12px;
+  padding: 10px 14px;
+  min-width: 80px;
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
-.metric-value { font-size: 22px; font-weight: 700; color: #0000C8; line-height: 1; }
-.metric-label { font-size: 8px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-top: 6px; }
+.metric-value { font-size: 18px; font-weight: 700; }
+.metric-label { font-size: 7px; color: #888888; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
 
-/* ── Bulgular / Öneriler ── */
-.findings-section { margin-bottom: 18px; }
+/* ── Bulgular ── */
+.findings-section { display: flex; flex-direction: column; gap: 4px; }
 .findings-label {
-  font-size: 9px;
+  font-size: 7px;
   font-weight: 700;
-  color: #1A1A1A;
+  color: #888888;
   letter-spacing: 2px;
   text-transform: uppercase;
-  padding-bottom: 6px;
-  border-bottom: 1px solid #EEEEEE;
-  margin-bottom: 10px;
+  margin-bottom: 4px;
 }
-.list-row {
-  display: flex;
-  gap: 8px;
-  align-items: flex-start;
-  margin-bottom: 7px;
-}
-.bullet-danger { color: #C0392B; font-size: 9px; flex-shrink: 0; margin-top: 1px; line-height: 1.5; }
-.bullet-blue   { color: #0000C8; font-size: 9px; flex-shrink: 0; margin-top: 1px; line-height: 1.5; }
-.list-text     { font-size: 10px; color: #333; line-height: 1.55; }
+.list-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 3px; }
+.list-text { font-size: 9px; color: #444444; line-height: 1.4; }
 
-/* ── Kazanım kutusu ── */
+/* ── Gain box ── */
 .gain-box {
   border-radius: 6px;
-  padding: 14px 18px;
-  margin-top: 16px;
+  padding: 12px 16px;
+  margin-top: auto;
 }
-.gain-label { font-size: 8px; font-weight: 700; color: rgba(255,255,255,0.6); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 5px; }
-.gain-text  { font-size: 10px; color: white; line-height: 1.6; }
-
-/* ── Yönetici Özeti tablosu ── */
-table { width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 0; }
-th {
-  background: #111111;
-  color: white;
-  padding: 8px 12px;
-  text-align: left;
-  font-weight: 700;
-  font-size: 8px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-}
-td { padding: 9px 12px; border-bottom: 1px solid #F0F0F0; }
-tr:nth-child(even) td { background: #FAFAFA; }
-.td-issue  { border-left: 3px solid #0000C8; }
-.td-risk   { color: #C0392B; font-weight: 700; }
-.td-loss   { color: #1A1A1A; }
-
-/* ── Kategori skor kartları ── */
-.cat-grid { display: flex; gap: 12px; margin-top: 18px; }
-.cat-card {
-  flex: 1;
-  background: #F5F5F5;
-  border-radius: 6px;
-  padding: 14px 10px;
-  text-align: center;
-}
-.cat-score { font-size: 28px; font-weight: 700; line-height: 1; margin-bottom: 5px; }
-.cat-label { font-size: 8px; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-.cat-bar   { height: 4px; background: #E0E0E0; border-radius: 2px; margin-top: 10px; overflow: hidden; }
-.cat-fill  { height: 100%; border-radius: 2px; }
-
-/* ── Tech stack & otomasyon ── */
-.tech-row  { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
-
-/* ── CTA ── */
-.cta-box {
-  background: linear-gradient(135deg, #0000C8, #BE29EC);
-  border-radius: 8px;
-  padding: 28px 32px;
-  text-align: center;
-  margin-top: 20px;
-}
-.cta-title        { font-size: 20px; font-weight: 700; color: white; margin-bottom: 10px; }
-.cta-text         { font-size: 10px; color: rgba(255,255,255,0.8); margin-bottom: 18px; line-height: 1.6; }
-.cta-divider      { height: 0.5px; background: rgba(255,255,255,0.2); margin-bottom: 14px; }
-.cta-contacts     { display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; }
-.cta-contact-item { font-size: 10px; font-weight: 700; color: white; }
+.gain-label { font-size: 7px; font-weight: 700; color: rgba(255,255,255,0.6); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+.gain-text { font-size: 10px; color: white; line-height: 1.5; }
 
 /* ── Footer ── */
 .page-footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  display: flex;
   background: #111111;
-  padding: 9px 44px;
+  padding: 10px 20px;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.footer-col { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.footer-center { text-align: center; align-items: center; }
+.footer-right { text-align: right; align-items: flex-end; }
+.footer-text { font-size: 7px; color: rgba(255,255,255,0.35); }
+.footer-accent { font-size: 7px; color: rgba(190,41,236,0.7); font-weight: 700; }
+
+/* ── Risk matrix ── */
+.risk-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-left: 3px solid #C0392B;
+  background: #FAFAFA;
+  border-radius: 0 4px 4px 0;
+}
+.risk-issue { font-size: 10px; font-weight: 700; color: #1A1A1A; flex: 1; }
+.risk-detail { font-size: 8px; color: #666666; flex: 1; }
+.risk-loss { font-size: 9px; font-weight: 700; color: #C0392B; flex: 1; text-align: right; }
+
+/* ── İki kolon layout ── */
+.two-col { display: flex; gap: 20px; }
+.two-col > * { flex: 1; }
+
+/* ── Package table ── */
+.pkg-table { display: flex; gap: 12px; }
+.pkg-col {
+  flex: 1;
+  border: 1px solid #E5E5E5;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.pkg-head {
+  padding: 12px;
+  text-align: center;
+}
+.pkg-name { font-size: 10px; font-weight: 700; color: white; text-transform: uppercase; letter-spacing: 1px; }
+.pkg-price { font-size: 18px; font-weight: 700; color: white; margin-top: 4px; }
+.pkg-period { font-size: 8px; color: rgba(255,255,255,0.6); }
+.pkg-body { padding: 12px; }
+.pkg-item { display: flex; gap: 6px; align-items: flex-start; margin-bottom: 6px; font-size: 8px; color: #444444; }
+.pkg-check { color: #27AE60; font-size: 9px; flex-shrink: 0; }
+
+/* ── Timeline ── */
+.timeline-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid #F0F0F0;
+}
+.tl-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #0000C8;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.tl-content { flex: 1; }
+.tl-title { font-size: 10px; font-weight: 700; color: #1A1A1A; }
+.tl-desc { font-size: 8px; color: #666666; margin-top: 3px; line-height: 1.4; }
+.tl-period { font-size: 8px; font-weight: 700; color: #0000C8; white-space: nowrap; }
+
+/* ── CTA sayfası ── */
+.cover-page {
+  width: 210mm;
+  min-height: 297mm;
+  display: flex;
+  page-break-after: always;
+}
+.cover-sidebar {
+  width: 14px;
+  flex-shrink: 0;
+  background: linear-gradient(to bottom, #BE29EC, #0000C8);
+}
+.cover-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.cover-top {
+  background: linear-gradient(135deg, #050510 0%, #0a0030 60%, #1a0040 100%);
+  padding: 48px 36px 40px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.cover-bottom {
+  background: #111111;
+  padding: 20px 36px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.footer-col    { flex: 1; }
-.footer-center { flex: 2; text-align: center; }
-.footer-right  { text-align: right; }
-.footer-text   { font-size: 7px; color: rgba(255,255,255,0.45); line-height: 1.7; }
-.footer-accent { font-size: 7px; color: #BE29EC; line-height: 1.7; }
 
-/* ── Print media ── */
 @media print {
   .page { page-break-after: always; }
 }
-</style>
-</head>
-<body>
+`;
 
-<!-- ══════════════ SAYFA 1: KAPAK ══════════════ -->
-<div class="cover">
-  <div class="cover-sidebar">
-    <div class="cover-sidebar-top">
-      <div class="cover-sidebar-text">A</div>
+  /* ══════════════════════
+     SAYFA 1 — KAPAK
+  ══════════════════════ */
+  const page1 = `
+<div class="cover-page">
+  <div class="cover-sidebar"></div>
+  <div class="cover-body">
+    <div class="cover-top">
+      <!-- Logo alanı -->
+      <div>
+        <div style="font-size:11px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:4px;text-transform:uppercase;margin-bottom:6px;">PREMIUM DIJITAL</div>
+        <div style="height:2px;width:48px;background:linear-gradient(to right,#BE29EC,#0000C8);margin-bottom:48px;"></div>
+      </div>
+
+      <!-- Ana başlık -->
+      <div>
+        <div style="font-size:9px;font-weight:700;color:rgba(190,41,236,0.8);letter-spacing:4px;text-transform:uppercase;margin-bottom:14px;">DIJITAL ANALIZ RAPORU</div>
+        <div style="font-size:36px;font-weight:700;color:white;line-height:1.15;margin-bottom:8px;">${data.clientName}</div>
+        <div style="font-size:14px;color:rgba(255,255,255,0.5);margin-bottom:32px;">${data.clientUrl}</div>
+        <div style="display:flex;gap:24px;align-items:center;">
+          <div style="text-align:center;">
+            <div style="font-size:52px;font-weight:700;color:${overallColor};line-height:1;">${data.overallScore}</div>
+            <div style="font-size:8px;color:rgba(255,255,255,0.4);letter-spacing:2px;text-transform:uppercase;margin-top:2px;">GENEL SKOR</div>
+          </div>
+          <div style="width:1px;height:60px;background:rgba(255,255,255,0.1);"></div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:${overallColor};margin-bottom:4px;">${data.scoreLabel}</div>
+            <div style="font-size:9px;color:rgba(255,255,255,0.4);">${data.sector} — ${data.segment}</div>
+            <div style="font-size:9px;color:rgba(255,255,255,0.3);margin-top:4px;">${data.reportDate}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alt bilgi -->
+      <div>
+        <div style="display:flex;gap:32px;">
+          <div>
+            <div style="font-size:7px;color:rgba(255,255,255,0.3);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;">HAZIRLAYAN</div>
+            <div style="font-size:9px;color:rgba(255,255,255,0.7);">${data.preparedBy}</div>
+          </div>
+          <div>
+            <div style="font-size:7px;color:rgba(255,255,255,0.3);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;">RAPOR NO</div>
+            <div style="font-size:9px;color:rgba(255,255,255,0.7);">${data.reportId}</div>
+          </div>
+          <div>
+            <div style="font-size:7px;color:rgba(255,255,255,0.3);letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;">SAYFA SAYISI</div>
+            <div style="font-size:9px;color:rgba(255,255,255,0.7);">12</div>
+          </div>
+        </div>
+        <div style="margin-top:20px;font-size:8px;color:rgba(255,255,255,0.2);line-height:1.6;">
+          Bu rapor yalnizca ${data.clientName} yetkilileri icin hazirlanmistir. Icerik gizlidir ve ucuncu kisilerle paylasilamaz.
+        </div>
+      </div>
     </div>
-    <div class="cover-sidebar-label">ANALİZ</div>
+
+    <div class="cover-bottom">
+      <div>
+        <div style="font-size:8px;color:rgba(255,255,255,0.5);font-weight:700;">0 212 982 57 24</div>
+        <div style="font-size:7px;color:rgba(255,255,255,0.25);">info@premiumdijital.com</div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:7px;color:rgba(255,255,255,0.2);">Ziya Gokalp Mah. Mall Of Istanbul The Office No:7E D:136</div>
+        <div style="font-size:7px;color:rgba(255,255,255,0.2);">34490 Basaksehir / Istanbul</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:8px;font-weight:700;color:rgba(190,41,236,0.7);">@premiumdijital</div>
+        <div style="font-size:7px;color:rgba(255,255,255,0.25);">premiumdijital.com</div>
+      </div>
+    </div>
   </div>
+</div>`;
 
-  <div class="cover-content">
-    <div>
-      <div class="cover-top-row">
-        <div>
-          <div class="cover-brand-name">PREMIUM DİJİTAL</div>
-          <div class="cover-brand-tag">DİJİTAL BÜYÜME MİMARLIĞI</div>
-        </div>
-        <div class="cover-meta">
-          <div>DOSYA: ${data.reportId}</div>
-          <div>${data.reportDate}</div>
-          <div>HAZIRLAYAN: ${data.preparedBy}</div>
-        </div>
+  /* ══════════════════════
+     SAYFA 2 — YÖNETİCİ ÖZETİ + RİSK MATRİSİ
+  ══════════════════════ */
+  const page2 = `
+<div class="page">
+  <div class="sidebar"><div class="sidebar-label">OZET</div></div>
+  <div class="page-inner">
+    ${pageHeaderBand("02", "YÖNETİCİ ÖZETİ", data.clientName)}
+    <div class="page-content">
+      <div class="section-title">Yönetici Özeti</div>
+      <div class="section-divider"></div>
+
+      <!-- Özet metin -->
+      <div style="font-size:10px;color:#444444;line-height:1.7;padding:14px 16px;background:#F8F8F8;border-radius:6px;border-left:3px solid #0000C8;">
+        ${data.executiveSummary}
       </div>
 
-      <div class="cover-pretitle">STRATEJİK TEŞHİS BELGESİ</div>
-      <div class="cover-main-title">DİJİTAL VARLIK VE</div>
-      <div class="cover-main-title">KONUMLANDIRMA ANALİZİ</div>
-
-      <div class="info-box">
-        <div class="info-box-label">HAZIRLANAN KURUM</div>
-        <div class="info-box-name">${data.clientName}</div>
-        <div class="info-box-url">${data.clientUrl}</div>
-        <div>
-          <span class="badge badge-blue">${data.sector}</span>
-          <span class="badge badge-purple">${data.segment}</span>
-        </div>
-      </div>
-
-      <div class="score-box">
-        <div class="score-circle" style="background:${overallColor};">
-          <div class="score-val">${data.overallScore}</div>
-          <div class="score-sub">/ 100</div>
-        </div>
-        <div>
-          <div class="score-box-label">GENEL DİJİTAL SKOR</div>
-          <div class="score-box-value" style="color:${overallColor};">${data.scoreLabel}</div>
-        </div>
-      </div>
-    </div>
-
-    <div style="border-top:1px solid #EEEEEE; padding-top:14px;">
-      <div style="font-size:8px; color:#CCCCCC;">
-        © ${new Date().getFullYear()} PREMIUM DİJİTAL REKLAM AJANSI VE PAZARLAMA · GİZLİDİR
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ══════════════ SAYFA 2: YÖNETİCİ ÖZETİ ══════════════ -->
-<div class="page inner-page">
-  ${pageHeaderBand("02", "YÖNETİCİ ÖZETİ", data.clientName)}
-  <div class="page-content">
-    <div class="section-title">Pazar Duruşu &amp; Risk Analizi</div>
-    <div class="section-divider"></div>
-
-    <p style="font-size:10px; color:#444; line-height:1.75; margin-bottom:22px;">${data.executiveSummary}</p>
-
-    <div class="findings-label">TESPİT EDİLEN SORUNLAR</div>
-    <table>
-      <thead>
-        <tr>
-          <th>TESPİT EDİLEN SORUN</th>
-          <th>RİSK</th>
-          <th>TAHMİNİ KAYIP</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${data.topIssues
+      <!-- Kategori skor özeti -->
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        ${[
+          { label: "SEO & Web", score: data.seo.score },
+          { label: "PPC", score: data.ppc.score },
+          { label: "Sosyal Medya", score: data.social.score },
+          { label: "Operasyon", score: data.operations.score },
+        ]
           .map(
-            (issue) => `
-        <tr>
-          <td class="td-issue">${issue.issue}</td>
-          <td class="td-risk">${issue.risk}</td>
-          <td class="td-loss">${issue.estimatedLoss}</td>
-        </tr>`
+            (c) => `
+        <div style="flex:1;min-width:80px;background:#F5F5F5;border-radius:6px;padding:12px;text-align:center;border-top:3px solid ${scoreColor(c.score)};">
+          <div style="font-size:22px;font-weight:700;color:${scoreColor(c.score)};">${c.score}</div>
+          <div style="font-size:7px;color:#888888;text-transform:uppercase;letter-spacing:1px;margin-top:3px;">${c.label}</div>
+        </div>`
           )
           .join("")}
-      </tbody>
-    </table>
-
-    <div style="font-size:9px; font-weight:700; color:#1A1A1A; letter-spacing:2px; text-transform:uppercase; margin:22px 0 0; padding-bottom:6px; border-bottom:1px solid #EEE;">
-      KATEGORİ BAZLI SKOR
-    </div>
-    <div class="cat-grid">
-      ${[
-        { label: "SEO &amp; WEB", score: data.seo.score },
-        { label: "PPC", score: data.ppc.score },
-        { label: "SOSYAL", score: data.social.score },
-        { label: "OPERASYON", score: data.operations.score },
-      ]
-        .map((cat) => {
-          const c = scoreColor(cat.score);
-          return `
-      <div class="cat-card">
-        <div class="cat-score" style="color:${c};">${cat.score}</div>
-        <div class="cat-label">${cat.label}</div>
-        <div class="cat-bar">
-          <div class="cat-fill" style="width:${cat.score}%; background:${c};"></div>
-        </div>
-      </div>`;
-        })
-        .join("")}
-    </div>
-  </div>
-  ${pageFooter()}
-</div>
-
-<!-- ══════════════ SAYFA 3: SEO & WEB ══════════════ -->
-${analysisPage({
-  pageNum: "03",
-  category: "SEO &amp; WEB MİMARİSİ",
-  title: "Teknik Altyapı &amp; Görünürlük Analizi",
-  score: data.seo.score,
-  metrics: [
-    { value: `${(data.seo.pageSpeed / 1000).toFixed(1)}s`, label: "SAYFA HIZI" },
-    { value: String(data.seo.mobileScore), label: "MOBİL SKORU" },
-    { value: String(data.seo.technicalErrors), label: "TEKNİK HATA" },
-  ],
-  findings: data.seo.findings,
-  recommendations: data.seo.recommendations,
-  gain: data.seo.gain,
-  clientName: data.clientName,
-})}
-
-<!-- ══════════════ SAYFA 4: PPC ══════════════ -->
-${analysisPage({
-  pageNum: "04",
-  category: "PPC &amp; REKLAM PERFORMANSI",
-  title: "Reklam Harcaması &amp; Dönüşüm Analizi",
-  score: data.ppc.score,
-  metrics: [
-    { value: `${data.ppc.qualityScore}/10`, label: "KALİTE SKORU" },
-    { value: data.ppc.competitorSpend, label: "RAKİP HARCAMA" },
-  ],
-  findings: data.ppc.findings,
-  recommendations: data.ppc.recommendations,
-  gain: data.ppc.gain,
-  clientName: data.clientName,
-})}
-
-<!-- ══════════════ SAYFA 5: SOSYAL MEDYA ══════════════ -->
-${analysisPage({
-  pageNum: "05",
-  category: "SOSYAL MEDYA &amp; İÇERİK",
-  title: "Marka Tutarlılığı &amp; Etkileşim Analizi",
-  score: data.social.score,
-  metrics: [
-    { value: data.social.engagementRate, label: "ETKİLEŞİM ORANI" },
-    { value: String(data.social.consistencyScore), label: "TUTARLILIK SKORU" },
-  ],
-  findings: data.social.findings,
-  recommendations: data.social.recommendations,
-  gain: data.social.gain,
-  clientName: data.clientName,
-  gainColor: "#BE29EC",
-})}
-
-<!-- ══════════════ SAYFA 6: DİJİTAL OPERASYON + CTA ══════════════ -->
-<div class="page inner-page">
-  ${pageHeaderBand("06", "DİJİTAL OPERASYON", data.clientName)}
-  <div class="page-content">
-    <div class="section-title">Sistem Olgunluğu &amp; Otomasyon Boşlukları</div>
-    <div class="section-divider"></div>
-
-    <div class="metrics-row" style="align-items:flex-start;">
-      <div class="score-circle" style="background:${scoreColor(data.operations.score)}; flex-shrink:0;">
-        <div class="score-val">${data.operations.score}</div>
-        <div class="score-sub">/ 100</div>
       </div>
-      <div style="flex:1;">
-        <div class="findings-label" style="margin-bottom:8px;">MEVCUT TECH STACK</div>
-        <div class="tech-row">
-          ${data.operations.techStack.map((t) => `<span class="badge badge-blue">${t}</span>`).join("")}
+
+      <!-- Risk matrisi -->
+      <div>
+        <div class="findings-label" style="margin-bottom:8px;">KRİTİK RİSK MATRİSİ</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          ${data.topIssues
+            .map(
+              (issue) => `
+          <div class="risk-row">
+            <div class="risk-issue">${issue.issue}</div>
+            <div class="risk-detail">${issue.risk}</div>
+            <div class="risk-loss">${issue.estimatedLoss}</div>
+          </div>`
+            )
+            .join("")}
         </div>
-        <div class="findings-label" style="margin:12px 0 8px;">OTOMASYON BOŞLUKLARI</div>
-        ${data.operations.automationGaps
-          .map((g) => `<div class="list-row"><span class="bullet-danger">▶</span><span class="list-text">${g}</span></div>`)
+      </div>
+
+      ${gainBox(
+        "Bu raporda tespit edilen kritik eksiklikler giderildiginde, mevcut reklam butcenizin verimliligi en az %40 artis gosterebilir.",
+        "#1A1A1A"
+      )}
+    </div>
+    ${pageFooter()}
+  </div>
+</div>`;
+
+  /* ══════════════════════
+     SAYFA 3 — SEKTÖR ANALİZİ
+  ══════════════════════ */
+  const compList = data.competitors ?? [];
+  const page3 = `
+<div class="page">
+  <div class="sidebar"><div class="sidebar-label">SEKTOR</div></div>
+  <div class="page-inner">
+    ${pageHeaderBand("03", "SEKTÖR ANALİZİ", data.clientName)}
+    <div class="page-content">
+      <div class="section-title">Rekabet İstihbaratı</div>
+      <div class="section-divider"></div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>RAKİP ALAN ADI</th>
+            <th>REKABETÇİLİK</th>
+            <th style="text-align:center;">ÜCRETLİ ANAHTAR KELİME</th>
+            <th style="text-align:right;">TAHMİNİ AYLIK HARCAMA</th>
+            <th style="text-align:center;">ÖD. TRAFIK</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${compList
+            .map(
+              (c) => `
+          <tr>
+            <td style="font-weight:700;">${c.domain}</td>
+            <td><span class="badge badge-${c.competitionLevel === "high" ? "red" : c.competitionLevel === "medium" ? "yellow" : "green"}">${c.competitionLevel === "high" ? "YÜKSEK" : c.competitionLevel === "medium" ? "ORTA" : "DÜŞÜK"}</span></td>
+            <td style="text-align:center;font-weight:700;">${c.paidKeywords}</td>
+            <td style="text-align:right;font-weight:700;color:#C0392B;">${c.monthlySpend ?? "—"}</td>
+            <td style="text-align:center;color:#666666;">${c.paidSearchTraffic ?? 0}K</td>
+          </tr>`
+            )
+            .join("")}
+        </tbody>
+      </table>
+
+      <div>
+        <div class="findings-label" style="margin-bottom:8px;">KOMPETİTİF POZİSYON HARİTASI</div>
+        ${competitorScatterSvg(data.competitors)}
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;">
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:10px;border-radius:50%;background:#C0392B;"></div><span style="font-size:8px;color:#666;">Yuksek Rekabet</span></div>
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:10px;border-radius:50%;background:#E67E22;"></div><span style="font-size:8px;color:#666;">Orta Rekabet</span></div>
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:10px;border-radius:50%;background:#27AE60;"></div><span style="font-size:8px;color:#666;">Dusuk Rekabet</span></div>
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:10px;height:10px;border-radius:50%;background:#0000C8;"></div><span style="font-size:8px;color:#0000C8;font-weight:700;">Siz</span></div>
+      </div>
+    </div>
+    ${pageFooter()}
+  </div>
+</div>`;
+
+  /* ══════════════════════
+     SAYFA 4 — SEO & WEB MİMARİSİ
+  ══════════════════════ */
+  const page4 = `
+<div class="page">
+  <div class="sidebar"><div class="sidebar-label">SEO</div></div>
+  <div class="page-inner">
+    ${pageHeaderBand("04", "SEO & WEB MİMARİSİ", data.clientName)}
+    <div class="page-content">
+      <div class="section-title">SEO &amp; Web Mimarisi Analizi</div>
+      <div class="section-divider"></div>
+
+      <div class="metrics-row">
+        <div class="score-circle" style="background:${scoreColor(data.seo.score)};">
+          <div class="score-val">${data.seo.score}</div>
+          <div class="score-sub">/ 100</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value" style="color:${scoreColor(data.seo.score)};">${(data.seo.pageSpeed / 1000).toFixed(1)}s</div>
+          <div class="metric-label">SAYFA HIZI</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value" style="color:${scoreColor(data.seo.mobileScore)};">${data.seo.mobileScore}</div>
+          <div class="metric-label">MOBİL SKOR</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value" style="color:#C0392B;">${data.seo.technicalErrors}</div>
+          <div class="metric-label">TEKNİK HATA</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="findings-section">
+          <div class="findings-label">TESPİT BULGULARI</div>
+          ${analysisList(data.seo.findings, "#C0392B")}
+        </div>
+        <div class="findings-section">
+          <div class="findings-label">ÖNERİLER</div>
+          ${analysisList(data.seo.recommendations, "#0000C8")}
+        </div>
+      </div>
+
+      ${gainBox(data.seo.gain)}
+    </div>
+    ${pageFooter()}
+  </div>
+</div>`;
+
+  /* ══════════════════════
+     SAYFA 5 — PPC & PERFORMANS (Bütçe + Keyword)
+  ══════════════════════ */
+  const scenarios = data.budgetScenarios ?? [];
+  const keywords = data.sampleKeywords ?? [];
+  const page5 = `
+<div class="page">
+  <div class="sidebar"><div class="sidebar-label">PPC</div></div>
+  <div class="page-inner">
+    ${pageHeaderBand("05", "PPC & PERFORMANS", data.clientName)}
+    <div class="page-content">
+      <div class="section-title">PPC &amp; Bütçe Senaryoları</div>
+      <div class="section-divider"></div>
+
+      <!-- Bütçe senaryoları -->
+      <div style="display:flex;gap:14px;">
+        ${scenarios
+          .map(
+            (s) => `
+        <div style="flex:1;border:2px solid #0000C8;border-radius:8px;padding:14px;background:#FAFEFF;">
+          <div style="font-size:8px;font-weight:700;color:#0000C8;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;">${s.label} PLAN</div>
+          <div style="font-size:20px;font-weight:700;color:#1A1A1A;margin-bottom:2px;">${s.monthlyBudget}<span style="font-size:10px;color:#888;">/ay</span></div>
+          <div style="font-size:8px;color:#888888;margin-bottom:14px;">Gunluk butce: ${s.dailyBudget}</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;">
+            <div style="background:#F5F5F5;border-radius:4px;padding:7px;text-align:center;">
+              <div style="font-size:15px;font-weight:700;color:#0000C8;">${s.clicks}</div>
+              <div style="font-size:7px;color:#888;text-transform:uppercase;letter-spacing:1px;">TIKLAMA</div>
+            </div>
+            <div style="background:#F5F5F5;border-radius:4px;padding:7px;text-align:center;">
+              <div style="font-size:15px;font-weight:700;color:#0000C8;">${s.impressions}</div>
+              <div style="font-size:7px;color:#888;text-transform:uppercase;letter-spacing:1px;">GÖSTERİM</div>
+            </div>
+            <div style="background:#F5F5F5;border-radius:4px;padding:7px;text-align:center;">
+              <div style="font-size:15px;font-weight:700;color:#27AE60;">${s.ctr}</div>
+              <div style="font-size:7px;color:#888;text-transform:uppercase;letter-spacing:1px;">TO</div>
+            </div>
+            <div style="background:#F5F5F5;border-radius:4px;padding:7px;text-align:center;">
+              <div style="font-size:15px;font-weight:700;color:#E67E22;">${s.avgCpc}</div>
+              <div style="font-size:7px;color:#888;text-transform:uppercase;letter-spacing:1px;">ORT. TBM</div>
+            </div>
+          </div>
+        </div>`
+          )
           .join("")}
       </div>
-    </div>
 
-    <div class="findings-section">
-      <div class="findings-label">TESPİT BULGULARI</div>
-      ${analysisList(data.operations.findings, "bullet-danger")}
-    </div>
-    <div class="findings-section">
-      <div class="findings-label">ÖNERİLER</div>
-      ${analysisList(data.operations.recommendations, "bullet-blue")}
-    </div>
-
-    <div class="gain-box" style="background:#0000C8;">
-      <div class="gain-label">TAHMİNİ KAZANIM</div>
-      <div class="gain-text">${data.operations.gain}</div>
-    </div>
-
-    <div class="cta-box">
-      <div class="cta-title">Sisteminizi Birlikte Kurgulayalım.</div>
-      <div class="cta-text">Bu raporda tespit edilen eksiklikler için özel bir büyüme planı hazırlıyoruz.<br>İlk strateji görüşmesi ücretsiz ve bağlayıcı değildir.</div>
-      <div class="cta-divider"></div>
-      <div class="cta-contacts">
-        <span class="cta-contact-item">premiumdijital.com</span>
-        <span class="cta-contact-item">info@premiumdijital.com</span>
-        <span class="cta-contact-item">(0212) 982 57 24</span>
+      <!-- Anahtar kelime tablosu -->
+      <div>
+        <div class="findings-label" style="margin-bottom:6px;">ÖRNEK ANAHTAR KELİME PLANI</div>
+        <table>
+          <thead>
+            <tr>
+              <th>ANAHTAR KELİME</th>
+              <th>EŞLEME</th>
+              <th style="text-align:center;">MAKS TBM</th>
+              <th style="text-align:center;">TIKLAMA</th>
+              <th style="text-align:center;">GÖSTERİM</th>
+              <th style="text-align:right;">MALİYET</th>
+              <th style="text-align:center;">TO</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${keywords
+              .map(
+                (kw) => `
+            <tr>
+              <td style="font-weight:600;">${kw.keyword}</td>
+              <td><span class="badge badge-blue">${kw.matchType}</span></td>
+              <td style="text-align:center;">${kw.maxCpc}</td>
+              <td style="text-align:center;font-weight:700;">${kw.clicks}</td>
+              <td style="text-align:center;">${kw.impressions.toLocaleString("tr-TR")}</td>
+              <td style="text-align:right;font-weight:700;color:#C0392B;">${kw.cost}</td>
+              <td style="text-align:center;color:#27AE60;font-weight:700;">${kw.ctr}</td>
+            </tr>`
+              )
+              .join("")}
+          </tbody>
+        </table>
       </div>
     </div>
+    ${pageFooter()}
   </div>
-  ${pageFooter()}
-</div>
+</div>`;
 
+  /* ══════════════════════
+     SAYFA 6 — COĞRAFİ HEDEFLEME + PPC DEVAM
+  ══════════════════════ */
+  const geoTargets = data.geoTargets ?? [];
+  const page6 = `
+<div class="page">
+  <div class="sidebar"><div class="sidebar-label">PPC</div></div>
+  <div class="page-inner">
+    ${pageHeaderBand("06", "COĞRAFİ HEDEFLEME", data.clientName)}
+    <div class="page-content">
+      <div class="section-title">Coğrafi Hedefleme &amp; Pazar Analizi</div>
+      <div class="section-divider"></div>
+
+      <div style="display:flex;gap:28px;align-items:flex-start;">
+        ${geoDonutSvg(data.geoTargets)}
+        <div style="flex:1;display:flex;flex-direction:column;gap:8px;padding-top:10px;">
+          <div class="findings-label" style="margin-bottom:4px;">HEDEF PAZAR DAĞILIMI</div>
+          ${geoTargets
+            .map(
+              (t) => `
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="width:10px;height:10px;border-radius:2px;background:${t.color};flex-shrink:0;"></div>
+            <div style="flex:1;font-size:9px;color:#444444;">${t.country}</div>
+            <div style="width:80px;background:#F0F0F0;border-radius:2px;height:6px;overflow:hidden;flex-shrink:0;">
+              <div style="width:${t.percentage}%;height:100%;background:${t.color};"></div>
+            </div>
+            <div style="font-size:11px;font-weight:700;color:#1A1A1A;min-width:30px;text-align:right;">%${t.percentage}</div>
+          </div>`
+            )
+            .join("")}
+        </div>
+      </div>
+
+      <!-- PPC bulgular devam -->
+      <div class="two-col">
+        <div class="findings-section">
+          <div class="findings-label">TESPİT BULGULARI</div>
+          ${analysisList(data.ppc.findings, "#C0392B")}
+        </div>
+        <div class="findings-section">
+          <div class="findings-label">ÖNERİLER</div>
+          ${analysisList(data.ppc.recommendations, "#0000C8")}
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:center;">
+        <div class="metric-box" style="text-align:center;">
+          <div class="metric-value" style="color:${scoreColor(data.ppc.score)};">${data.ppc.score}</div>
+          <div class="metric-label">PPC SKOR</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value" style="color:#C0392B;">${data.ppc.qualityScore}/10</div>
+          <div class="metric-label">KALİTE SKORU</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value" style="font-size:12px;color:#E67E22;">${data.ppc.competitorSpend}</div>
+          <div class="metric-label">RAKİP HARCAMASI</div>
+        </div>
+      </div>
+
+      ${gainBox(data.ppc.gain, "#BE29EC")}
+    </div>
+    ${pageFooter()}
+  </div>
+</div>`;
+
+  /* ══════════════════════
+     SAYFA 7 — SOSYAL MEDYA
+  ══════════════════════ */
+  const page7 = `
+<div class="page">
+  <div class="sidebar"><div class="sidebar-label">SOSYAL</div></div>
+  <div class="page-inner">
+    ${pageHeaderBand("07", "SOSYAL MEDYA & İÇERİK", data.clientName)}
+    <div class="page-content">
+      <div class="section-title">Sosyal Medya &amp; İçerik Analizi</div>
+      <div class="section-divider"></div>
+
+      <div class="metrics-row">
+        <div class="score-circle" style="background:${scoreColor(data.social.score)};">
+          <div class="score-val">${data.social.score}</div>
+          <div class="score-sub">/ 100</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value" style="color:${scoreColor(data.social.score)};">${data.social.engagementRate}</div>
+          <div class="metric-label">ETKİLEŞİM ORANI</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value" style="color:${scoreColor(data.social.consistencyScore)};">${data.social.consistencyScore}</div>
+          <div class="metric-label">TUTARLILIK SKORU</div>
+        </div>
+      </div>
+
+      <!-- Platform karşılaştırma simülasyonu -->
+      <div>
+        <div class="findings-label" style="margin-bottom:8px;">PLATFORM PERFORMANS KARŞILAŞTIRMASI</div>
+        <div style="display:flex;gap:10px;">
+          ${[
+            { platform: "Instagram", score: Math.round(data.social.score * 1.1), icon: "IG" },
+            { platform: "LinkedIn", score: Math.round(data.social.score * 0.9), icon: "LN" },
+            { platform: "Facebook", score: Math.round(data.social.score * 0.85), icon: "FB" },
+            { platform: "X / Twitter", score: Math.round(data.social.score * 0.7), icon: "X" },
+          ]
+            .map(
+              (p) => `
+          <div style="flex:1;background:#F8F8F8;border-radius:6px;padding:10px;text-align:center;">
+            <div style="font-size:10px;font-weight:700;color:#1A1A1A;margin-bottom:4px;">${p.icon}</div>
+            <div style="font-size:16px;font-weight:700;color:${scoreColor(Math.min(p.score, 100))};">${Math.min(p.score, 100)}</div>
+            <div style="font-size:7px;color:#888;margin-top:3px;">${p.platform}</div>
+          </div>`
+            )
+            .join("")}
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="findings-section">
+          <div class="findings-label">TESPİT BULGULARI</div>
+          ${analysisList(data.social.findings, "#C0392B")}
+        </div>
+        <div class="findings-section">
+          <div class="findings-label">ÖNERİLER</div>
+          ${analysisList(data.social.recommendations, "#0000C8")}
+        </div>
+      </div>
+
+      ${gainBox(data.social.gain, "#0000C8")}
+    </div>
+    ${pageFooter()}
+  </div>
+</div>`;
+
+  /* ══════════════════════
+     SAYFA 8 — DİJİTAL OPERASYON
+  ══════════════════════ */
+  const page8 = `
+<div class="page">
+  <div class="sidebar"><div class="sidebar-label">OPER.</div></div>
+  <div class="page-inner">
+    ${pageHeaderBand("08", "DİJİTAL OPERASYON", data.clientName)}
+    <div class="page-content">
+      <div class="section-title">Dijital Operasyon &amp; Otomasyon</div>
+      <div class="section-divider"></div>
+
+      <div class="metrics-row">
+        <div class="score-circle" style="background:${scoreColor(data.operations.score)};">
+          <div class="score-val">${data.operations.score}</div>
+          <div class="score-sub">/ 100</div>
+        </div>
+        <div style="flex:1;">
+          <div class="findings-label" style="margin-bottom:8px;">MEVCUT TECH STACK</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            ${data.operations.techStack
+              .map(
+                (t) => `<span style="background:#EEF0FF;color:#0000C8;padding:4px 10px;border-radius:12px;font-size:8px;font-weight:700;">${t}</span>`
+              )
+              .join("")}
+          </div>
+        </div>
+      </div>
+
+      <!-- Otomasyon gap analizi -->
+      <div>
+        <div class="findings-label" style="margin-bottom:8px;">OTOMASYON BOŞLUK ANALİZİ</div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          ${data.operations.automationGaps
+            .map(
+              (g) => `
+          <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#FDEDEB;border-radius:4px;border-left:3px solid #C0392B;">
+            <span style="font-size:9px;color:#888;font-weight:700;flex-shrink:0;">GAP</span>
+            <span style="font-size:9px;color:#1A1A1A;">${g}</span>
+            <span style="margin-left:auto;font-size:8px;font-weight:700;color:#C0392B;flex-shrink:0;">EKSİK</span>
+          </div>`
+            )
+            .join("")}
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="findings-section">
+          <div class="findings-label">TESPİT BULGULARI</div>
+          ${analysisList(data.operations.findings, "#C0392B")}
+        </div>
+        <div class="findings-section">
+          <div class="findings-label">ÖNERİLER</div>
+          ${analysisList(data.operations.recommendations, "#0000C8")}
+        </div>
+      </div>
+
+      ${gainBox(data.operations.gain, "#1A1A1A")}
+    </div>
+    ${pageFooter()}
+  </div>
+</div>`;
+
+  /* ══════════════════════
+     SAYFA 9 — KATEGORİ SKORU KARŞILAŞTIRMASI
+  ══════════════════════ */
+  const catScores = [
+    { label: "SEO & Web", score: data.seo.score, sectorAvg: 58 },
+    { label: "PPC", score: data.ppc.score, sectorAvg: 52 },
+    { label: "Sosyal Medya", score: data.social.score, sectorAvg: 61 },
+    { label: "Operasyon", score: data.operations.score, sectorAvg: 47 },
+    { label: "Genel", score: data.overallScore, sectorAvg: 55 },
+  ];
+  const page9 = `
+<div class="page">
+  <div class="sidebar"><div class="sidebar-label">ANALIZ</div></div>
+  <div class="page-inner">
+    ${pageHeaderBand("09", "KATEGORİ ANALİZİ", data.clientName)}
+    <div class="page-content">
+      <div class="section-title">Kategori Skorları &amp; Sektör Karşılaştırması</div>
+      <div class="section-divider"></div>
+
+      ${categoryBarSvg(catScores)}
+
+      <!-- Sektör ortalamaları açıklaması -->
+      <div style="background:#F8F8F8;border-radius:6px;padding:14px 16px;margin-top:4px;">
+        <div class="findings-label" style="margin-bottom:10px;">SEKTÖR KARŞILAŞTIRMASI — ${data.sector.toUpperCase()}</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          ${catScores
+            .map((c) => {
+              const diff = c.score - c.sectorAvg;
+              const diffColor = diff >= 0 ? "#27AE60" : "#C0392B";
+              const diffSign = diff >= 0 ? "+" : "";
+              return `
+          <div style="flex:1;min-width:80px;text-align:center;padding:10px 8px;background:white;border-radius:4px;border:1px solid #EEEEEE;">
+            <div style="font-size:8px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">${c.label}</div>
+            <div style="font-size:18px;font-weight:700;color:${scoreColor(c.score)};">${c.score}</div>
+            <div style="font-size:8px;font-weight:700;color:${diffColor};margin-top:2px;">${diffSign}${diff} ort.'a göre</div>
+          </div>`;
+            })
+            .join("")}
+        </div>
+      </div>
+
+      <div style="padding:12px 16px;background:#EEF0FF;border-radius:6px;border-left:3px solid #0000C8;">
+        <div class="findings-label" style="margin-bottom:4px;">ÖZET DEĞERLENDİRME</div>
+        <div style="font-size:9px;color:#444444;line-height:1.6;">
+          ${data.clientName} olarak genel dijital skorunuz <strong style="color:${overallColor};">${data.overallScore}/100</strong> ile sektör ortalamasinin (55)
+          ${data.overallScore >= 55 ? "üzerindedir" : "altindadir"}.
+          En kritik iyilestirme alanlari: <strong>${catScores.sort((a, b) => a.score - b.score).slice(0, 2).map((c) => c.label).join(" ve ")}</strong>.
+        </div>
+      </div>
+    </div>
+    ${pageFooter()}
+  </div>
+</div>`;
+
+  /* ══════════════════════
+     SAYFA 10 — HİZMET KAPSAMI & PAKETLER
+  ══════════════════════ */
+  const packages = [
+    {
+      name: "Başlangıç",
+      price: "₺35.000",
+      color: "#1A1A1A",
+      items: [
+        "SEO Teknik Audit ve Düzeltme",
+        "Google Ads Kurulum (1 kampanya)",
+        "Aylık Performans Raporu",
+        "E-posta Destek",
+        "3 Aylık Taahhüt",
+      ],
+    },
+    {
+      name: "Büyüme",
+      price: "₺55.000",
+      color: "#0000C8",
+      items: [
+        "Tüm Başlangıç Paketi Dahil",
+        "Google + Meta Ads Yönetimi",
+        "Sosyal Medya İçerik (8 içerik/ay)",
+        "CRM Kurulumu ve Entegrasyonu",
+        "Haftalık Strateji Görüşmesi",
+        "6 Aylık Taahhüt",
+      ],
+    },
+    {
+      name: "Sistem",
+      price: "₺85.000",
+      color: "#BE29EC",
+      items: [
+        "Tüm Büyüme Paketi Dahil",
+        "Tam Dijital Operasyon Kurulumu",
+        "Özel Landing Page Tasarımı",
+        "Otomasyon ve WhatsApp API",
+        "Dedike Hesap Yöneticisi",
+        "Aylık Yönetici Sunumu",
+        "12 Aylık Taahhüt",
+      ],
+    },
+  ];
+  const page10 = `
+<div class="page">
+  <div class="sidebar"><div class="sidebar-label">PAKET</div></div>
+  <div class="page-inner">
+    ${pageHeaderBand("10", "HİZMET KAPSAMI", data.clientName)}
+    <div class="page-content">
+      <div class="section-title">Hizmet Paketleri</div>
+      <div class="section-divider"></div>
+
+      <div class="pkg-table">
+        ${packages
+          .map(
+            (pkg) => `
+        <div class="pkg-col">
+          <div class="pkg-head" style="background:${pkg.color};">
+            <div class="pkg-name">${pkg.name}</div>
+            <div class="pkg-price">${pkg.price}<span style="font-size:10px;opacity:0.6;">/ay</span></div>
+          </div>
+          <div class="pkg-body">
+            ${pkg.items
+              .map(
+                (item) => `
+            <div class="pkg-item">
+              <span class="pkg-check">&#10003;</span>
+              <span>${item}</span>
+            </div>`
+              )
+              .join("")}
+          </div>
+        </div>`
+          )
+          .join("")}
+      </div>
+
+      <!-- Neden Premium Dijital? -->
+      <div style="background:#F8F8F8;border-radius:6px;padding:14px 16px;">
+        <div class="findings-label" style="margin-bottom:8px;">NEDEN PREMIUM DİJİTAL?</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          ${[
+            { title: "Veri Odaklı", desc: "Her karar veriye dayanir, tahmine degil" },
+            { title: "Sektör Uzmanlığı", desc: "Saglik ve turizm sektorlerinde derin bilgi" },
+            { title: "Şeffaf Raporlama", desc: "Haftalik ve aylik detayli performans raporlari" },
+            { title: "Tam Sistem", desc: "Sadece reklam degil, butun dijital sistemini kuruyoruz" },
+          ]
+            .map(
+              (f) => `
+          <div style="flex:1;min-width:120px;padding:10px;background:white;border-radius:4px;border-top:2px solid #0000C8;">
+            <div style="font-size:9px;font-weight:700;color:#1A1A1A;margin-bottom:3px;">${f.title}</div>
+            <div style="font-size:8px;color:#666666;line-height:1.4;">${f.desc}</div>
+          </div>`
+            )
+            .join("")}
+        </div>
+      </div>
+
+      <div style="padding:10px 14px;background:#1A1A1A;border-radius:6px;text-align:center;">
+        <div style="font-size:9px;color:rgba(255,255,255,0.5);margin-bottom:4px;">Tavsiye Edilen Paket</div>
+        <div style="font-size:13px;font-weight:700;color:white;">Mevcut durumunuza gore <span style="color:#BE29EC;">Buyume Paketi</span> onerilir</div>
+      </div>
+    </div>
+    ${pageFooter()}
+  </div>
+</div>`;
+
+  /* ══════════════════════
+     SAYFA 11 — SÜREÇ & ZAMAN ÇİZELGESİ
+  ══════════════════════ */
+  const timeline = [
+    { num: "1", title: "Onboarding ve Sistem Kurulumu", desc: "Hesap erişimleri, pixel kurulumları, Analytics yapılandırması, takip altyapısı kurulumu.", period: "Hafta 1" },
+    { num: "2", title: "Audit ve Strateji Belgesi", desc: "SEO teknik audit, reklam hesabı analizi, rakip araştırması, içerik strateji belgesi.", period: "Hafta 2" },
+    { num: "3", title: "İlk Kampanya Lansmanı", desc: "Google Ads ve Meta kampanyaları yayına alınır, A/B test grupları oluşturulur.", period: "Hafta 3-4" },
+    { num: "4", title: "Optimizasyon Döngüsü", desc: "İlk 30 günlük veri analizi, teklif optimizasyonu, negatif kelime güncellemesi.", period: "Ay 2" },
+    { num: "5", title: "Büyüme Aksiyonları", desc: "Performans verisine göre bütçe dağılımı optimize edilir, yeni reklam grupları eklenir.", period: "Ay 3" },
+    { num: "6", title: "Yönetici Değerlendirme Sunumu", desc: "90 günlük kapsamlı performans sunumu, sonraki dönem stratejisi, hedef revizyonu.", period: "Ay 3 sonu" },
+  ];
+  const page11 = `
+<div class="page">
+  <div class="sidebar"><div class="sidebar-label">SUREC</div></div>
+  <div class="page-inner">
+    ${pageHeaderBand("11", "SÜREÇ & ZAMANÇİZELGESİ", data.clientName)}
+    <div class="page-content">
+      <div class="section-title">Çalışma Süreci &amp; Zaman Çizelgesi</div>
+      <div class="section-divider"></div>
+
+      <div style="display:flex;flex-direction:column;gap:0;">
+        ${timeline
+          .map(
+            (step) => `
+        <div class="timeline-row">
+          <div class="tl-num">${step.num}</div>
+          <div class="tl-content">
+            <div class="tl-title">${step.title}</div>
+            <div class="tl-desc">${step.desc}</div>
+          </div>
+          <div class="tl-period">${step.period}</div>
+        </div>`
+          )
+          .join("")}
+      </div>
+
+      <!-- Çalışma modeli -->
+      <div style="background:#F8F8F8;border-radius:6px;padding:14px 16px;">
+        <div class="findings-label" style="margin-bottom:8px;">ÇALIŞMA MODELİ</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          ${[
+            { title: "Haftalık Rapor", desc: "Her Pazartesi e-posta ile" },
+            { title: "Aylık Sunum", desc: "Google Meet - 60 dk" },
+            { title: "Anlık Bildirim", desc: "WhatsApp ile kritik gelismeler" },
+            { title: "Dashboard", desc: "7/24 canli Looker Studio" },
+          ]
+            .map(
+              (m) => `
+          <div style="flex:1;min-width:100px;padding:8px 10px;background:white;border-radius:4px;border-left:2px solid #0000C8;">
+            <div style="font-size:8px;font-weight:700;color:#1A1A1A;margin-bottom:2px;">${m.title}</div>
+            <div style="font-size:7px;color:#888888;">${m.desc}</div>
+          </div>`
+            )
+            .join("")}
+        </div>
+      </div>
+    </div>
+    ${pageFooter()}
+  </div>
+</div>`;
+
+  /* ══════════════════════
+     SAYFA 12 — CTA & İLETİŞİM
+  ══════════════════════ */
+  const page12 = `
+<div class="page">
+  <div class="sidebar" style="background:linear-gradient(to bottom,#BE29EC,#0000C8);"></div>
+  <div class="page-inner">
+    ${pageHeaderBand("12", "İLETİŞİM", data.clientName)}
+    <div class="page-content" style="justify-content:center;align-items:center;text-align:center;gap:20px;">
+
+      <div style="max-width:400px;">
+        <div style="font-size:9px;font-weight:700;color:#BE29EC;letter-spacing:3px;text-transform:uppercase;margin-bottom:12px;">SONRAKI ADIM</div>
+        <div style="font-size:24px;font-weight:700;color:#1A1A1A;line-height:1.3;margin-bottom:14px;">Dijital sisteminizi birlikte kuralım.</div>
+        <div style="font-size:10px;color:#666666;line-height:1.7;">
+          Bu raporun bulgularini sizinle detayli ele almak icin 30 dakikalik ucretsiz bir stateji gorusmesi ayarlayalim.
+          Ihtiyaciniza en uygun paketi birlikte belirleyelim.
+        </div>
+      </div>
+
+      <!-- CTA kartı -->
+      <div style="background:linear-gradient(135deg,#050510,#0a0030);border-radius:12px;padding:28px 36px;width:100%;max-width:380px;">
+        <div style="font-size:8px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;">İLETİŞİM</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;gap:12px;align-items:center;">
+            <div style="width:32px;height:32px;background:rgba(255,255,255,0.08);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">&#128222;</div>
+            <div style="text-align:left;">
+              <div style="font-size:7px;color:rgba(255,255,255,0.3);margin-bottom:1px;">TELEFON</div>
+              <div style="font-size:12px;font-weight:700;color:white;">0 212 982 57 24</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;">
+            <div style="width:32px;height:32px;background:rgba(255,255,255,0.08);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">&#9993;</div>
+            <div style="text-align:left;">
+              <div style="font-size:7px;color:rgba(255,255,255,0.3);margin-bottom:1px;">E-POSTA</div>
+              <div style="font-size:11px;font-weight:700;color:white;">info@premiumdijital.com</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;">
+            <div style="width:32px;height:32px;background:rgba(255,255,255,0.08);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">&#127759;</div>
+            <div style="text-align:left;">
+              <div style="font-size:7px;color:rgba(255,255,255,0.3);margin-bottom:1px;">WEB</div>
+              <div style="font-size:11px;font-weight:700;color:white;">premiumdijital.com</div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:20px;padding:10px;background:rgba(190,41,236,0.15);border-radius:6px;border:1px solid rgba(190,41,236,0.3);">
+          <div style="font-size:9px;font-weight:700;color:#BE29EC;margin-bottom:2px;">Ucretsiz Strateji Gorusmesi</div>
+          <div style="font-size:8px;color:rgba(255,255,255,0.5);">premiumdijital.com/ucretsiz-analiz adresinden randevu alin</div>
+        </div>
+      </div>
+
+      <div style="font-size:8px;color:#AAAAAA;max-width:360px;line-height:1.6;">
+        Bu rapor Premium Dijital Reklam Ajansi tarafindan hazirlanmistir ve yalnizca ${data.clientName} icin gecerlidir.
+        Rapor tarihi: ${data.reportDate} · Rapor No: ${data.reportId}
+      </div>
+    </div>
+    ${pageFooter()}
+  </div>
+</div>`;
+
+  return `<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>${css}</style>
+</head>
+<body>
+${page1}
+${page2}
+${page3}
+${page4}
+${page5}
+${page6}
+${page7}
+${page8}
+${page9}
+${page10}
+${page11}
+${page12}
 </body>
 </html>`;
 }
