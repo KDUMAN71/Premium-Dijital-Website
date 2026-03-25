@@ -352,7 +352,7 @@ export default function ProcessRoadmap() {
               {current.id}
             </div>
 
-            <AnimatePresence mode="wait">
+            <AnimatePresence>
               <motion.div
                 key={activeStep}
                 initial={{ opacity: 0, y: prefersReduced ? 0 : 12 }}

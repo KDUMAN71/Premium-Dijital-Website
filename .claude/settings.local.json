@@ -6,7 +6,9 @@
       "Bash(BASE=\"C:/Projects/Premium Dijital Websitesi Tasarımı yeni_nesil/premium-digital-web/public/img\" && mv \"$BASE/premiumdijital-logo.webp\" \"$BASE/brand/\" && mv \"$BASE/premiumdijital-logo-500px.webp\" \"$BASE/brand/\" && mv \"$BASE/premiumdijital-logo.png\" \"$BASE/brand/\" && echo \"Taşındı\")",
       "Bash(ls:*)",
       "Bash(find '/c/Projects/Premium Dijital Websitesi Tasarımı yeni_nesil/premium-digital-web' -name *blogPost* -o -name *blog-data*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(npm run:*)",
+      "Bash(npm install:*)"
     ]
   }
 }

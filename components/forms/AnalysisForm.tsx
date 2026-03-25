@@ -2339,7 +2339,7 @@ export default function AnalysisForm({
 
       <div className="relative overflow-hidden rounded-[2rem] border border-white/8 bg-[#0c0c0c] p-5 shadow-2xl sm:rounded-[2.5rem] sm:p-8 md:p-10">
         <div className="relative z-10">
-          <AnimatePresence mode="wait">
+          <AnimatePresence>
             {formMode === "quick" ? (
               <QuickForm
                 key="quick"
@@ -2371,7 +2371,7 @@ export default function AnalysisForm({
                   completedSteps={completedSteps}
                 />
 
-                <AnimatePresence mode="wait">
+                <AnimatePresence>
                   <motion.div
                     key={step}
                     initial={{ opacity: 0, x: 12 }}

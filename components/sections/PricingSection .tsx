@@ -156,7 +156,7 @@ export default function PricingSection() {
         </motion.div>
 
         {/* Ana içerik */}
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           <motion.div
             key={active}
             initial={{ opacity: 0, y: prefersReduced ? 0 : 12 }}

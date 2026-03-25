@@ -809,7 +809,7 @@ export default function ProcessRoadmapAlt() {
 
           {/* SAĞ — sticky detay paneli, layout değişmiyor */}
           <div className="hidden lg:block lg:sticky lg:top-10">
-            <AnimatePresence mode="wait">
+            <AnimatePresence>
               <DetailPanel
                 key={activeStep}
                 step={STEPS[activeStep]}

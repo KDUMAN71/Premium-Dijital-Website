@@ -249,7 +249,7 @@ export default function ServiceHeroRadar() {
                   transition={{ duration: 0.9, ease: "easeOut" }}
                 />
 
-                <AnimatePresence mode="wait">
+                <AnimatePresence>
                   {isActive && (
                     <motion.div
                       key={node.id}

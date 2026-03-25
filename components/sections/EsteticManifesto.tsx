@@ -329,7 +329,7 @@ export default function EsteticManifesto() {
           {/* SAĞ PANEL */}
           <div className="lg:col-span-11 grid grid-cols-1 lg:grid-cols-2 gap-8 bg-white/[0.02] border border-white/5 rounded-[2.5rem] p-6 md:p-10 backdrop-blur-3xl overflow-hidden">
             <div className="flex flex-col justify-between gap-6">
-              <AnimatePresence mode="wait">
+              <AnimatePresence>
                 <motion.div
                   key={active}
                   initial={{ opacity: 0, x: -16 }}
@@ -386,7 +386,7 @@ export default function EsteticManifesto() {
             </div>
 
             <div className="hidden lg:flex items-center justify-center relative aspect-square">
-              <AnimatePresence mode="wait">
+              <AnimatePresence>
                 <motion.div
                   key={active}
                   initial={{ opacity: 0 }}

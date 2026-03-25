@@ -195,7 +195,7 @@ export default function DesignStandards() {
         <div className="grid lg:grid-cols-12 gap-8 items-stretch">
           {/* Sol Panel: Sektörel Vizyon */}
           <div className="lg:col-span-5 flex flex-col justify-between gap-6">
-            <AnimatePresence mode="wait">
+            <AnimatePresence>
               <motion.div
                 key={standard.id}
                 initial={{ opacity: 0, x: -20 }}
@@ -238,7 +238,7 @@ export default function DesignStandards() {
           {/* Sağ Panel: Sektörel Reçete */}
           <div className="lg:col-span-7">
             <div className="grid sm:grid-cols-2 gap-4 h-full">
-              <AnimatePresence mode="wait">
+              <AnimatePresence>
                 {standard.services.map((s, i) => (
                   <motion.div
                     key={`${standard.id}-${s.title}`}

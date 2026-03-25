@@ -557,7 +557,7 @@ export default function InvestmentCalculator() {
                 <p className="mb-3 text-[10px] font-black uppercase tracking-[0.28em] text-white/30">
                   Tahmini Başlangıç Yatırımı
                 </p>
-                <AnimatePresence mode="wait">
+                <AnimatePresence>
                   <motion.div
                     key={total}
                     initial={{ opacity: 0, y: prefersReduced ? 0 : -12 }}

@@ -841,7 +841,7 @@ export default function WebsiteCheckup() {
               </div>
 
               {/* Soru */}
-              <AnimatePresence mode="wait">
+              <AnimatePresence>
                 <motion.div
                   key={currentQ}
                   initial={{ opacity: 0, x: prefersReduced ? 0 : 16 }}

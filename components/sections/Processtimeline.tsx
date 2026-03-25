@@ -226,7 +226,7 @@ export default function ProcessTimeline() {
           </div>
 
           {/* Sağ — aktif adım detayı */}
-          <AnimatePresence mode="wait">
+          <AnimatePresence>
             <motion.div
               key={activeStep}
               initial={{ opacity: 0, y: prefersReduced ? 0 : 14 }}

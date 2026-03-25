@@ -1010,7 +1010,7 @@ function KineticDemo() {
         </div>
 
         {/* Sayfa A — ana sayfa */}
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           {(scene === "idle" || scene === "hover") && (
             <motion.div
               key="pageA"
@@ -1081,7 +1081,7 @@ function KineticDemo() {
         </AnimatePresence>
 
         {/* Sayfa B — geçiş sonrası */}
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           {scene === "navigate" && (
             <motion.div
               key="pageB"
@@ -1361,7 +1361,7 @@ export default function DesignShowcase() {
 
         {/* Mockup + detay */}
         <div className="mb-16 grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-start">
-          <AnimatePresence mode="wait">
+          <AnimatePresence>
             <motion.div
               key={activeShowcase}
               initial={{ opacity: 0, y: prefersReduced ? 0 : 16 }}
@@ -1373,7 +1373,7 @@ export default function DesignShowcase() {
             </motion.div>
           </AnimatePresence>
 
-          <AnimatePresence mode="wait">
+          <AnimatePresence>
             <motion.div
               key={`d-${activeShowcase}`}
               initial={{ opacity: 0, x: prefersReduced ? 0 : 14 }}
@@ -1542,7 +1542,7 @@ export default function DesignShowcase() {
                   "radial-gradient(ellipse at 50% 0%,rgba(190,41,236,0.06),transparent 60%)",
               }}
             >
-              <AnimatePresence mode="wait">
+              <AnimatePresence>
                 {activeStandard ? (
                   <motion.div
                     key={activeStandard}

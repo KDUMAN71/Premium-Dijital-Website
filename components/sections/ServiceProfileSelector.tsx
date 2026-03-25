@@ -432,7 +432,7 @@ export default function ServiceProfileSelector() {
         <div className="grid items-stretch gap-8 lg:grid-cols-12">
           {/* Sol — 5/12 */}
           <div className="flex flex-col gap-5 lg:col-span-5">
-            <AnimatePresence mode="wait">
+            <AnimatePresence>
               <motion.div
                 key={`${activeProfile}-${activeTier}`}
                 initial={{ opacity: 0, x: prefersReduced ? 0 : -16 }}
@@ -485,7 +485,7 @@ export default function ServiceProfileSelector() {
           {/* Sağ — 7/12 */}
           <div className="lg:col-span-7">
             <div className="grid gap-4 sm:grid-cols-2">
-              <AnimatePresence mode="wait">
+              <AnimatePresence>
                 {tierData.services.map((s, i) => (
                   <motion.div
                     key={`${activeProfile}-${activeTier}-${s.title}`}
