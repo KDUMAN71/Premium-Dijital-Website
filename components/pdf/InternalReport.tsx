@@ -577,14 +577,14 @@ function ScoreAndMetrics({
   score,
   metrics,
 }: {
-  score: number;
-  metrics: { value: string | number; label: string; color?: string }[];
+  score: number | null;
+  metrics: { value: string | number | null; label: string; color?: string }[];
 }) {
-  const color = scoreColor(score);
+  const color = score !== null ? scoreColor(score) : "#888888";
   return (
     <View style={S.metricsRow}>
       <View style={[S.scoreCircle, { backgroundColor: color }]}>
-        <Text style={S.scoreCircleVal}>{score}</Text>
+        <Text style={S.scoreCircleVal}>{score !== null ? score : "—"}</Text>
         <Text style={S.scoreCircleSub}>/ 100</Text>
       </View>
       {metrics.map((m, i) => (
@@ -779,10 +779,10 @@ function ExecutiveSummaryPage({ data }: { data: AnalysisData }) {
         <Text style={S.listTitle}>Kategori Bazli Degerler</Text>
         <View style={S.categoryGrid}>
           {categories.map((cat) => {
-            const c = scoreColor(cat.score);
+            const c = cat.score !== null ? scoreColor(cat.score) : "#CCCCCC";
             return (
               <View key={cat.name} style={S.categoryCard}>
-                <Text style={[S.categoryScoreVal, { color: c }]}>{cat.score}</Text>
+                <Text style={[S.categoryScoreVal, { color: c }]}>{cat.score !== null ? cat.score : "—"}</Text>
                 <Text style={S.categoryScoreName}>{cat.name}</Text>
               </View>
             );
@@ -807,8 +807,8 @@ function SeoPage({ data }: { data: AnalysisData }) {
       <PageHeader pageNum="03" category="SEO & WEB MIMARISI" clientName={data.clientName} title="Teknik Altyapi ve Gorunurluk Analizi" />
       <View style={S.body}>
         <ScoreAndMetrics score={seo.score} metrics={[
-          { value: `${(seo.pageSpeed / 1000).toFixed(1)}s`, label: "Sayfa Hizi" },
-          { value: seo.mobileScore, label: "Mobil Skoru" },
+          { value: seo.pageSpeed !== null ? `${(seo.pageSpeed / 1000).toFixed(1)}s` : "PageSpeed API", label: "Sayfa Hizi" },
+          { value: seo.mobileScore !== null ? seo.mobileScore : "—", label: "Mobil Skoru" },
           { value: seo.technicalErrors, label: "Teknik Hata", color: COLORS.danger },
         ]} />
         <Findings items={seo.findings} />
@@ -834,7 +834,7 @@ function PpcPage({ data }: { data: AnalysisData }) {
       <PageHeader pageNum="04" category="PPC & REKLAM PERFORMANSI" clientName={data.clientName} title="Reklam Harcamasi ve Donusum Analizi" />
       <View style={S.body}>
         <ScoreAndMetrics score={ppc.score} metrics={[
-          { value: `${ppc.qualityScore}/10`, label: "Kalite Skoru", color: ppc.qualityScore < 5 ? COLORS.danger : COLORS.success },
+          { value: ppc.qualityScore !== null ? `${ppc.qualityScore}/10` : "—", label: "Kalite Skoru", color: ppc.qualityScore !== null && ppc.qualityScore < 5 ? COLORS.danger : COLORS.success },
           { value: ppc.competitorSpend, label: "Rakip Harcama" },
         ]} />
         <Findings items={ppc.findings} />
@@ -860,8 +860,8 @@ function SocialPage({ data }: { data: AnalysisData }) {
       <PageHeader pageNum="05" category="SOSYAL MEDYA & ICERIK" clientName={data.clientName} title="Marka Tutarliligi ve Etkilesim Analizi" />
       <View style={S.body}>
         <ScoreAndMetrics score={social.score} metrics={[
-          { value: social.engagementRate, label: "Etkilesim Orani", color: COLORS.purple },
-          { value: social.consistencyScore, label: "Tutarlilik Skoru", color: COLORS.purple },
+          { value: social.engagementRate || "—", label: "Etkilesim Orani", color: COLORS.purple },
+          { value: social.consistencyScore !== null ? social.consistencyScore : "—", label: "Tutarlilik Skoru", color: COLORS.purple },
         ]} />
         <Findings items={social.findings} />
         <Recommendations items={social.recommendations} />

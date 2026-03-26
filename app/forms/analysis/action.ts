@@ -11,6 +11,7 @@ import {
 } from "@/lib/oauth/google";
 import { cookies } from "next/headers";
 import type { AnalysisData } from "@/types/analysis";
+import { calculateScoredAnalysis } from "@/lib/pdf/scoring";
 
 /* ─────────────────────────────────────────────────────────────────────────────
    LABEL MAPS
@@ -88,26 +89,26 @@ function buildMinimalAnalysisData(
       "Başvurunuz alınmıştır. Ekibimiz en kısa sürede detaylı analizi tamamlayarak sizinle paylaşacaktır.",
     topIssues: [],
     seo: {
-      score: 0,
-      pageSpeed: 0,
-      mobileScore: 0,
+      score: null,
+      pageSpeed: null,
+      mobileScore: null,
       technicalErrors: 0,
       findings: ["Analiz hazırlanıyor..."],
       recommendations: [],
       gain: "",
     },
     ppc: {
-      score: 0,
+      score: null,
       competitorSpend: "",
-      qualityScore: 0,
+      qualityScore: null,
       findings: ["Analiz hazırlanıyor..."],
       recommendations: [],
       gain: "",
     },
     social: {
-      score: 0,
+      score: null,
       engagementRate: "",
-      consistencyScore: 0,
+      consistencyScore: null,
       findings: ["Analiz hazırlanıyor..."],
       recommendations: [],
       gain: "",
@@ -149,18 +150,10 @@ function buildUserConfirmationEmail({
   </h2>
 
   <p style="font-size:14px;color:#555;line-height:1.7;margin:0 0 24px;">
-    Dijital analiz başvurunuzu aldık. Ekibimiz en geç
-    <strong>1 iş günü</strong> içinde sizinle iletişime geçecek.
+    Dijital analiz başvurunuzu aldık. Uzman ekibimiz
+    sitenizi inceleyerek <strong>1 iş günü</strong> içinde size özel
+    hazırlanmış analiz raporunu iletecektir.
   </p>
-
-  <div style="background:#f0f4ff;border-left:4px solid #0000c8;padding:16px 20px;margin:0 0 24px;border-radius:4px;">
-    <div style="font-size:11px;font-weight:800;color:#0000c8;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">
-      Ön Analiz Raporunuz Hazır
-    </div>
-    <p style="font-size:13px;color:#444;margin:0;line-height:1.6;">
-      Ön analiz raporunuz ekte yer almaktadır.
-    </p>
-  </div>
 
   <div style="border-top:1px solid #eee;padding-top:24px;margin-top:8px;">
     <p style="font-size:12px;color:#999;margin:0 0 4px;">
@@ -259,18 +252,11 @@ export async function submitAnalysisAction(
   ].join("");
 
   try {
-    // 1. Yönetici mailine bildirim (mevcut — değişmiyor)
-    await resend.emails.send({
-      from: process.env.RESEND_FROM!,
-      to: process.env.RESEND_TO!.split(",").map((e) => e.trim()),
-      replyTo: [d.email],
-      subject: `Başvuru — ${escapeHtml(d.fullName)} · ${serviceLabel} · ${sectorLabel}`,
-      html: emailShell("Yeni Başvuru", badgesHtml, tableRows),
-    });
+    const clientNameForSubject = d.company || d.fullName;
 
     await addToAudience(d.email, d.fullName);
 
-    // 2. PDF üret + e-posta eki olarak gönder
+    // 1. PDF üret
     let pdfAttachment: { filename: string; content: Buffer } | null = null;
     try {
       // Temel analiz verisi
@@ -339,7 +325,7 @@ export async function submitAnalysisAction(
       console.log("[PageSpeed] result:", JSON.stringify(pageSpeedResult));
 
       // ── Gerçek verilerle merge ────────────────────────────────────────
-      const analysisData: AnalysisData = {
+      const mergedData: AnalysisData = {
         ...baseAnalysisData,
         seo: {
           ...baseAnalysisData.seo,
@@ -352,6 +338,9 @@ export async function submitAnalysisAction(
         ...(ga4Result && { ga4Data: ga4Result }),
         ...(searchConsoleResult && { searchConsoleData: searchConsoleResult }),
       };
+
+      // ── Sektör bazlı skorlama motoru ──────────────────────────────────
+      const analysisData: AnalysisData = calculateScoredAnalysis(mergedData, d.sector);
 
       const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
       const reportResponse = await fetch(`${appUrl}/api/generate-report`, {
@@ -372,13 +361,22 @@ export async function submitAnalysisAction(
       console.error("[PDF Generation] Failed:", pdfErr);
     }
 
-    // 3. Kullanıcıya onay maili
+    // 2. Yönetici mailine PDF eki ile bildirim
+    await resend.emails.send({
+      from: process.env.RESEND_FROM!,
+      to: process.env.RESEND_TO!.split(",").map((e) => e.trim()),
+      replyTo: [d.email],
+      subject: `[YÖNETİCİ] Başvuru — ${escapeHtml(clientNameForSubject)}`,
+      html: emailShell("Yeni Başvuru", badgesHtml, tableRows),
+      ...(pdfAttachment ? { attachments: [pdfAttachment] } : {}),
+    });
+
+    // 3. Kullanıcıya onay maili (PDF eki olmadan)
     await resend.emails.send({
       from: process.env.RESEND_FROM!,
       to: [d.email],
-      subject: "Dijital Analiz Raporunuz Hazır — Premium Dijital",
+      subject: "Başvurunuz Alındı — Premium Dijital",
       html: buildUserConfirmationEmail({ fullName: d.fullName }),
-      ...(pdfAttachment ? { attachments: [pdfAttachment] } : {}),
     });
 
     return { success: true };

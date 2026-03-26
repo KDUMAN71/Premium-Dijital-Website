@@ -28,9 +28,9 @@ export interface AnalysisData {
 
   // SEO & Web
   seo: {
-    score: number;
-    pageSpeed: number;
-    mobileScore: number;
+    score: number | null;
+    pageSpeed: number | null;
+    mobileScore: number | null;
     technicalErrors: number;
     findings: string[];
     recommendations: string[];
@@ -39,9 +39,9 @@ export interface AnalysisData {
 
   // PPC
   ppc: {
-    score: number;
+    score: number | null;
     competitorSpend: string;
-    qualityScore: number;
+    qualityScore: number | null;
     findings: string[];
     recommendations: string[];
     gain: string;
@@ -49,9 +49,9 @@ export interface AnalysisData {
 
   // Sosyal Medya
   social: {
-    score: number;
+    score: number | null;
     engagementRate: string;
-    consistencyScore: number;
+    consistencyScore: number | null;
     findings: string[];
     recommendations: string[];
     gain: string;
@@ -128,6 +128,23 @@ export interface AnalysisData {
       position: number;
     }>;
   };
+
+  // Skorlama motoru çıktıları
+  generalScore?: number;
+  sectorBenchmark?: {
+    seo: number;
+    ppc: number;
+    social: number;
+    operations: number;
+    overall: number;
+  };
+  riskMatrix?: Array<{
+    category: string;
+    score: number;
+    benchmarkScore: number;
+    gap: number;
+    priority: "HIGH" | "MEDIUM" | "LOW";
+  }>;
 
   // Sadece iç rapor için
   internal?: {

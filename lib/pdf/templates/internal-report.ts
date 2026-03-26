@@ -62,7 +62,7 @@ function analysisPage(opts: {
   pageNum: string;
   category: string;
   title: string;
-  score: number;
+  score: number | null;
   metrics: { value: string; label: string }[];
   findings: string[];
   recommendations: string[];
@@ -70,7 +70,7 @@ function analysisPage(opts: {
   gainColor?: string;
   internalNoteText?: string;
 }): string {
-  const color = scoreColor(opts.score);
+  const color = opts.score !== null ? scoreColor(opts.score) : "#888888";
   const gainBg = opts.gainColor ?? "#0000C8";
   return `
 <div class="page inner-page">
@@ -81,7 +81,7 @@ function analysisPage(opts: {
 
     <div class="metrics-row">
       <div class="score-circle" style="background:${color};">
-        <div class="score-val">${opts.score}</div>
+        <div class="score-val">${opts.score !== null ? opts.score : "—"}</div>
         <div class="score-sub">/ 100</div>
       </div>
       ${opts.metrics
@@ -563,12 +563,12 @@ tr:nth-child(even) td { background: #FAFAFA; }
         { label: "OPERASYON", score: data.operations.score },
       ]
         .map((cat) => {
-          const c = scoreColor(cat.score);
+          const c = cat.score !== null ? scoreColor(cat.score) : "#CCCCCC";
           return `
       <div class="cat-card">
-        <div class="cat-score" style="color:${c};">${cat.score}</div>
+        <div class="cat-score" style="color:${c};">${cat.score !== null ? cat.score : "—"}</div>
         <div class="cat-label">${cat.label}</div>
-        <div class="cat-bar"><div class="cat-fill" style="width:${cat.score}%; background:${c};"></div></div>
+        <div class="cat-bar"><div class="cat-fill" style="width:${cat.score ?? 0}%; background:${c};"></div></div>
       </div>`;
         })
         .join("")}
@@ -586,8 +586,8 @@ ${analysisPage({
   title: "Teknik Altyapı &amp; Görünürlük Analizi",
   score: data.seo.score,
   metrics: [
-    { value: `${(data.seo.pageSpeed / 1000).toFixed(1)}s`, label: "SAYFA HIZI" },
-    { value: String(data.seo.mobileScore), label: "MOBİL SKORU" },
+    { value: data.seo.pageSpeed !== null ? `${(data.seo.pageSpeed / 1000).toFixed(1)}s` : "PageSpeed API", label: "SAYFA HIZI" },
+    { value: data.seo.mobileScore !== null ? String(data.seo.mobileScore) : "—", label: "MOBİL SKORU" },
     { value: String(data.seo.technicalErrors), label: "TEKNİK HATA" },
   ],
   findings: data.seo.findings,
@@ -603,7 +603,7 @@ ${analysisPage({
   title: "Reklam Harcaması &amp; Dönüşüm Analizi",
   score: data.ppc.score,
   metrics: [
-    { value: `${data.ppc.qualityScore}/10`, label: "KALİTE SKORU" },
+    { value: data.ppc.qualityScore !== null ? `${data.ppc.qualityScore}/10` : "—", label: "KALİTE SKORU" },
     { value: data.ppc.competitorSpend, label: "RAKİP HARCAMA" },
   ],
   findings: data.ppc.findings,
@@ -620,7 +620,7 @@ ${analysisPage({
   score: data.social.score,
   metrics: [
     { value: data.social.engagementRate, label: "ETKİLEŞİM ORANI" },
-    { value: String(data.social.consistencyScore), label: "TUTARLILIK SKORU" },
+    { value: data.social.consistencyScore !== null ? String(data.social.consistencyScore) : "—", label: "TUTARLILIK SKORU" },
   ],
   findings: data.social.findings,
   recommendations: data.social.recommendations,

@@ -48,7 +48,7 @@ export async function fetchGA4Properties(
   try {
     const response = await fetch(
       "https://analyticsadmin.googleapis.com/v1alpha/accounts",
-      { headers: { Authorization: `Bearer ${accessToken}` } },
+      { headers: { Authorization: `Bearer ${accessToken}` }, signal: AbortSignal.timeout(4000) },
     );
     if (!response.ok) return null;
     const data = (await response.json()) as {
@@ -59,7 +59,7 @@ export async function fetchGA4Properties(
 
     const propResponse = await fetch(
       `https://analyticsadmin.googleapis.com/v1alpha/properties?filter=parent:accounts/${accountId}`,
-      { headers: { Authorization: `Bearer ${accessToken}` } },
+      { headers: { Authorization: `Bearer ${accessToken}` }, signal: AbortSignal.timeout(4000) },
     );
     if (!propResponse.ok) return null;
     const propData = (await propResponse.json()) as {
@@ -93,6 +93,7 @@ export async function fetchGA4Metrics(
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
+        signal: AbortSignal.timeout(5000),
         body: JSON.stringify({
           dateRanges: [{ startDate: "30daysAgo", endDate: "today" }],
           dimensions: [{ name: "sessionDefaultChannelGroup" }],
@@ -176,6 +177,7 @@ export async function fetchSearchConsoleData(
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
+        signal: AbortSignal.timeout(5000),
         body: JSON.stringify({
           startDate,
           endDate,

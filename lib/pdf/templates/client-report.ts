@@ -660,11 +660,15 @@ tr:nth-child(even) td { background: #FAFAFA; }
           { label: "Operasyon", score: data.operations.score },
         ]
           .map(
-            (c) => `
-        <div style="flex:1;min-width:80px;background:#F5F5F5;border-radius:6px;padding:12px;text-align:center;border-top:3px solid ${scoreColor(c.score)};">
-          <div style="font-size:22px;font-weight:700;color:${scoreColor(c.score)};">${c.score}</div>
+            (c) => {
+              const sc = c.score;
+              const col = sc !== null ? scoreColor(sc) : "#CCCCCC";
+              return `
+        <div style="flex:1;min-width:80px;background:#F5F5F5;border-radius:6px;padding:12px;text-align:center;border-top:3px solid ${col};">
+          <div style="font-size:22px;font-weight:700;color:${col};">${sc !== null ? sc : "—"}</div>
           <div style="font-size:7px;color:#888888;text-transform:uppercase;letter-spacing:1px;margin-top:3px;">${c.label}</div>
-        </div>`
+        </div>`;
+            }
           )
           .join("")}
       </div>
@@ -763,18 +767,19 @@ tr:nth-child(even) td { background: #FAFAFA; }
       <div class="section-divider"></div>
 
       <div class="metrics-row">
-        <div class="score-circle" style="background:${scoreColor(data.seo.score)};">
-          <div class="score-val">${data.seo.score}</div>
+        <div class="score-circle" style="background:${data.seo.score !== null ? scoreColor(data.seo.score) : '#888888'};">
+          <div class="score-val">${data.seo.score !== null ? data.seo.score : "—"}</div>
           <div class="score-sub">/ 100</div>
         </div>
         <div class="metric-box">
-          <div class="metric-value" style="color:${scoreColor(data.seo.score)};">${(data.seo.pageSpeed / 1000).toFixed(1)}s</div>
+          <div class="metric-value" style="color:${data.seo.pageSpeed !== null ? scoreColor(data.seo.score ?? 0) : '#AAAAAA'};">${data.seo.pageSpeed !== null ? `${(data.seo.pageSpeed / 1000).toFixed(1)}s` : "PageSpeed API"}</div>
           <div class="metric-label">SAYFA HIZI</div>
         </div>
+        ${data.seo.mobileScore !== null ? `
         <div class="metric-box">
           <div class="metric-value" style="color:${scoreColor(data.seo.mobileScore)};">${data.seo.mobileScore}</div>
           <div class="metric-label">MOBİL SKOR</div>
-        </div>
+        </div>` : ""}
         <div class="metric-box">
           <div class="metric-value" style="color:#C0392B;">${data.seo.technicalErrors}</div>
           <div class="metric-label">TEKNİK HATA</div>
@@ -811,6 +816,11 @@ tr:nth-child(even) td { background: #FAFAFA; }
     <div class="page-content">
       <div class="section-title">PPC &amp; Bütçe Senaryoları</div>
       <div class="section-divider"></div>
+
+      ${data.ppc.score === null ? `
+      <div style="padding:14px 18px;background:#FFF8E1;border-left:4px solid #E67E22;border-radius:4px;margin-bottom:12px;font-size:10px;color:#7D5A00;">
+        Google Ads hesabı bağlandığında gerçek veriler görünecek
+      </div>` : ""}
 
       <!-- Bütçe senaryoları -->
       <div style="display:flex;gap:14px;">
@@ -929,11 +939,11 @@ tr:nth-child(even) td { background: #FAFAFA; }
 
       <div style="display:flex;gap:12px;align-items:center;">
         <div class="metric-box" style="text-align:center;">
-          <div class="metric-value" style="color:${scoreColor(data.ppc.score)};">${data.ppc.score}</div>
+          <div class="metric-value" style="color:${data.ppc.score !== null ? scoreColor(data.ppc.score) : '#AAAAAA'};">${data.ppc.score !== null ? data.ppc.score : "—"}</div>
           <div class="metric-label">PPC SKOR</div>
         </div>
         <div class="metric-box">
-          <div class="metric-value" style="color:#C0392B;">${data.ppc.qualityScore}/10</div>
+          <div class="metric-value" style="color:#C0392B;">${data.ppc.qualityScore !== null ? `${data.ppc.qualityScore}/10` : "—"}</div>
           <div class="metric-label">KALİTE SKORU</div>
         </div>
         <div class="metric-box">
@@ -960,30 +970,37 @@ tr:nth-child(even) td { background: #FAFAFA; }
       <div class="section-title">Sosyal Medya &amp; İçerik Analizi</div>
       <div class="section-divider"></div>
 
+      ${data.social.score === null ? `
+      <div style="padding:14px 18px;background:#FFF8E1;border-left:4px solid #E67E22;border-radius:4px;margin-bottom:12px;font-size:10px;color:#7D5A00;">
+        Sosyal medya hesapları form'dan alınmadı
+      </div>` : ""}
+
       <div class="metrics-row">
-        <div class="score-circle" style="background:${scoreColor(data.social.score)};">
-          <div class="score-val">${data.social.score}</div>
+        <div class="score-circle" style="background:${data.social.score !== null ? scoreColor(data.social.score) : '#888888'};">
+          <div class="score-val">${data.social.score !== null ? data.social.score : "—"}</div>
           <div class="score-sub">/ 100</div>
         </div>
+        ${data.social.score !== null ? `
         <div class="metric-box">
           <div class="metric-value" style="color:${scoreColor(data.social.score)};">${data.social.engagementRate}</div>
           <div class="metric-label">ETKİLEŞİM ORANI</div>
         </div>
         <div class="metric-box">
-          <div class="metric-value" style="color:${scoreColor(data.social.consistencyScore)};">${data.social.consistencyScore}</div>
+          <div class="metric-value" style="color:${scoreColor(data.social.consistencyScore ?? 0)};">${data.social.consistencyScore ?? "—"}</div>
           <div class="metric-label">TUTARLILIK SKORU</div>
-        </div>
+        </div>` : ""}
       </div>
 
       <!-- Platform karşılaştırma simülasyonu -->
+      ${data.social.score !== null ? `
       <div>
         <div class="findings-label" style="margin-bottom:8px;">PLATFORM PERFORMANS KARŞILAŞTIRMASI</div>
         <div style="display:flex;gap:10px;">
           ${[
-            { platform: "Instagram", score: Math.round(data.social.score * 1.1), icon: "IG" },
-            { platform: "LinkedIn", score: Math.round(data.social.score * 0.9), icon: "LN" },
-            { platform: "Facebook", score: Math.round(data.social.score * 0.85), icon: "FB" },
-            { platform: "X / Twitter", score: Math.round(data.social.score * 0.7), icon: "X" },
+            { platform: "Instagram", score: Math.round((data.social.score ?? 0) * 1.1), icon: "IG" },
+            { platform: "LinkedIn", score: Math.round((data.social.score ?? 0) * 0.9), icon: "LN" },
+            { platform: "Facebook", score: Math.round((data.social.score ?? 0) * 0.85), icon: "FB" },
+            { platform: "X / Twitter", score: Math.round((data.social.score ?? 0) * 0.7), icon: "X" },
           ]
             .map(
               (p) => `
@@ -995,7 +1012,7 @@ tr:nth-child(even) td { background: #FAFAFA; }
             )
             .join("")}
         </div>
-      </div>
+      </div>` : ""}
 
       <div class="two-col">
         <div class="findings-section">
@@ -1080,13 +1097,16 @@ tr:nth-child(even) td { background: #FAFAFA; }
   /* ══════════════════════
      SAYFA 9 — KATEGORİ SKORU KARŞILAŞTIRMASI
   ══════════════════════ */
-  const catScores = [
-    { label: "SEO & Web", score: data.seo.score, sectorAvg: 58 },
-    { label: "PPC", score: data.ppc.score, sectorAvg: 52 },
-    { label: "Sosyal Medya", score: data.social.score, sectorAvg: 61 },
-    { label: "Operasyon", score: data.operations.score, sectorAvg: 47 },
-    { label: "Genel", score: data.overallScore, sectorAvg: 55 },
+  const sb = data.sectorBenchmark;
+  const allCatScores = [
+    { label: "SEO & Web", score: data.seo.score, sectorAvg: sb?.seo ?? 58 },
+    { label: "PPC", score: data.ppc.score, sectorAvg: sb?.ppc ?? 52 },
+    { label: "Sosyal Medya", score: data.social.score, sectorAvg: sb?.social ?? 61 },
+    { label: "Operasyon", score: data.operations.score, sectorAvg: sb?.operations ?? 47 },
+    { label: "Genel", score: data.overallScore, sectorAvg: sb?.overall ?? 55 },
   ];
+  // null skorları bar chart'tan filtrele
+  const catScores = allCatScores.filter((c) => c.score !== null) as { label: string; score: number; sectorAvg: number }[];
   const page9 = `
 <div class="page">
   <div class="sidebar"><div class="sidebar-label">ANALIZ</div></div>
@@ -1102,8 +1122,16 @@ tr:nth-child(even) td { background: #FAFAFA; }
       <div style="background:#F8F8F8;border-radius:6px;padding:14px 16px;margin-top:4px;">
         <div class="findings-label" style="margin-bottom:10px;">SEKTÖR KARŞILAŞTIRMASI — ${data.sector.toUpperCase()}</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap;">
-          ${catScores
+          ${allCatScores
             .map((c) => {
+              if (c.score === null) {
+                return `
+          <div style="flex:1;min-width:80px;text-align:center;padding:10px 8px;background:white;border-radius:4px;border:1px solid #EEEEEE;">
+            <div style="font-size:8px;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">${c.label}</div>
+            <div style="font-size:18px;font-weight:700;color:#CCCCCC;">—</div>
+            <div style="font-size:7px;color:#AAAAAA;margin-top:2px;">Veri yok</div>
+          </div>`;
+              }
               const diff = c.score - c.sectorAvg;
               const diffColor = diff >= 0 ? "#27AE60" : "#C0392B";
               const diffSign = diff >= 0 ? "+" : "";
@@ -1121,8 +1149,8 @@ tr:nth-child(even) td { background: #FAFAFA; }
       <div style="padding:12px 16px;background:#EEF0FF;border-radius:6px;border-left:3px solid #0000C8;">
         <div class="findings-label" style="margin-bottom:4px;">ÖZET DEĞERLENDİRME</div>
         <div style="font-size:9px;color:#444444;line-height:1.6;">
-          ${data.clientName} olarak genel dijital skorunuz <strong style="color:${overallColor};">${data.overallScore}/100</strong> ile sektör ortalamasinin (55)
-          ${data.overallScore >= 55 ? "üzerindedir" : "altindadir"}.
+          ${data.clientName} olarak genel dijital skorunuz <strong style="color:${overallColor};">${data.overallScore}/100</strong> ile sektör ortalamasinin (${sb?.overall ?? 55})
+          ${data.overallScore >= (sb?.overall ?? 55) ? "üzerindedir" : "altindadir"}.
           En kritik iyilestirme alanlari: <strong>${catScores.sort((a, b) => a.score - b.score).slice(0, 2).map((c) => c.label).join(" ve ")}</strong>.
         </div>
       </div>
