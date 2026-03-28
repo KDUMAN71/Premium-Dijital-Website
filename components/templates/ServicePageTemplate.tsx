@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 import ServiceHeroTrustStrip from "@/components/templates/ServiceHeroTrustStrip";
 import ServicePageStickyNav from "@/components/templates/ServicePageStickyNav";
+import ShimmerButton from "../ui/ShimmerButton";
 
 type ServicePageTemplateProps = {
   eyebrow: string;
@@ -130,7 +131,8 @@ export default function ServicePageTemplate({
       </section>
 
       {trustItems?.length ? <ServiceHeroTrustStrip items={trustItems} /> : null}
-      {customNav ?? (navItems?.length ? <ServicePageStickyNav items={navItems} /> : null)}
+      {customNav ??
+        (navItems?.length ? <ServicePageStickyNav items={navItems} /> : null)}
 
       {children}
 
@@ -157,12 +159,16 @@ export default function ServicePageTemplate({
                 Ücretsiz Analiz Al →
               </Link>
 
-              <Link
-                href="/iletisim"
-                className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-8 py-4 text-sm font-semibold text-white/85 transition hover:bg-white/10 hover:text-white"
-              >
-                İletişime Geç
-              </Link>
+              <div className="w-full sm:w-auto">
+                <ShimmerButton
+                  href="/iletisim"
+                  variant="primary"
+                  size="md"
+                  className="w-full sm:w-auto"
+                >
+                  İletişime Geç
+                </ShimmerButton>
+              </div>
             </div>
           </div>
         </div>

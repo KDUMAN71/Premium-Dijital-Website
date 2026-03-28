@@ -119,7 +119,7 @@ const ACCESS_TOOLS = [
   },
 ] as const;
 
-type AccessToolValue = typeof ACCESS_TOOLS[number]["value"];
+type AccessToolValue = (typeof ACCESS_TOOLS)[number]["value"];
 
 // Dijital Operasyon — yetenek paketleri (MasterPlan v10)
 const OPS_CAPABILITIES = [
@@ -478,19 +478,21 @@ function OAuthModal({
   onClose,
   onSuccess,
 }: {
-  tool: typeof ACCESS_TOOLS[number];
+  tool: (typeof ACCESS_TOOLS)[number];
   onClose: () => void;
   onSuccess: (toolValue: string, token: string) => void;
 }) {
-  const [status, setStatus] = useState<"idle" | "waiting" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "waiting" | "success" | "error"
+  >("idle");
 
   const handleConnect = () => {
     setStatus("waiting");
 
     const clientId =
       tool.provider === "google"
-        ? process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? ""
-        : process.env.NEXT_PUBLIC_META_APP_ID ?? "";
+        ? (process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? "")
+        : (process.env.NEXT_PUBLIC_META_APP_ID ?? "");
 
     const redirectUri = `${window.location.origin}/api/oauth/callback/${tool.provider}`;
 
@@ -512,13 +514,19 @@ function OAuthModal({
 
     const messageHandler = (event: MessageEvent) => {
       if (event.origin !== window.location.origin) return;
-      if (event.data?.type === "OAUTH_SUCCESS" && event.data?.tool === tool.value) {
+      if (
+        event.data?.type === "OAUTH_SUCCESS" &&
+        event.data?.tool === tool.value
+      ) {
         window.removeEventListener("message", messageHandler);
         setStatus("success");
         onSuccess(tool.value, event.data.token ?? "connected");
         setTimeout(onClose, 1200);
       }
-      if (event.data?.type === "OAUTH_ERROR" && event.data?.tool === tool.value) {
+      if (
+        event.data?.type === "OAUTH_ERROR" &&
+        event.data?.tool === tool.value
+      ) {
         window.removeEventListener("message", messageHandler);
         setStatus("error");
       }
@@ -528,10 +536,26 @@ function OAuthModal({
   };
 
   const permissionItems: Record<string, string[]> = {
-    ga4: ["Trafik ve kullanıcı verileri", "Oturum ve bounce rate", "Dönüşüm ve hedef verileri"],
-    search_console: ["Organik arama keyword'leri", "Tıklama ve impression verileri", "Ortalama sıralama pozisyonu"],
-    google_ads: ["Kampanya harcama verileri", "Reklam kalite skorları", "Kampanya performans metrikleri"],
-    meta_ads: ["Facebook & Instagram reklam verisi", "Kampanya CPM ve CPC metrikleri", "Hedef kitle erişim verileri"],
+    ga4: [
+      "Trafik ve kullanıcı verileri",
+      "Oturum ve bounce rate",
+      "Dönüşüm ve hedef verileri",
+    ],
+    search_console: [
+      "Organik arama keyword'leri",
+      "Tıklama ve impression verileri",
+      "Ortalama sıralama pozisyonu",
+    ],
+    google_ads: [
+      "Kampanya harcama verileri",
+      "Reklam kalite skorları",
+      "Kampanya performans metrikleri",
+    ],
+    meta_ads: [
+      "Facebook & Instagram reklam verisi",
+      "Kampanya CPM ve CPC metrikleri",
+      "Hedef kitle erişim verileri",
+    ],
   };
 
   return (
@@ -575,14 +599,22 @@ function OAuthModal({
               </div>
               <ul className="space-y-2">
                 {(permissionItems[tool.value] ?? []).map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-[11px] text-white/50">
-                    <Check size={10} className="text-green-400 shrink-0" strokeWidth={3} />
+                  <li
+                    key={item}
+                    className="flex items-center gap-2 text-[11px] text-white/50"
+                  >
+                    <Check
+                      size={10}
+                      className="text-green-400 shrink-0"
+                      strokeWidth={3}
+                    />
                     {item}
                   </li>
                 ))}
               </ul>
               <p className="mt-3 text-[10px] text-white/20">
-                Şifreniz istenmez. İstediğiniz zaman erişimi iptal edebilirsiniz.
+                Şifreniz istenmez. İstediğiniz zaman erişimi iptal
+                edebilirsiniz.
               </p>
             </div>
 
@@ -600,7 +632,9 @@ function OAuthModal({
                   type="button"
                   onClick={() => setStatus("idle")}
                   className="w-full py-3 rounded-2xl text-[11px] font-black uppercase tracking-[0.18em] text-white transition cursor-pointer"
-                  style={{ background: "linear-gradient(90deg,#be29ec,#0000c8)" }}
+                  style={{
+                    background: "linear-gradient(90deg,#be29ec,#0000c8)",
+                  }}
                 >
                   Tekrar Dene
                 </button>
@@ -752,7 +786,9 @@ function StepDetails({
   const hasExistingBrand = watch("hasExistingBrand") ?? "";
   const competitors = (watch("competitors") as string[]) ?? [];
   const oauthTokens = (watch("oauthTokens") as Record<string, string>) ?? {};
-  const [activeOAuthTool, setActiveOAuthTool] = useState<typeof ACCESS_TOOLS[number] | null>(null);
+  const [activeOAuthTool, setActiveOAuthTool] = useState<
+    (typeof ACCESS_TOOLS)[number] | null
+  >(null);
 
   const handleOAuthSuccess = (toolValue: string, token: string) => {
     const current = (watch("oauthTokens") as Record<string, string>) ?? {};
@@ -769,7 +805,10 @@ function StepDetails({
   };
 
   const removeCompetitor = (index: number) => {
-    setValue("competitors", competitors.filter((_, i) => i !== index));
+    setValue(
+      "competitors",
+      competitors.filter((_, i) => i !== index),
+    );
   };
 
   const updateCompetitor = (index: number, value: string) => {
@@ -878,7 +917,8 @@ function StepDetails({
               </span>
             </label>
             <p className="mt-1 text-[11px] text-white/25">
-              Alan adı girin. Raporunuzda rakibinizle karşılaştırmalı konum gösterilecektir.
+              Alan adı girin. Raporunuzda rakibinizle karşılaştırmalı konum
+              gösterilecektir.
             </p>
           </div>
           <div className="space-y-2">
@@ -946,8 +986,14 @@ function StepDetails({
                   className="flex items-center justify-between rounded-xl border px-4 py-3 transition-all"
                   style={
                     isConnected
-                      ? { borderColor: "rgba(34,197,94,0.4)", backgroundColor: "rgba(34,197,94,0.06)" }
-                      : { borderColor: "rgba(255,255,255,0.08)", backgroundColor: "rgba(255,255,255,0.02)" }
+                      ? {
+                          borderColor: "rgba(34,197,94,0.4)",
+                          backgroundColor: "rgba(34,197,94,0.06)",
+                        }
+                      : {
+                          borderColor: "rgba(255,255,255,0.08)",
+                          backgroundColor: "rgba(255,255,255,0.02)",
+                        }
                   }
                 >
                   <div className="flex items-center gap-3">
@@ -955,17 +1001,26 @@ function StepDetails({
                       className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border"
                       style={
                         isConnected
-                          ? { borderColor: "rgba(34,197,94,0.6)", backgroundColor: "rgba(34,197,94,0.2)" }
+                          ? {
+                              borderColor: "rgba(34,197,94,0.6)",
+                              backgroundColor: "rgba(34,197,94,0.2)",
+                            }
                           : { borderColor: "rgba(255,255,255,0.15)" }
                       }
                     >
-                      {isConnected && <Check size={10} strokeWidth={3} color="#4ade80" />}
+                      {isConnected && (
+                        <Check size={10} strokeWidth={3} color="#4ade80" />
+                      )}
                     </span>
                     <div>
-                      <div className={`text-[11px] font-bold ${isConnected ? "text-green-400" : "text-white/60"}`}>
+                      <div
+                        className={`text-[11px] font-bold ${isConnected ? "text-green-400" : "text-white/60"}`}
+                      >
                         {tool.label}
                       </div>
-                      <div className="text-[10px] text-white/25">{tool.description}</div>
+                      <div className="text-[10px] text-white/25">
+                        {tool.description}
+                      </div>
                     </div>
                   </div>
                   <button
@@ -974,8 +1029,16 @@ function StepDetails({
                     className="shrink-0 rounded-lg border px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] transition-all cursor-pointer hover:scale-[1.02]"
                     style={
                       isConnected
-                        ? { borderColor: "rgba(34,197,94,0.3)", color: "rgba(74,222,128,0.8)", backgroundColor: "rgba(34,197,94,0.05)" }
-                        : { borderColor: "rgba(190,41,236,0.3)", color: "#be29ec", backgroundColor: "rgba(190,41,236,0.05)" }
+                        ? {
+                            borderColor: "rgba(34,197,94,0.3)",
+                            color: "rgba(74,222,128,0.8)",
+                            backgroundColor: "rgba(34,197,94,0.05)",
+                          }
+                        : {
+                            borderColor: "rgba(190,41,236,0.3)",
+                            color: "#be29ec",
+                            backgroundColor: "rgba(190,41,236,0.05)",
+                          }
                     }
                   >
                     {isConnected ? "Yenile" : "Bağlan →"}
@@ -1140,7 +1203,8 @@ function StepDetails({
                     </span>
                   </label>
                   <p className="text-[11px] text-white/30">
-                    Hesabınıza güvenli OAuth ile bağlanıyoruz. Şifre istemiyoruz.
+                    Hesabınıza güvenli OAuth ile bağlanıyoruz. Şifre
+                    istemiyoruz.
                   </p>
                   <div className="flex flex-col gap-2 mt-2">
                     {ACCESS_TOOLS.filter((t) =>
@@ -1153,8 +1217,14 @@ function StepDetails({
                           className="flex items-center justify-between rounded-xl border px-4 py-3 transition-all"
                           style={
                             isConnected
-                              ? { borderColor: "rgba(34,197,94,0.4)", backgroundColor: "rgba(34,197,94,0.06)" }
-                              : { borderColor: "rgba(255,255,255,0.08)", backgroundColor: "rgba(255,255,255,0.02)" }
+                              ? {
+                                  borderColor: "rgba(34,197,94,0.4)",
+                                  backgroundColor: "rgba(34,197,94,0.06)",
+                                }
+                              : {
+                                  borderColor: "rgba(255,255,255,0.08)",
+                                  backgroundColor: "rgba(255,255,255,0.02)",
+                                }
                           }
                         >
                           <div className="flex items-center gap-3">
@@ -1162,17 +1232,30 @@ function StepDetails({
                               className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border"
                               style={
                                 isConnected
-                                  ? { borderColor: "rgba(34,197,94,0.6)", backgroundColor: "rgba(34,197,94,0.2)" }
+                                  ? {
+                                      borderColor: "rgba(34,197,94,0.6)",
+                                      backgroundColor: "rgba(34,197,94,0.2)",
+                                    }
                                   : { borderColor: "rgba(255,255,255,0.15)" }
                               }
                             >
-                              {isConnected && <Check size={10} strokeWidth={3} color="#4ade80" />}
+                              {isConnected && (
+                                <Check
+                                  size={10}
+                                  strokeWidth={3}
+                                  color="#4ade80"
+                                />
+                              )}
                             </span>
                             <div>
-                              <div className={`text-[11px] font-bold ${isConnected ? "text-green-400" : "text-white/60"}`}>
+                              <div
+                                className={`text-[11px] font-bold ${isConnected ? "text-green-400" : "text-white/60"}`}
+                              >
                                 {tool.label}
                               </div>
-                              <div className="text-[10px] text-white/25">{tool.description}</div>
+                              <div className="text-[10px] text-white/25">
+                                {tool.description}
+                              </div>
                             </div>
                           </div>
                           <button
@@ -1181,8 +1264,16 @@ function StepDetails({
                             className="shrink-0 rounded-lg border px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.12em] transition-all cursor-pointer hover:scale-[1.02]"
                             style={
                               isConnected
-                                ? { borderColor: "rgba(34,197,94,0.3)", color: "rgba(74,222,128,0.8)", backgroundColor: "rgba(34,197,94,0.05)" }
-                                : { borderColor: "rgba(190,41,236,0.3)", color: "#be29ec", backgroundColor: "rgba(190,41,236,0.05)" }
+                                ? {
+                                    borderColor: "rgba(34,197,94,0.3)",
+                                    color: "rgba(74,222,128,0.8)",
+                                    backgroundColor: "rgba(34,197,94,0.05)",
+                                  }
+                                : {
+                                    borderColor: "rgba(190,41,236,0.3)",
+                                    color: "#be29ec",
+                                    backgroundColor: "rgba(190,41,236,0.05)",
+                                  }
                             }
                           >
                             {isConnected ? "Yenile" : "Bağlan →"}
@@ -1214,7 +1305,8 @@ function StepDetails({
               </span>
             </label>
             <p className="mt-1 text-[11px] text-white/25">
-              Alan adı girin. Raporunuzda rakibinizle karşılaştırmalı konum gösterilecektir.
+              Alan adı girin. Raporunuzda rakibinizle karşılaştırmalı konum
+              gösterilecektir.
             </p>
           </div>
           <div className="space-y-2">
