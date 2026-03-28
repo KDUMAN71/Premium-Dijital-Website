@@ -86,8 +86,8 @@ export default function SeoPage() {
             icon: "target",
           },
           {
-            label: "Sosyal Medya Reklamları",
-            href: "/hizmetler/performans-pazarlama/sosyal-medya-reklamlari",
+            label: "Sosyal Medya Yönetimi",
+            href: "/hizmetler/dijital-mimari/sosyal-medya-yonetimi",
             icon: "share",
           },
         ],

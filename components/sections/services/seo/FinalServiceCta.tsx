@@ -34,12 +34,12 @@ export default function FinalServiceCta() {
                 />
               </Link>
               <Link
-                href="/hizmetler/performans-pazarlama/sosyal-medya-reklamlari"
+                href="/hizmetler/dijital-mimari/sosyal-medya-yonetimi"
                 className="group flex items-center gap-3 px-8 py-4 rounded-2xl bg-white/5 border border-white/10 hover:border-brand-purple transition-all"
               >
                 <Share2 size={18} className="text-brand-purple" />
                 <span className="text-sm font-bold uppercase tracking-widest">
-                  Sosyal Medya Reklamları
+                  Sosyal Medya Yönetimi
                 </span>
                 <ArrowRight
                   size={14}

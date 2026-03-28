@@ -110,16 +110,32 @@ export default function MetaAdsPage() {
           },
         ],
       }}
-      customNav={<MetaStickyNav key="sticky-nav" />}
+      customNav={<MetaStickyNav />}
     >
-      <MetaPlatform key="platform" />
-      <div key="hatalar" id="hatalar"><CommonMistakes /></div>
-      <div key="sistem" id="sistem"><MetaSystem /></div>
-      <div key="kreatif" id="kreatif"><CreativeEngine /></div>
-      <div key="paketler" id="paketler"><MetaPackages /></div>
-      <div key="vaka" id="vaka"><MiniCaseStudy /></div>
-      <div key="scorecard" id="scorecard"><MetaScorecard /></div>
-      <div key="sss" id="sss"><FAQSection faqs={metaFaqs} /></div>
+      <>
+        <MetaPlatform />
+        <div id="hatalar">
+          <CommonMistakes />
+        </div>
+        <div id="sistem">
+          <MetaSystem />
+        </div>
+        <div id="kreatif">
+          <CreativeEngine />
+        </div>
+        <div id="paketler">
+          <MetaPackages />
+        </div>
+        <div id="vaka">
+          <MiniCaseStudy />
+        </div>
+        <div id="scorecard">
+          <MetaScorecard />
+        </div>
+        <div id="sss">
+          <FAQSection faqs={metaFaqs} />
+        </div>
+      </>
     </SubServicePageTemplate>
   );
 }

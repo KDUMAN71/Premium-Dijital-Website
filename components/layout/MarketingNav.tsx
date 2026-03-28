@@ -56,9 +56,9 @@ const SERVICES = [
         icon: Youtube,
       },
       {
-        label: "Sosyal Medya Reklamları",
-        href: "/hizmetler/performans-pazarlama/sosyal-medya-reklamlari",
-        icon: Share2,
+        label: "Dönüşüm Optimizasyonu (CRO)",
+        href: "/hizmetler/performans-pazarlama/donusum-optimizasyonu",
+        icon: UserCheck,
       },
       {
         label: "Landing Page Tasarımları",
@@ -94,9 +94,9 @@ const SERVICES = [
         icon: Wrench,
       },
       {
-        label: "Dönüşüm Optimizasyonu (CRO)",
-        href: "/hizmetler/dijital-mimari/cro",
-        icon: UserCheck,
+        label: "Sosyal Medya Yönetimi",
+        href: "/hizmetler/dijital-mimari/sosyal-medya-yonetimi",
+        icon: Share2,
       },
     ],
   },

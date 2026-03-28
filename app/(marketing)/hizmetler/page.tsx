@@ -67,7 +67,7 @@ const services = [
     items: [
       "Google Ads Yönetimi",
       "Meta Ads Yönetimi",
-      "Yeniden Pazarlama",
+      "Dönüşüm Optimizasyonu (CRO)",
       "ROI Optimizasyonu",
     ],
     color: "blue",
@@ -80,8 +80,8 @@ const services = [
     items: [
       "Modern Web Tasarımı",
       "Teknik SEO",
-      "Dönüşüm Hunisi (CRO)",
       "Sosyal Medya Yönetimi",
+      "Hazır Sistemler (CMS/CRM)",
     ],
     color: "purple",
   },

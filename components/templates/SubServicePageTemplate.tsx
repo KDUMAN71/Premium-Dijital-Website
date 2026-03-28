@@ -21,9 +21,10 @@ type SubServicePageTemplateProps = {
     title: string;
     accent: string;
     description: string;
-    bgImage: string;
+    bgImage?: string;
+    heroVisual?: React.ReactNode;
     primaryCta: { label: string; href: string };
-    secondaryCta?: { label: string; href: string }; // Opsiyonel yapıldı
+    secondaryCta?: { label: string; href: string };
     stats?: { label: string; value: string }[];
   };
   finalCta?: {
@@ -85,83 +86,176 @@ export default function SubServicePageTemplate({
       />
 
       {/* ── 2. HERO SECTION ── */}
-      <section className="relative overflow-hidden py-28 md:py-36 min-h-[600px] flex items-center">
-        {/* Arka Plan Görseli */}
-        <NextImage
-          src={hero.bgImage}
-          alt={hero.title}
-          fill
-          priority
-          className="object-cover absolute inset-0 z-0 opacity-100"
-        />
-        <div className="absolute inset-0 bg-brand-dark/75 z-10" />
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-dark/70 to-transparent z-20" />
+      <section
+        className="relative overflow-hidden flex items-center"
+        style={{
+          minHeight: "calc(100svh - 80px)",
+          maxHeight: "calc(100svh - 80px)",
+          marginTop: "80px",
+        }}
+      >
+        {/* Arka Plan — bgImage VEYA koyu gradient */}
+        {hero.bgImage ? (
+          <>
+            {/* Koyu arka plan — tüm breakpoint'lerde */}
+            <div className="absolute inset-0 bg-brand-dark z-0" />
+            {/* Görsel — md+ ekranlarda görünür, kırpılmaz, oranı korunur */}
+            <div className="absolute inset-0 z-[1] hidden md:flex items-center justify-end overflow-hidden">
+              <img
+                src={hero.bgImage}
+                alt=""
+                aria-hidden="true"
+                className="h-full w-auto object-contain object-right opacity-80"
+              />
+            </div>
+            {/* Gradient overlay — soldan metni korur */}
+            <div className="absolute inset-0 bg-gradient-to-r from-brand-dark via-brand-dark/85 to-brand-dark/30 z-[2]" />
+            {/* Mobilde tam karartma */}
+            <div className="absolute inset-0 bg-brand-dark/60 z-[2] md:hidden" />
+          </>
+        ) : (
+          <>
+            <div className="absolute inset-0 bg-brand-dark z-0" />
+            <div className="absolute inset-0 bg-gradient-to-br from-brand-dark via-[#08081a] to-brand-dark z-10" />
+          </>
+        )}
 
-        {/* Hizalama Konteyneri: max-w-7xl mx-auto ile sola yapışma engellendi */}
-        <div className="mx-auto max-w-7xl px-6 relative z-30 w-full">
-          <div className="max-w-2xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <span className="text-xs font-bold text-white/60 tracking-[0.2em] uppercase mb-4 block border-l-2 border-brand-blue pl-4">
-                {hero.eyebrow}
-              </span>
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-tight mb-6">
-                {hero.title}{" "}
-                <span className="text-[#BE29EC] italic">{hero.accent}</span>
-              </h1>
-              <p className="text-lg md:text-xl text-gray-300 mb-10 max-w-xl leading-relaxed">
-                {hero.description}
-              </p>
-
-              {/* SHIMMER BUTTON ENTEGRASYONU */}
-              <div className="flex flex-col sm:flex-row gap-4">
-                <ShimmerButton
-                  href={hero.primaryCta.href}
-                  variant="primary"
-                  size="lg"
-                >
-                  {hero.primaryCta.label}
-                </ShimmerButton>
-
-                {/* Güvenli render kontrolü ile TypeError engellendi */}
-                {hero.secondaryCta && (
+        {/* İçerik konteyneri — pt artık navbar offset'e gerek yok */}
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 relative z-30 w-full py-8">
+          {hero.heroVisual ? (
+            /* İki kolonlu layout — SVG visual varsa: sol %38, sağ %62 */
+            <div className="grid grid-cols-1 lg:grid-cols-[38%_62%] gap-6 lg:gap-8 items-center">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="flex flex-col justify-center"
+              >
+                <span className="text-[10px] font-bold text-white/60 tracking-[0.2em] uppercase mb-3 block border-l-2 border-brand-blue pl-3">
+                  {hero.eyebrow}
+                </span>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tighter leading-tight mb-3 sm:mb-4">
+                  {hero.title}{" "}
+                  <span className="text-[#BE29EC] italic">{hero.accent}</span>
+                </h1>
+                <p className="text-sm sm:text-base text-gray-300 mb-5 sm:mb-6 leading-relaxed">
+                  {hero.description}
+                </p>
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                   <ShimmerButton
-                    href={hero.secondaryCta.href}
-                    variant="secondary"
+                    href={hero.primaryCta.href}
+                    variant="primary"
                     size="lg"
                   >
-                    {hero.secondaryCta.label}
+                    {hero.primaryCta.label}
                   </ShimmerButton>
-                )}
-              </div>
-
-              {hero.stats && (
-                <div className="mt-12 flex flex-wrap gap-8 text-sm text-gray-400 border-t border-white/10 pt-8">
-                  {hero.stats.map((stat, i) => (
-                    <div key={i}>
-                      <div className="font-bold text-lg text-white">
-                        {stat.value}
-                      </div>
-                      <div className="uppercase tracking-widest text-[10px] mt-1 font-semibold">
-                        {stat.label}
-                      </div>
-                    </div>
-                  ))}
+                  {hero.secondaryCta && (
+                    <ShimmerButton
+                      href={hero.secondaryCta.href}
+                      variant="secondary"
+                      size="lg"
+                    >
+                      {hero.secondaryCta.label}
+                    </ShimmerButton>
+                  )}
                 </div>
-              )}
-            </motion.div>
-          </div>
+                {hero.stats && (
+                  <div className="mt-5 sm:mt-6 flex flex-wrap gap-4 sm:gap-6 text-sm text-gray-400 border-t border-white/10 pt-4 sm:pt-5">
+                    {hero.stats.map((stat, i) => (
+                      <div key={i}>
+                        <div className="font-bold text-sm sm:text-base text-white">
+                          {stat.value}
+                        </div>
+                        <div className="uppercase tracking-widest text-[8px] sm:text-[9px] mt-0.5 font-semibold">
+                          {stat.label}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="hidden lg:flex items-center justify-center"
+              >
+                {hero.heroVisual}
+              </motion.div>
+            </div>
+          ) : (
+            /* Tek kolonlu layout — bgImage varsa */
+            <div className="max-w-2xl">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+              >
+                <span className="text-[10px] sm:text-xs font-bold text-white/60 tracking-[0.2em] uppercase mb-3 block border-l-2 border-brand-blue pl-4">
+                  {hero.eyebrow}
+                </span>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-4xl xl:text-5xl font-bold tracking-tighter leading-tight mb-4 sm:mb-5">
+                  {hero.title}{" "}
+                  <span className="text-[#BE29EC] italic">{hero.accent}</span>
+                </h1>
+                <p className="text-sm sm:text-base md:text-lg text-gray-300 mb-6 sm:mb-8 max-w-sm sm:max-w-xl leading-relaxed">
+                  {hero.description}
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                  <ShimmerButton
+                    href={hero.primaryCta.href}
+                    variant="primary"
+                    size="lg"
+                  >
+                    {hero.primaryCta.label}
+                  </ShimmerButton>
+                  {hero.secondaryCta && (
+                    <ShimmerButton
+                      href={hero.secondaryCta.href}
+                      variant="secondary"
+                      size="lg"
+                    >
+                      {hero.secondaryCta.label}
+                    </ShimmerButton>
+                  )}
+                </div>
+                {hero.stats && (
+                  <div className="mt-6 sm:mt-8 flex flex-wrap gap-5 sm:gap-8 text-sm text-gray-400 border-t border-white/10 pt-5 sm:pt-6">
+                    {hero.stats.map((stat, i) => (
+                      <div key={i}>
+                        <div className="font-bold text-base sm:text-lg text-white">
+                          {stat.value}
+                        </div>
+                        <div className="uppercase tracking-widest text-[9px] sm:text-[10px] mt-1 font-semibold">
+                          {stat.label}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </motion.div>
+            </div>
+          )}
         </div>
       </section>
 
       {/* ── 3. STICKY NAV ── */}
-      {customNav}
+      {customNav && React.isValidElement(customNav)
+        ? React.cloneElement(customNav as React.ReactElement, {
+            key: "sticky-nav",
+          })
+        : customNav}
 
       {/* ── 4. SAYFA İÇERİĞİ (Children) ── */}
-      <div className="relative z-10">{children}</div>
+      <div className="relative z-10">
+        {React.Children.map(children, (child, i) =>
+          React.isValidElement(child) && !child.key
+            ? React.cloneElement(child as React.ReactElement, {
+                key: `child-${i}`,
+              })
+            : child,
+        )}
+      </div>
 
       {/* ── 5. FINAL CTA (Entegre) ── */}
       <section className="py-24 border-t border-white/5 bg-gradient-to-b from-brand-dark to-[#080808]">
